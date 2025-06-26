@@ -1,0 +1,51 @@
+/* Estilos personalizados y configuración de Tailwind */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #FEFDFB;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Merriweather', serif;
+}
+
+/* Colores de la marca */
+.bg-brand-amarillo-pastel { background-color: #dfbf85; }
+.bg-brand-amarillo-suave { background-color: #f2ce85; }
+.bg-brand-naranja-mostaza { background-color: #d79f49; }
+.bg-brand-verde-oliva { background-color: #aca060; }
+.text-brand-amarillo-pastel { color: #dfbf85; }
+.text-brand-amarillo-suave { color: #f2ce85; }
+.text-brand-naranja-mostaza { color: #d79f49; }
+.text-brand-verde-oliva { color: #aca060; }
+.border-brand-naranja-mostaza { border-color: #d79f49; }
+.ring-brand-naranja-mostaza:focus { --tw-ring-color: #d79f49; }
+
+/* Animación de introducción */
+#intro-animation-bg {
+    position: fixed;
+    z-index: 10000;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s;
+    width: 100vw;
+    height: 100vh;
+}
+#intro-animation-bg.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+#intro-animation-video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    background: transparent;
+    display: block;
+}
