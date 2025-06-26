@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LXG5F7LK42"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LXG5F7LK42');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Checkout - Finalizar Compra | La Tierrita - Bocaditos Tradicionales</title>
+    <meta name="description" content="Finaliza tu compra de bocaditos tradicionales ecuatorianos. Pago seguro y envío a todo el país. La Tierrita - Del campo a tu mesa.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://latierrita.com/checkout">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://latierrita.com/checkout">
+    <meta property="og:title" content="Checkout - La Tierrita">
+    <meta property="og:description" content="Finaliza tu compra de productos tradicionales ecuatorianos">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="img/logofla.ico">
+    
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Structured Data for Checkout -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CheckoutPage",
+      "name": "Checkout - La Tierrita",
+      "description": "Página de finalización de compra para productos de La Tierrita",
+      "url": "https://latierrita.com/checkout",
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://latierrita.com/#organization"
+      },
+      "mainEntity": {
+        "@type": "Order",
+        "orderStatus": "https://schema.org/OrderProcessing",
+        "seller": {
+          "@type": "Organization",
+          "name": "La Tierrita",
+          "url": "https://latierrita.com",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+593-XXX-XXXX",
+            "contactType": "customer service",
+            "areaServed": "EC"
+          }
+        }
+      }
+    }
+    </script>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+    <!-- Header Simplificado para Checkout -->
+    <header class="bg-white shadow-md sticky top-0 z-40" role="banner">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center" role="navigation" aria-label="Navegación de checkout">
+            <a href="index.html" class="text-2xl font-bold text-brand-naranja-mostaza flex items-center" aria-label="Volver a inicio">
+                <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i>
+                La Tierrita
+            </a>
+            
+            <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-600">Checkout Seguro</span>
+                <i class="fas fa-shield-alt text-green-500" aria-hidden="true" title="Conexión segura"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 max-w-6xl">
+        <!-- Breadcrumb -->
+        <nav aria-label="Breadcrumb" class="mb-8">
+            <ol class="flex space-x-2 text-sm">
+                <li><a href="index.html" class="text-brand-naranja-mostaza hover:underline">Inicio</a></li>
+                <li class="text-gray-500">></li>
+                <li><a href="index.html#productos" class="text-brand-naranja-mostaza hover:underline">Productos</a></li>
+                <li class="text-gray-500">></li>
+                <li class="text-gray-500" aria-current="page">Checkout</li>
+            </ol>
+        </nav>
+
+        <!-- Progress Indicator -->
+        <div class="mb-8">
+            <div class="flex items-center justify-center space-x-4">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-brand-naranja-mostaza text-white rounded-full flex items-center justify-center text-sm font-medium">1</div>
+                    <span class="ml-2 text-sm font-medium text-gray-900">Carrito</span>
+                </div>
+                <div class="w-16 h-0.5 bg-brand-naranja-mostaza"></div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-brand-naranja-mostaza text-white rounded-full flex items-center justify-center text-sm font-medium">2</div>
+                    <span class="ml-2 text-sm font-medium text-gray-900">Información</span>
+                </div>
+                <div class="w-16 h-0.5 bg-gray-300"></div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-medium">3</div>
+                    <span class="ml-2 text-sm text-gray-500">Confirmación</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Formulario de Checkout -->
+            <div class="lg:order-1">
+                <form id="checkout-form" class="space-y-8" action="#" method="POST">
+                    <!-- Información de Contacto -->
+                    <section class="bg-white p-6 rounded-lg shadow-sm border">
+                        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                            <i class="fas fa-user text-brand-naranja-mostaza mr-2" aria-hidden="true"></i>
+                            Información de Contacto
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">Nombre *</label>
+                                <input type="text" id="firstName" name="firstName" required
+                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-naranja-mostaza focus:border-brand-naranja-mostaza">
+                            </div>
+                            <div>
+                                <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">Apellido *</label>
+                                <input type="text" id="lastName" name="lastName" required
+                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-naranja-mostaza focus:border-brand-naranja-mostaza">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Correo Electrónico *</label>
+                                <input type="email" id="email" name="email" required
+                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-naranja-mostaza focus:border-brand-naranja-mostaza">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Teléfono / WhatsApp *</label>
+                                <input type="tel" id="phone" name="phone" required
+                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-naranja-mostaza focus:border-brand-naranja-mostaza">
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Información de Envío -->
+                    <section class="bg-white p-6 rounded-lg shadow-sm border">
+                        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                            <i class="fas fa-truck text-brand-naranja-mostaza mr-2" aria-hidden="true"></i>
+                            Información de Envío
+                        </h2>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label for="address" class="block text-sm font-medium text-gray-700 mb-2">Dirección Completa *</label>
+                                <input type="text" id="address" name="address" required
+                                       placeholder="Calle principal, número de casa, referencia"
+                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-naranja-mostaza focus:border-brand-naranja-mostaza">
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="city" class="block text-sm font-medium text-gray-700 mb-2">Ciudad *</label>
+                                    <input type="text" id="city" name="city" required
+                                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-naranja-mostaza focus:border-brand-naranja-mostaza">
+                                </div>
+                                <div>
+                                    <label for="province" class="block text-sm font-medium text-gray-700 mb-2">Provincia *</label>
+                                    <select id="province" name="province" required
+                                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-naranja-mostaza focus:border-brand-naranja-mostaza">
+                                        <option value="">Selecciona tu provincia</option>
+                                        <option value="azuay">Azuay</option>
+                                        <option value="bolivar">Bolívar</option>
+                                        <option value="canar">Cañar</option>
+                                        <option value="carchi">Carchi</option>
+                                        <option value="chimborazo">Chimborazo</option>
+                                        <option value="cotopaxi">Cotopaxi</option>
+                                        <option value="el-oro">El Oro</option>
+                                        <option value="esmeraldas">Esmeraldas</option>
+                                        <option value="galapagos">Galápagos</option>
+                                        <option value="guayas">Guayas</option>
+                                        <option value="imbabura">Imbabura</option>
+                                        <option value="loja">Loja</option>
+                                        <option value="los-rios">Los Ríos</option>
+                                        <option value="manabi">Manabí</option>
+                                        <option value="morona-santiago">Morona Santiago</option>
+                                        <option value="napo">Napo</option>
+                                        <option value="orellana">Orellana</option>
+                                        <option value="pastaza">Pastaza</option>
+                                        <option value="pichincha">Pichincha</option>
+                                        <option value="santa-elena">Santa Elena</option>
+                                        <option value="santo-domingo">Santo Domingo</option>
+                                        <option value="sucumbios">Sucumbíos</option>
+                                        <option value="tungurahua">Tungurahua</option>
+                                        <option value="zamora-chinchipe">Zamora Chinchipe</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="postalCode" class="block text-sm font-medium text-gray-700 mb-2">Código Postal</label>
+                                <input type="text" id="postalCode" name="postalCode"
+                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-naranja-mostaza focus:border-brand-naranja-mostaza">
+                            </div>
+                            
+                            <div>
+                                <label for="deliveryNotes" class="block text-sm font-medium text-gray-700 mb-2">Notas de Entrega (Opcional)</label>
+                                <textarea id="deliveryNotes" name="deliveryNotes" rows="3"
+                                          placeholder="Instrucciones especiales para la entrega"
+                                          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-naranja-mostaza focus:border-brand-naranja-mostaza"></textarea>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Método de Pago -->
+                    <section class="bg-white p-6 rounded-lg shadow-sm border">
+                        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                            <i class="fas fa-credit-card text-brand-naranja-mostaza mr-2" aria-hidden="true"></i>
+                            Método de Pago
+                        </h2>
+                        
+                        <div class="space-y-4">
+                            <div class="space-y-3">
+                                <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-brand-naranja-mostaza">
+                                    <input type="radio" name="paymentMethod" value="transfer" class="mr-3" checked>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-university text-2xl text-blue-600 mr-3" aria-hidden="true"></i>
+                                        <div>
+                                            <div class="font-medium">Transferencia Bancaria</div>
+                                            <div class="text-sm text-gray-500">Te enviaremos los datos bancarios por WhatsApp</div>
+                                        </div>
+                                    </div>
+                                </label>
+                                
+                                <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-brand-naranja-mostaza">
+                                    <input type="radio" name="paymentMethod" value="paypal" class="mr-3">
+                                    <div class="flex items-center">
+                                        <i class="fab fa-paypal text-2xl text-blue-500 mr-3" aria-hidden="true"></i>
+                                        <div>
+                                            <div class="font-medium">PayPal</div>
+                                            <div class="text-sm text-gray-500">Pago seguro con PayPal</div>
+                                        </div>
+                                    </div>
+                                </label>
+                                
+                                <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-brand-naranja-mostaza">
+                                    <input type="radio" name="paymentMethod" value="cash" class="mr-3">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-money-bill-wave text-2xl text-green-600 mr-3" aria-hidden="true"></i>
+                                        <div>
+                                            <div class="font-medium">Pago contra entrega</div>
+                                            <div class="text-sm text-gray-500">Paga cuando recibas tu pedido</div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Términos y Condiciones -->
+                    <section class="bg-white p-6 rounded-lg shadow-sm border">
+                        <div class="space-y-4">
+                            <label class="flex items-start">
+                                <input type="checkbox" id="termsAccepted" name="termsAccepted" required class="mt-1 mr-3">
+                                <span class="text-sm text-gray-700">
+                                    He leído y acepto los 
+                                    <a href="terminos-condiciones.html" class="text-brand-naranja-mostaza hover:underline" target="_blank">términos y condiciones</a> 
+                                    y la 
+                                    <a href="politica-privacidad.html" class="text-brand-naranja-mostaza hover:underline" target="_blank">política de privacidad</a>
+                                </span>
+                            </label>
+                            
+                            <label class="flex items-start">
+                                <input type="checkbox" id="marketingConsent" name="marketingConsent" class="mt-1 mr-3">
+                                <span class="text-sm text-gray-700">
+                                    Acepto recibir ofertas especiales y novedades de La Tierrita por WhatsApp y correo electrónico
+                                </span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <!-- Botón de Finalizar Compra -->
+                    <div class="pt-6 border-t border-gray-200">
+                        <button type="submit" id="place-order-btn"
+                                class="w-full bg-brand-naranja-mostaza text-white font-bold py-4 px-6 rounded-lg hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <i class="fas fa-lock mr-2" aria-hidden="true"></i>
+                            Finalizar Compra
+                        </button>
+                        <p class="text-xs text-gray-500 text-center mt-3">
+                            <i class="fas fa-shield-alt mr-1" aria-hidden="true"></i>
+                            Tu información está protegida y segura
+                        </p>
+                        <div class="mt-3 text-center">
+                            <small class="text-gray-400">
+                                Al hacer clic en "Finalizar Compra" aceptas nuestros 
+                                <a href="terminos-condiciones.html" class="text-brand-naranja-mostaza hover:underline" target="_blank">términos y condiciones</a>
+                            </small>
+                        </div>
+                        
+                        <!-- Botón de prueba temporal (eliminar en producción) -->
+                        <div class="mt-4 text-center">
+                            <button type="button" id="test-modal-btn" 
+                                    class="text-sm text-gray-500 hover:text-brand-naranja-mostaza underline">
+                                Test Modal de Confirmación
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Resumen del Pedido -->
+            <div class="lg:order-2">
+                <div class="bg-white p-6 rounded-lg shadow-sm border sticky top-24">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                        <i class="fas fa-shopping-bag text-brand-naranja-mostaza mr-2" aria-hidden="true"></i>
+                        Resumen del Pedido
+                    </h2>
+                    
+                    <!-- Items del carrito -->
+                    <div id="checkout-items" class="space-y-4 mb-6">
+                        <!-- Los items se cargarán dinámicamente -->
+                    </div>
+                    
+                    <!-- Cupón de descuento -->
+                    <div class="border-t pt-4 mb-4">
+                        <div class="flex">
+                            <input type="text" id="couponCode" placeholder="Código de descuento"
+                                   class="flex-1 p-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-brand-naranja-mostaza focus:border-brand-naranja-mostaza">
+                            <button type="button" id="applyCoupon"
+                                    class="bg-gray-600 text-white px-4 py-3 rounded-r-lg hover:bg-gray-700 transition-colors">
+                                Aplicar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Costos -->
+                    <div class="border-t pt-4 space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>Envío:</span>
+                            <span id="shipping">$5.00</span>
+                        </div>
+                        <div id="discount-row" class="flex justify-between text-sm text-green-600 hidden">
+                            <span>Descuento:</span>
+                            <span id="discount">-$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold border-t pt-2">
+                            <span>Total:</span>
+                            <span id="total">$5.00</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Información de envío -->
+                    <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                        <h3 class="font-medium text-blue-900 mb-2 flex items-center">
+                            <i class="fas fa-info-circle mr-2" aria-hidden="true"></i>
+                            Información de Envío
+                        </h3>
+                        <ul class="text-sm text-blue-800 space-y-1">
+                            <li>• Tiempo de entrega: 2-5 días hábiles</li>
+                            <li>• Envío gratis en compras mayores a $50</li>
+                            <li>• Productos congelados en empaques especiales</li>
+                            <li>• Confirmación por WhatsApp</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Garantía -->
+                    <div class="mt-4 p-4 bg-green-50 rounded-lg">
+                        <h3 class="font-medium text-green-900 mb-2 flex items-center">
+                            <i class="fas fa-shield-alt mr-2" aria-hidden="true"></i>
+                            Garantía de Satisfacción
+                        </h3>
+                        <p class="text-sm text-green-800">
+                            Si no estás 100% satisfecho con tu compra, te devolvemos tu dinero. 
+                            <a href="politica-devoluciones.html" class="underline">Política de devoluciones</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Simplificado -->
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto px-6 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-brand-amarillo-suave">La Tierrita</h3>
+                    <p class="text-sm text-gray-300">
+                        Sabores auténticos del campo ecuatoriano.<br>
+                        Del campo a tu mesa con amor.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-brand-amarillo-suave">Contacto</h3>
+                    <ul class="text-sm text-gray-300 space-y-2">
+                        <li><i class="fas fa-phone mr-2"></i> +593-XXX-XXXX</li>
+                        <li><i class="fas fa-envelope mr-2"></i> info@latierrita.com</li>
+                        <li><i class="fas fa-map-marker-alt mr-2"></i> Ecuador</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-brand-amarillo-suave">Información</h3>
+                    <ul class="text-sm text-gray-300 space-y-2">
+                        <li><a href="terminos-condiciones.html" class="hover:text-brand-amarillo-suave">Términos y Condiciones</a></li>
+                        <li><a href="politica-privacidad.html" class="hover:text-brand-amarillo-suave">Política de Privacidad</a></li>
+                        <li><a href="politica-devoluciones.html" class="hover:text-brand-amarillo-suave">Política de Devoluciones</a></li>
+                        <li><a href="#" class="hover:text-brand-amarillo-suave">Preguntas Frecuentes</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-sm">
+                <p>&copy; 2025 La Tierrita. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de Confirmación -->
+    <div id="order-confirmation-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-6 text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-2xl text-green-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">¡Pedido Recibido!</h3>
+                <p class="text-gray-600 mb-4">
+                    Gracias por tu compra. Te contactaremos por WhatsApp para confirmar los detalles de tu pedido.
+                </p>
+                <p class="text-sm text-gray-500 mb-6">
+                    Número de pedido: <span id="order-number" class="font-mono"></span>
+                </p>
+                <button id="close-confirmation" 
+                        class="bg-brand-naranja-mostaza text-white px-6 py-2 rounded-lg hover:bg-opacity-90 transition-colors">
+                    Continuar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="checkout.js"></script>
+</body>
+</html>

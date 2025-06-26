@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Por si el video no carga bien, forzar ocultar tras 8s
         setTimeout(hideIntro, 8000);
     }
+    
+    // Inicializar productos y carrito
+    renderizarProductos();
+    actualizarCarrito();
 });
 
 // --- CATÁLOGO DE PRODUCTOS (orden: tradicionales primero, luego gourmet) ---
@@ -170,73 +174,109 @@ function renderizarProductos() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', renderizarProductos);
 
-// --- CARRITO DE COMPRAS (corregido para mostrar productos correctamente) ---
-let carrito = [];
+
+// --- CARRITO DE COMPRAS (sincronizado con localStorage) ---
+function obtenerCarrito() {
+    return JSON.parse(localStorage.getItem('cart')) || [];
+}
+
+function guardarCarrito(carrito) {
+    localStorage.setItem('cart', JSON.stringify(carrito));
+}
 
 function actualizarCarrito() {
     const cartCount = document.getElementById('cart-count');
     const cartItems = document.getElementById('cart-items');
     const cartTotal = document.getElementById('cart-total');
     const emptyMsg = document.getElementById('cart-empty-msg');
+    
     // Validación de existencia de elementos
     if (!cartCount || !cartItems || !cartTotal) return;
+    
+    const carrito = obtenerCarrito();
     let total = 0;
     cartItems.innerHTML = '';
+    
     if (carrito.length === 0) {
         if (emptyMsg) emptyMsg.style.display = '';
         cartTotal.textContent = '$0.00';
         cartCount.textContent = '0';
         return;
     }
+    
     if (emptyMsg) emptyMsg.style.display = 'none';
+    
     carrito.forEach(item => {
-        total += item.precio * item.cantidad;
+        const producto = productos.find(p => p.id === item.id);
+        if (!producto) return;
+        
+        total += producto.precio * item.quantity;
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between mb-4';
         div.innerHTML = `
             <div class="flex items-center gap-2">
-                <img src="${item.imagen}" alt="${item.nombre}" class="w-12 h-12 object-cover rounded">
+                <img src="${producto.imagen}" alt="${producto.nombre}" class="w-12 h-12 object-cover rounded">
                 <div>
-                    <div class="font-bold text-brand-naranja-mostaza">${item.nombre}</div>
-                    <div class="text-sm text-gray-600">x${item.cantidad}</div>
+                    <div class="font-bold text-brand-naranja-mostaza">${producto.nombre}</div>
+                    <div class="text-sm text-gray-600">x${item.quantity}</div>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <span class="font-bold">$${(item.precio * item.cantidad).toFixed(2)}</span>
+                <span class="font-bold">$${(producto.precio * item.quantity).toFixed(2)}</span>
                 <button class="text-red-500 hover:text-red-700" data-id="${item.id}" data-action="eliminar"><i class="fas fa-trash"></i></button>
             </div>
         `;
         cartItems.appendChild(div);
     });
+    
     cartTotal.textContent = `$${total.toFixed(2)}`;
-    cartCount.textContent = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+    cartCount.textContent = carrito.reduce((acc, item) => acc + item.quantity, 0);
 }
 
 function agregarAlCarrito(id) {
     const prod = productos.find(p => p.id === id);
     if (!prod) return;
+    
+    let carrito = obtenerCarrito();
     const idx = carrito.findIndex(item => item.id === id);
+    
     if (idx > -1) {
-        carrito[idx].cantidad++;
+        carrito[idx].quantity++;
     } else {
         carrito.push({
             id: prod.id,
-            nombre: prod.nombre,
-            precio: prod.precio,
-            imagen: prod.imagen,
-            cantidad: 1
+            quantity: 1
         });
     }
+    
+    guardarCarrito(carrito);
     actualizarCarrito();
+    
     // Mostrar el modal del carrito automáticamente después de agregar
     const cartModal = document.getElementById('cart-modal');
     if (cartModal) cartModal.classList.remove('hidden');
+    
+    // Google Analytics - Add to Cart Event
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'add_to_cart', {
+            currency: 'USD',
+            value: prod.precio,
+            items: [{
+                item_id: prod.id,
+                item_name: prod.nombre,
+                category: prod.categoria,
+                quantity: 1,
+                price: prod.precio
+            }]
+        });
+    }
 }
 
 function eliminarDelCarrito(id) {
+    let carrito = obtenerCarrito();
     carrito = carrito.filter(item => item.id !== id);
+    guardarCarrito(carrito);
     actualizarCarrito();
 }
 
@@ -326,4 +366,40 @@ scrollBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// ...puedes agregar aquí la lógica del formulario y mapa si lo deseas...
+// --- CHECKOUT FUNCTIONALITY ---
+document.getElementById('checkout-button').addEventListener('click', () => {
+    const cart = obtenerCarrito();
+    
+    if (cart.length === 0) {
+        alert('Tu carrito está vacío. Agrega algunos productos antes de continuar.');
+        return;
+    }
+    
+    // Google Analytics - Begin Checkout Event
+    if (typeof gtag !== 'undefined') {
+        const cartValue = cart.reduce((total, item) => {
+            const producto = productos.find(p => p.id === item.id);
+            return total + (producto.precio * item.quantity);
+        }, 0);
+        
+        gtag('event', 'begin_checkout', {
+            currency: 'USD',
+            value: cartValue,
+            items: cart.map(item => {
+                const producto = productos.find(p => p.id === item.id);
+                return {
+                    item_id: producto.id,
+                    item_name: producto.nombre,
+                    category: producto.categoria,
+                    quantity: item.quantity,
+                    price: producto.precio
+                };
+            })
+        });
+    }
+    
+    // Redirigir a la página de checkout
+    window.location.href = 'checkout.html';
+});
+
+
