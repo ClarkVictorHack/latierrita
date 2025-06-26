@@ -2,108 +2,193 @@
 <html lang="es" class="scroll-smooth">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LXG5F7LK42"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-LXG5F7LK42');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Tierrita - Bocaditos para toda ocasión</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>La Tierrita - Bocaditos Tradicionales del Campo Ecuatoriano | Productos Naturales</title>
+    <meta name="description" content="Descubre los auténticos bocaditos tradicionales de La Tierrita. Productos 100% naturales, libres de gluten, del campo ecuatoriano a tu mesa. ¡Conviértete en distribuidor!">
+    <meta name="keywords" content="bocaditos ecuatorianos, comida tradicional, productos naturales, sin gluten, distribuidores, La Tierrita">
+    <meta name="author" content="La Tierrita">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://latierrita.com/">
+    <meta property="og:title" content="La Tierrita - Bocaditos Tradicionales del Campo Ecuatoriano">
+    <meta property="og:description" content="Productos 100% naturales, libres de gluten, hechos con amor. Del campo a tu mesa.">
+    <meta property="og:image" content="https://latierrita.com/img/familia.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://latierrita.com/">
+    <meta property="twitter:title" content="La Tierrita - Bocaditos Tradicionales">
+    <meta property="twitter:description" content="Productos 100% naturales del campo ecuatoriano">
+    <meta property="twitter:image" content="https://latierrita.com/img/familia.png">
+    
+    <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="img/logofla.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://unpkg.com">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Google Fonts: Merriweather y Roboto -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-    <!-- jsPDF Library for PDF Generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-    <!-- EmailJS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <!-- External Libraries - Load asynchronously -->
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script async src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
     <!-- Leaflet CSS y JS para Geoapify -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Enlace a CSS externo -->
+    <!-- Main stylesheet -->
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "La Tierrita",
+      "description": "Bocaditos tradicionales del campo ecuatoriano, productos 100% naturales y libres de gluten",
+      "url": "https://latierrita.com",
+      "telephone": "+593-XXX-XXXX",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "EC"
+      },
+      "sameAs": [
+        "https://www.facebook.com/latierrita",
+        "https://www.instagram.com/latierrita"
+      ]
+    }
+    </script>
 </head>
 
 <body class="text-gray-800">
-    <!-- Animación de introducción -->
-    <div id="intro-animation-bg">
-        <video id="intro-animation-video" src="anima/animacion1.mp4" autoplay muted playsinline></video>
+    <!-- Animación de introducción optimizada -->
+    <div id="intro-animation-bg" aria-hidden="true">
+        <video id="intro-animation-video" 
+               src="anima/animacion1.mp4" 
+               autoplay 
+               muted 
+               playsinline
+               preload="metadata"
+               poster="img/loading-poster.jpg">
+            Su navegador no soporta el elemento video.
+        </video>
     </div>
 
     <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-40">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-brand-naranja-mostaza">
+    <header class="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-40" role="banner">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center" role="navigation" aria-label="Navegación principal">
+            <a href="#inicio" class="text-2xl font-bold text-brand-naranja-mostaza" aria-label="Ir a inicio">
                 La Tierrita
             </a>
+            
             <!-- Menú hamburguesa para móvil -->
-            <button id="mobile-menu-button" class="md:hidden text-2xl text-brand-naranja-mostaza focus:outline-none">
-                <i class="fas fa-bars"></i>
+            <button id="mobile-menu-button" 
+                    class="md:hidden text-2xl text-brand-naranja-mostaza focus:outline-none focus:ring-2 focus:ring-brand-naranja-mostaza"
+                    aria-label="Abrir menú de navegación"
+                    aria-expanded="false"
+                    aria-controls="mobile-menu-panel">
+                <i class="fas fa-bars" aria-hidden="true"></i>
             </button>
+            
             <div class="hidden md:flex space-x-6 items-center">
-                <a href="#inicio" class="text-gray-600 hover:text-brand-naranja-mostaza">Inicio</a>
-                <a href="#productos" class="text-gray-600 hover:text-brand-naranja-mostaza">Productos</a>
-                <a href="#distribuidores" class="text-gray-600 hover:text-brand-naranja-mostaza">Distribuidores</a>
-                <a href="#contacto" class="text-gray-600 hover:text-brand-naranja-mostaza">Contacto</a>
+                <a href="#inicio" class="text-gray-600 hover:text-brand-naranja-mostaza transition-colors">Inicio</a>
+                <a href="#productos" class="text-gray-600 hover:text-brand-naranja-mostaza transition-colors">Productos</a>
+                <a href="#distribuidores" class="text-gray-600 hover:text-brand-naranja-mostaza transition-colors">Distribuidores</a>
+                <a href="#contacto" class="text-gray-600 hover:text-brand-naranja-mostaza transition-colors">Contacto</a>
             </div>
+            
             <div class="flex items-center">
                 <button id="cart-button"
-                    class="relative text-gray-600 hover:text-brand-naranja-mostaza focus:outline-none">
-                    <i class="fa-solid fa-cart-shopping fa-lg"></i>
+                        class="relative text-gray-600 hover:text-brand-naranja-mostaza focus:outline-none focus:ring-2 focus:ring-brand-naranja-mostaza transition-colors"
+                        aria-label="Abrir carrito de compras">
+                    <i class="fa-solid fa-cart-shopping fa-lg" aria-hidden="true"></i>
                     <span id="cart-count"
-                        class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                          class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                          aria-label="Cantidad de productos en carrito">0</span>
                 </button>
             </div>
         </nav>
+        
         <!-- Panel lateral del menú móvil -->
-        <div id="mobile-menu-panel" class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform -translate-x-full transition-transform duration-300 md:hidden">
+        <div id="mobile-menu-panel" 
+             class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform -translate-x-full transition-transform duration-300 md:hidden"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="mobile-menu-title">
             <div class="flex justify-between items-center p-4 border-b">
-                <span class="text-2xl font-bold text-brand-naranja-mostaza">Menú</span>
-                <button id="close-mobile-menu" class="text-2xl text-gray-500 hover:text-brand-naranja-mostaza">&times;</button>
+                <span id="mobile-menu-title" class="text-2xl font-bold text-brand-naranja-mostaza">Menú</span>
+                <button id="close-mobile-menu" 
+                        class="text-2xl text-gray-500 hover:text-brand-naranja-mostaza focus:outline-none"
+                        aria-label="Cerrar menú">&times;</button>
             </div>
-            <nav class="flex flex-col p-6 space-y-4">
-                <a href="#inicio" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg">Inicio</a>
-                <a href="#productos" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg">Productos</a>
-                <a href="#distribuidores" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg">Distribuidores</a>
-                <a href="#contacto" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg">Contacto</a>
+            <nav class="flex flex-col p-6 space-y-4" role="navigation" aria-label="Navegación móvil">
+                <a href="#inicio" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg transition-colors">Inicio</a>
+                <a href="#productos" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg transition-colors">Productos</a>
+                <a href="#distribuidores" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg transition-colors">Distribuidores</a>
+                <a href="#contacto" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg transition-colors">Contacto</a>
             </nav>
         </div>
-        <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden"></div>
+        <div id="mobile-menu-overlay" 
+             class="fixed inset-0 bg-black/40 z-40 hidden md:hidden"
+             aria-hidden="true"></div>
     </header>
 
     <main>
         <!-- Hero Section -->
         <section id="inicio" class="relative h-[60vh] md:h-[80vh] bg-cover bg-center text-white"
-            style="background-image: url('img/planta.png');">
-            <div class="absolute inset-0 bg-black/50"></div>
+            style="background-image: url('img/planta.png');" 
+            role="banner" 
+            aria-label="Sección principal de La Tierrita">
+            <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
             <div
                 class="relative z-10 container mx-auto px-6 h-full flex flex-col justify-center items-center text-center">
                 <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">La Tierrita</h1>
                 <p class="text-xl md:text-2xl mb-8">Bocaditos para toda ocasión. Del campo a tu mesa.</p>
                 <a href="#productos"
-                    class="bg-brand-naranja-mostaza text-white font-bold rounded-lg hover:bg-opacity-90 transition-transform transform hover:scale-105 px-8 py-4 text-lg">Ver
-                    Productos</a>
+                    class="bg-brand-naranja-mostaza text-white font-bold rounded-lg hover:bg-opacity-90 transition-transform transform hover:scale-105 px-8 py-4 text-lg"
+                    aria-label="Ver nuestros productos disponibles">Ver Productos</a>
             </div>
         </section>
 
         <!-- About Us Section -->
-        <section id="nosotros" class="py-16 md:py-24 bg-white">
+        <section id="nosotros" class="py-16 md:py-24 bg-white" aria-label="Información sobre nuestra empresa">
             <div class="container mx-auto px-6">
                 <div class="flex flex-col md:flex-row items-center gap-12">
                     <div class="md:w-1/2">
-                        <img src="img/familia.png" alt="[Imagen de la familia fundadora de La Tierrita]"
-                            class="w-full h-auto object-cover md:max-h-[400px] mx-auto bg-white/0"
-                            style="border-radius: 0; box-shadow: none; mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, white 70%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, white 70%, transparent 100%);">
+                        <img src="img/familia.png" 
+                             alt="Familia fundadora de La Tierrita trabajando en el campo, mostrando su compromiso con la agricultura tradicional"
+                             class="w-full h-auto object-cover md:max-h-[400px] mx-auto family-image-mask"
+                             loading="lazy"
+                             width="400" 
+                             height="400">
                     </div>
                     <div class="md:w-1/2 text-center md:text-left">
                         <h2 class="text-3xl md:text-4xl font-bold text-brand-naranja-mostaza mb-6">Nuestra Historia</h2>

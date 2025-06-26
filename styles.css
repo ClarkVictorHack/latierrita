@@ -1,51 +1,168 @@
-/* Estilos personalizados y configuración de Tailwind */
+/* Configuración de Tailwind y variables personalizadas */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables CSS para colores de marca */
+:root {
+  --brand-naranja-mostaza: #d79f49;
+  --brand-verde-oliva: #aca060;
+  --brand-amarillo-pastel: #dfbf85;
+  --brand-amarillo-suave: #f2ce85;
+}
+
+/* Configuración de fuentes */
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #FEFDFB;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Merriweather', serif;
 }
 
-/* Colores de la marca */
-.bg-brand-amarillo-pastel { background-color: #dfbf85; }
-.bg-brand-amarillo-suave { background-color: #f2ce85; }
-.bg-brand-naranja-mostaza { background-color: #d79f49; }
-.bg-brand-verde-oliva { background-color: #aca060; }
-.text-brand-amarillo-pastel { color: #dfbf85; }
-.text-brand-amarillo-suave { color: #f2ce85; }
-.text-brand-naranja-mostaza { color: #d79f49; }
-.text-brand-verde-oliva { color: #aca060; }
-.border-brand-naranja-mostaza { border-color: #d79f49; }
-.ring-brand-naranja-mostaza:focus { --tw-ring-color: #d79f49; }
+/* Configuración de Tailwind personalizada */
+@layer utilities {
+  .bg-brand-naranja-mostaza {
+    background-color: var(--brand-naranja-mostaza);
+  }
+  
+  .bg-brand-verde-oliva {
+    background-color: var(--brand-verde-oliva);
+  }
+  
+  .bg-brand-amarillo-pastel {
+    background-color: var(--brand-amarillo-pastel);
+  }
+  
+  .bg-brand-amarillo-suave {
+    background-color: var(--brand-amarillo-suave);
+  }
+  
+  .text-brand-naranja-mostaza {
+    color: var(--brand-naranja-mostaza);
+  }
+  
+  .text-brand-verde-oliva {
+    color: var(--brand-verde-oliva);
+  }
+  
+  .text-brand-amarillo-pastel {
+    color: var(--brand-amarillo-pastel);
+  }
+  
+  .text-brand-amarillo-suave {
+    color: var(--brand-amarillo-suave);
+  }
+  
+  .border-brand-naranja-mostaza {
+    border-color: var(--brand-naranja-mostaza);
+  }
+  
+  .ring-brand-naranja-mostaza:focus {
+    --tw-ring-color: var(--brand-naranja-mostaza);
+  }
+  
+  .hover\:text-brand-naranja-mostaza:hover {
+    color: var(--brand-naranja-mostaza);
+  }
+  
+  .hover\:text-brand-amarillo-suave:hover {
+    color: var(--brand-amarillo-suave);
+  }
+}
 
-/* Animación de introducción */
+/* Efectos personalizados */
+.family-image-mask {
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, white 70%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, white 70%, transparent 100%);
+  transition: transform 0.3s ease;
+}
+
+.family-image-mask:hover {
+  transform: scale(1.02);
+}
+
+/* Animación suave para el scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optimización de la animación de introducción */
 #intro-animation-bg {
     position: fixed;
-    z-index: 10000;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.0);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: #000;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.5s;
-    width: 100vw;
-    height: 100vh;
+    transition: opacity 0.5s ease-out;
 }
+
 #intro-animation-bg.hide {
     opacity: 0;
     pointer-events: none;
 }
+
 #intro-animation-video {
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    background: transparent;
-    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Mejoras de performance para imágenes */
+img {
+  image-rendering: auto;
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Mejoras en formularios */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(215, 159, 73, 0.5);
+}
+
+/* Transiciones suaves para botones */
+button,
+.btn {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Loading state para imágenes */
+.loading-placeholder {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Mejoras para transiciones */
+.transition-colors {
+  transition: color 0.2s ease-in-out;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .family-image-mask {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }
