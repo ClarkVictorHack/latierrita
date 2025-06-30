@@ -267,6 +267,52 @@ button,
   margin-bottom: 1rem !important;
 }
 
+/* Estilos para el marcador personalizado del mapa */
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.custom-marker i {
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+}
+
+/* Estilos para el contenedor del mapa */
+#map-container {
+  border: 2px solid var(--brand-naranja-mostaza) !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden !important;
+}
+
+#geoapify-map {
+  border-radius: 0.5rem !important;
+}
+
+/* Mejorar la apariencia de los controles del mapa */
+.leaflet-control-zoom a {
+  background-color: var(--brand-naranja-mostaza) !important;
+  color: white !important;
+  border-color: var(--brand-naranja-mostaza) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background-color: var(--brand-verde-oliva) !important;
+}
+
+/* Popup personalizado */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.leaflet-popup-tip {
+  background: white !important;
+}
+
 /* Print styles */
 @media print {
   .no-print {

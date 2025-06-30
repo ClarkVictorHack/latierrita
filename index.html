@@ -60,7 +60,7 @@
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script async src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-    <!-- Leaflet CSS y JS para Geoapify -->
+    <!-- Leaflet CSS y JS para Mapbox -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -81,8 +81,11 @@
         "addressCountry": "EC"
       },
       "sameAs": [
-        "https://www.facebook.com/latierrita",
-        "https://www.instagram.com/latierrita"
+        "https://www.facebook.com/latierrita.shop",
+        "https://www.instagram.com/latierrita.shop/",
+        "https://www.linkedin.com/company/latierrita/?viewAsMember=true",
+        "https://x.com/Latierritashop",
+        "https://www.tiktok.com/@la.tierrita.shop"
       ]
     }
     </script>
@@ -284,7 +287,7 @@
                                         </button>
                                     </div>
                                     <input type="hidden" id="geolocation" name="geolocation">
-                                    <!-- Mapbox Preview reemplaza Google Maps -->
+                                    <!-- Mapbox Preview con Leaflet -->
                                     <div id="map-container" class="mt-4 w-full h-64 rounded-lg overflow-hidden border border-gray-200" style="display:none;">
                                         <div id="geoapify-map" style="width:100%;height:100%;min-height:200px;"></div>
                                     </div>

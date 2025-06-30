@@ -1,8 +1,5 @@
 // Este archivo contiene toda la lógica JS de la landing page de La Tierrita.
-// Incluye: animación de introducción, menú móvil, productos, carrito, formulario distribuidores, geolocalización y mapa.
-// El código debe ser copiado desde landing.js aquí y luego eliminar landing.js.
-
-// (ver contenido anterior para detalles)
+// Incluye: animación de introducción, menú móvil, productos, carrito, formulario distribuidores, geolocalización y mapa mejorados.
 
 // --- ANIMACIÓN DE INTRODUCCIÓN ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -100,393 +97,816 @@ const productos = [
         descripcion: "Hechas con plátano verde y rellenas de puro sabor, son perfectas para resolver el desayuno.",
         precio: 3.00,
         peso: "400g",
-        ingredientes: "Plátano, grasa vegetal, cebollin, sal y queso."
+        ingredientes: "Verde, sal, grasa vegetal y queso."
     },
     {
         id: 7,
-        nombre: "Torrejas de Verde",
-        categoria: "Bocaditos Gourmet",
-        imagen: "img/torrejas.jpg",
-        descripcion: "Comida muy ecuatoriana con su crujiente sabor recordarás el desayuno de tu infancia.",
-        precio: 3.00,
-        peso: "400g",
-        ingredientes: "Plátano, pimiento, cebolla colorada, cebollin, queso, cebolla blanca, sal y achiote."
-    },
-    {
-        id: 8,
         nombre: "Muchines de Yuca",
         categoria: "Bocaditos Gourmet",
         imagen: "img/muchines de yuca.jpg",
-        descripcion: "¡El clásico que nunca falla! Hechos con yuca 100% natural y rellenos de queso.",
+        descripcion: "Crujientes por fuera, suaves por dentro. Hechos con yuca 100% natural y el toque perfecto de sal.",
         precio: 3.00,
-        peso: "500g",
-        ingredientes: "Yuca, sal, grasa vegetal y queso."
+        peso: "400g",
+        ingredientes: "Yuca, sal y grasa vegetal."
     },
+    {
+        id: 8,
+        nombre: "Torrejas",
+        categoria: "Bocaditos Gourmet",
+        imagen: "img/torrejas.jpg",
+        descripcion: "Esponjosas y doradas, perfectas para acompañar con café o chocolate caliente.",
+        precio: 3.00,
+        peso: "400g",
+        ingredientes: "Harina, huevo, leche, azúcar, sal."
+    }
 ];
 
-// --- RENDERIZADO DE PRODUCTOS (al hacer clic en Añadir, mostrar modal antes de agregar) ---
-function renderizarProductos() {
-    const lista = document.getElementById('product-list');
-    if (!lista) return;
-    lista.innerHTML = '';
-    // Agrupar por categoría
-    const categorias = [
-        { nombre: 'Bocaditos Tradicionales', color: 'bg-brand-amarillo-suave' },
-        { nombre: 'Bocaditos Gourmet', color: 'bg-brand-amarillo-pastel' }
-    ];
-    categorias.forEach(cat => {
-        // Título de categoría
-        const catTitle = document.createElement('div');
-        catTitle.className = `col-span-full text-2xl font-bold mb-2 mt-6 ${cat.color} rounded-lg py-2 px-4 text-gray-800`;
-        catTitle.textContent = cat.nombre;
-        catTitle.style.backgroundColor = cat.color === 'bg-brand-amarillo-suave' ? 'var(--brand-amarillo-suave)' : 'var(--brand-amarillo-pastel)';
-        lista.appendChild(catTitle);
-        // Productos de la categoría
-        productos.filter(p => p.categoria === cat.nombre).forEach(producto => {
-            const card = document.createElement('div');
-            card.className = 'product-card bg-white rounded-lg shadow-lg overflow-hidden flex flex-col cursor-pointer transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2';
-            card.innerHTML = `
-                <div class="relative pb-[100%] bg-white">
-                    <img src="${producto.imagen}" alt="[Imagen de ${producto.nombre}]" class="absolute h-full w-full object-contain">
-                </div>
-                <div class="p-6 flex-grow flex flex-col">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">${producto.nombre}</h3>
-                    <p class="text-gray-600 mb-2 flex-grow">${producto.descripcion}</p>
-                    <div class="mb-2">
-                        <span class="block text-xs font-semibold text-brand-verde-oliva uppercase tracking-wide">Peso</span>
-                        <span class="text-sm text-gray-500">${producto.peso}</span>
-                    </div>
-                    <div class="flex justify-between items-center mt-2">
-                        <span class="text-2xl font-bold text-brand-naranja-mostaza" style="color: var(--brand-naranja-mostaza);">$${producto.precio.toFixed(2)}</span>
-                        <button data-id="${producto.id}" class="show-detail-btn bg-brand-naranja-mostaza text-white font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-transform transform hover:scale-105" style="background-color: var(--brand-naranja-mostaza); color: white; display: inline-flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-plus mr-2"></i>Añadir
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            // Aplicar estilos inline para asegurar visibilidad
-            card.style.backgroundColor = 'white';
-            card.style.borderRadius = '0.5rem';
-            card.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
-            card.style.overflow = 'hidden';
-            card.style.display = 'flex';
-            card.style.flexDirection = 'column';
-            card.style.cursor = 'pointer';
-            card.style.transition = 'all 0.3s ease-in-out';
-            
-            // Evento para mostrar modal desde cualquier parte de la tarjeta
-            card.addEventListener('click', (e) => {
-                if (!e.target.closest('.show-detail-btn')) {
-                    mostrarDetalleProducto(producto.id);
-                }
-            });
-            // Evento para mostrar modal desde el botón Añadir
-            const addButton = card.querySelector('.show-detail-btn');
-            addButton.style.backgroundColor = 'var(--brand-naranja-mostaza)';
-            addButton.style.color = 'white';
-            addButton.style.border = 'none';
-            addButton.style.padding = '0.5rem 1rem';
-            addButton.style.borderRadius = '0.5rem';
-            addButton.style.fontWeight = 'bold';
-            addButton.style.cursor = 'pointer';
-            addButton.style.display = 'inline-flex';
-            addButton.style.alignItems = 'center';
-            addButton.style.justifyContent = 'center';
-            addButton.style.transition = 'all 0.2s ease-in-out';
-            
-            addButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                mostrarDetalleProducto(producto.id);
-            });
-            lista.appendChild(card);
+// --- GESTIÓN DEL CARRITO ---
+let carrito = JSON.parse(localStorage.getItem('carritoLaTierrita')) || [];
+
+function agregarAlCarrito(productoId) {
+    const producto = productos.find(p => p.id === productoId);
+    if (!producto) return;
+    
+    const itemExistente = carrito.find(item => item.id === productoId);
+    if (itemExistente) {
+        itemExistente.cantidad += 1;
+    } else {
+        carrito.push({
+            id: producto.id,
+            nombre: producto.nombre,
+            precio: producto.precio,
+            imagen: producto.imagen,
+            cantidad: 1
         });
-    });
+    }
+    
+    guardarCarrito();
+    actualizarCarrito();
+    mostrarNotificacionCarrito(producto.nombre);
 }
 
-
-
-// --- CARRITO DE COMPRAS (sincronizado con localStorage) ---
-function obtenerCarrito() {
-    return JSON.parse(localStorage.getItem('cart')) || [];
+function removerDelCarrito(productoId) {
+    carrito = carrito.filter(item => item.id !== productoId);
+    guardarCarrito();
+    actualizarCarrito();
 }
 
-function guardarCarrito(carrito) {
-    localStorage.setItem('cart', JSON.stringify(carrito));
+function cambiarCantidad(productoId, nuevaCantidad) {
+    if (nuevaCantidad <= 0) {
+        removerDelCarrito(productoId);
+        return;
+    }
+    
+    const item = carrito.find(item => item.id === productoId);
+    if (item) {
+        item.cantidad = nuevaCantidad;
+        guardarCarrito();
+        actualizarCarrito();
+    }
+}
+
+function guardarCarrito() {
+    localStorage.setItem('carritoLaTierrita', JSON.stringify(carrito));
+}
+
+function obtenerTotalCarrito() {
+    return carrito.reduce((total, item) => total + (item.precio * item.cantidad), 0);
+}
+
+function obtenerCantidadTotal() {
+    return carrito.reduce((total, item) => total + item.cantidad, 0);
+}
+
+function vaciarCarrito() {
+    carrito = [];
+    guardarCarrito();
+    actualizarCarrito();
 }
 
 function actualizarCarrito() {
-    const cartCount = document.getElementById('cart-count');
-    const cartItems = document.getElementById('cart-items');
-    const cartTotal = document.getElementById('cart-total');
-    const emptyMsg = document.getElementById('cart-empty-msg');
+    const contadorCarrito = document.getElementById('cart-count');
+    const listaCarrito = document.getElementById('cart-items');
+    const totalCarrito = document.getElementById('cart-total');
+    const botonCheckout = document.getElementById('checkout-btn');
     
-    // Validación de existencia de elementos
-    if (!cartCount || !cartItems || !cartTotal) return;
+    const cantidadTotal = obtenerCantidadTotal();
+    const precioTotal = obtenerTotalCarrito();
     
-    const carrito = obtenerCarrito();
-    let total = 0;
-    cartItems.innerHTML = '';
-    
-    if (carrito.length === 0) {
-        if (emptyMsg) emptyMsg.style.display = '';
-        cartTotal.textContent = '$0.00';
-        cartCount.textContent = '0';
-        return;
+    // Actualizar contador
+    if (contadorCarrito) {
+        contadorCarrito.textContent = cantidadTotal;
+        contadorCarrito.style.display = cantidadTotal > 0 ? 'block' : 'none';
     }
     
-    if (emptyMsg) emptyMsg.style.display = 'none';
-    
-    carrito.forEach(item => {
-        const producto = productos.find(p => p.id === item.id);
-        if (!producto) return;
-        
-        total += producto.precio * item.quantity;
-        const div = document.createElement('div');
-        div.className = 'flex items-center justify-between mb-4';
-        div.innerHTML = `
-            <div class="flex items-center gap-2">
-                <img src="${producto.imagen}" alt="${producto.nombre}" class="w-12 h-12 object-cover rounded">
-                <div>
-                    <div class="font-bold text-brand-naranja-mostaza">${producto.nombre}</div>
-                    <div class="text-sm text-gray-600">x${item.quantity}</div>
+    // Actualizar lista de items
+    if (listaCarrito) {
+        if (carrito.length === 0) {
+            listaCarrito.innerHTML = '<p class="text-gray-500 text-center py-4">Tu carrito está vacío</p>';
+        } else {
+            listaCarrito.innerHTML = carrito.map(item => `
+                <div class="flex items-center justify-between p-2 border-b border-gray-100">
+                    <div class="flex items-center space-x-3">
+                        <img src="${item.imagen}" alt="${item.nombre}" class="w-12 h-12 object-cover rounded">
+                        <div>
+                            <h4 class="font-medium text-sm">${item.nombre}</h4>
+                            <p class="text-brand-naranja-mostaza font-bold text-sm">$${item.precio.toFixed(2)}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="cambiarCantidad(${item.id}, ${item.cantidad - 1})" 
+                                class="w-6 h-6 bg-gray-200 rounded-full text-sm hover:bg-gray-300">-</button>
+                        <span class="text-sm font-medium w-8 text-center">${item.cantidad}</span>
+                        <button onclick="cambiarCantidad(${item.id}, ${item.cantidad + 1})" 
+                                class="w-6 h-6 bg-gray-200 rounded-full text-sm hover:bg-gray-300">+</button>
+                        <button onclick="removerDelCarrito(${item.id})" 
+                                class="text-red-500 ml-2 hover:text-red-700 text-sm">🗑️</button>
+                    </div>
                 </div>
-            </div>
-            <div class="flex items-center gap-2">
-                <span class="font-bold">$${(producto.precio * item.quantity).toFixed(2)}</span>
-                <button class="text-red-500 hover:text-red-700" data-id="${item.id}" data-action="eliminar"><i class="fas fa-trash"></i></button>
-            </div>
-        `;
-        cartItems.appendChild(div);
-    });
-    
-    cartTotal.textContent = `$${total.toFixed(2)}`;
-    cartCount.textContent = carrito.reduce((acc, item) => acc + item.quantity, 0);
-    
-    // Asegurar visibilidad de botones después de actualizar el carrito
-    setTimeout(() => {
-        asegurarVisibilidadBotones();
-    }, 50);
-}
-
-function agregarAlCarrito(id) {
-    const prod = productos.find(p => p.id === id);
-    if (!prod) return;
-    
-    let carrito = obtenerCarrito();
-    const idx = carrito.findIndex(item => item.id === id);
-    
-    if (idx > -1) {
-        carrito[idx].quantity++;
-    } else {
-        carrito.push({
-            id: prod.id,
-            quantity: 1
-        });
+            `).join('');
+        }
     }
     
-    guardarCarrito(carrito);
-    actualizarCarrito();
+    // Actualizar total
+    if (totalCarrito) {
+        totalCarrito.textContent = `$${precioTotal.toFixed(2)}`;
+    }
     
-    // Mostrar el modal del carrito automáticamente después de agregar
-    const cartModal = document.getElementById('cart-modal');
-    if (cartModal) cartModal.classList.remove('hidden');
-    
-    // Google Analytics - Add to Cart Event
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'add_to_cart', {
-            currency: 'USD',
-            value: prod.precio,
-            items: [{
-                item_id: prod.id,
-                item_name: prod.nombre,
-                category: prod.categoria,
-                quantity: 1,
-                price: prod.precio
-            }]
-        });
+    // Habilitar/deshabilitar botón de checkout
+    if (botonCheckout) {
+        botonCheckout.disabled = carrito.length === 0;
+        botonCheckout.classList.toggle('opacity-50', carrito.length === 0);
+        botonCheckout.classList.toggle('cursor-not-allowed', carrito.length === 0);
     }
 }
 
-function eliminarDelCarrito(id) {
-    let carrito = obtenerCarrito();
-    carrito = carrito.filter(item => item.id !== id);
-    guardarCarrito(carrito);
-    actualizarCarrito();
-}
-
-document.addEventListener('click', e => {
-    const target = e.target.closest('button[data-action]');
-    if (!target) return;
-    const id = parseInt(target.getAttribute('data-id'));
-    const action = target.getAttribute('data-action');
-    if (action === 'agregar') {
-        agregarAlCarrito(id);
-    } else if (action === 'eliminar') {
-        eliminarDelCarrito(id);
-    } else if (action === 'detalle') {
-        mostrarDetalleProducto(id);
-    }
-});
-
-document.getElementById('cart-button').addEventListener('click', () => {
-    document.getElementById('cart-modal').classList.remove('hidden');
-    actualizarCarrito();
-});
-document.getElementById('close-cart-button').addEventListener('click', () => {
-    document.getElementById('cart-modal').classList.add('hidden');
-});
-
-// --- MODAL DE DETALLE DE PRODUCTO (agregar funcionalidad de añadir al carrito) ---
-function mostrarDetalleProducto(id) {
-    const prod = productos.find(p => p.id === id);
-    if (!prod) return;
-    const modal = document.getElementById('product-modal');
-    const content = document.getElementById('product-modal-content');
-    content.innerHTML = `
-        <button id="close-product-modal" class="absolute top-4 right-4 text-2xl text-gray-500 hover:text-gray-800">&times;</button>
-        <div class="grid md:grid-cols-2 gap-6">
-            <img src="${prod.imagen}" alt="[Imagen de ${prod.nombre}]" class="w-full h-full object-contain rounded-l-lg">
-            <div class="p-8 flex flex-col">
-                <h2 class="text-3xl font-bold text-brand-naranja-mostaza mb-2">${prod.nombre}</h2>
-                <p class="text-sm text-gray-500 mb-4">${prod.categoria}</p>
-                <p class="text-gray-600 mb-6 flex-grow">${prod.descripcion}</p>
-                <div class="mb-6">
-                    <h4 class="font-bold text-lg mb-2">Peso</h4>
-                    <p class="text-gray-600 mb-2">${prod.peso}</p>
-                    <h4 class="font-bold text-lg mb-2">Ingredientes:</h4>
-                    <p class="text-gray-600">${prod.ingredientes}</p>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-3xl font-bold text-brand-naranja-mostaza">$${prod.precio.toFixed(2)}</span>
-                    <button data-id="${prod.id}" class="add-to-cart-btn bg-brand-naranja-mostaza text-white font-bold rounded-lg hover:bg-opacity-90 transition-transform transform hover:scale-105 px-6 py-3">Añadir al Carrito</button>
-                </div>
-            </div>
+function mostrarNotificacionCarrito(nombreProducto) {
+    // Crear notificación
+    const notificacion = document.createElement('div');
+    notificacion.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 transform transition-transform duration-300 translate-x-full';
+    notificacion.innerHTML = `
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-check-circle"></i>
+            <span>${nombreProducto} agregado al carrito</span>
         </div>
     `;
-    modal.classList.remove('hidden');
-    document.getElementById('close-product-modal').addEventListener('click', () => modal.classList.add('hidden'));
-    modal.onclick = e => { if (e.target === modal) modal.classList.add('hidden'); };
-    // Evento para agregar al carrito desde el modal
-    content.querySelector('.add-to-cart-btn').addEventListener('click', (e) => {
-        agregarAlCarrito(prod.id);
-        modal.classList.add('hidden');
+    
+    document.body.appendChild(notificacion);
+    
+    // Animar entrada
+    setTimeout(() => {
+        notificacion.classList.remove('translate-x-full');
+    }, 10);
+    
+    // Animar salida y remover
+    setTimeout(() => {
+        notificacion.classList.add('translate-x-full');
+        setTimeout(() => {
+            if (notificacion.parentNode) {
+                notificacion.parentNode.removeChild(notificacion);
+            }
+        }, 300);
+    }, 2000);
+}
+
+// --- RENDERIZADO DE PRODUCTOS ---
+function renderizarProductos() {
+    const contenedor = document.getElementById('productos-grid');
+    if (!contenedor) return;
+    
+    // Agrupar productos por categoría manteniendo el orden
+    const categorias = ['Bocaditos Tradicionales', 'Bocaditos Gourmet'];
+    
+    let html = '';
+    categorias.forEach(categoria => {
+        const productosCategoria = productos.filter(p => p.categoria === categoria);
+        if (productosCategoria.length > 0) {
+            html += `
+                <div class="col-span-full mb-8">
+                    <h3 class="text-2xl font-bold text-brand-verde-oliva mb-6 text-center">${categoria}</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        ${productosCategoria.map(producto => `
+                            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+                                <div class="aspect-square bg-gray-50 flex items-center justify-center p-4">
+                                    <img src="${producto.imagen}" alt="${producto.nombre}" 
+                                         class="max-w-full max-h-full object-contain rounded-lg">
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="font-bold text-lg text-gray-800 mb-2">${producto.nombre}</h3>
+                                    <p class="text-gray-600 text-sm mb-3 leading-relaxed">${producto.descripcion}</p>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <span class="text-2xl font-bold text-brand-naranja-mostaza">$${producto.precio.toFixed(2)}</span>
+                                        <span class="text-sm text-gray-500">${producto.peso}</span>
+                                    </div>
+                                    <button onclick="agregarAlCarrito(${producto.id})" 
+                                            style="background-color: #d79f49 !important; color: white !important;" 
+                                            class="w-full py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-brand-naranja-mostaza focus:ring-opacity-50">
+                                        <i class="fas fa-shopping-cart mr-2"></i>
+                                        Agregar al Carrito
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
     });
+    
+    contenedor.innerHTML = html;
+    
+    // Asegurar visibilidad de botones después del renderizado
+    setTimeout(asegurarVisibilidadBotones, 100);
 }
 
 // --- MENÚ MÓVIL ---
-document.getElementById('mobile-menu-button').addEventListener('click', () => {
-    document.getElementById('mobile-menu-panel').classList.remove('-translate-x-full');
-    document.getElementById('mobile-menu-overlay').classList.remove('hidden');
-});
-document.getElementById('close-mobile-menu').addEventListener('click', () => {
-    document.getElementById('mobile-menu-panel').classList.add('-translate-x-full');
-    document.getElementById('mobile-menu-overlay').classList.add('hidden');
-});
-document.getElementById('mobile-menu-overlay').addEventListener('click', () => {
-    document.getElementById('mobile-menu-panel').classList.add('-translate-x-full');
-    document.getElementById('mobile-menu-overlay').classList.add('hidden');
-});
-
-// --- BOTÓN FLOTANTE SCROLL TO TOP ---
-const scrollBtn = document.getElementById('scrollToTopBtn');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-        scrollBtn.classList.remove('hidden');
-    } else {
-        scrollBtn.classList.add('hidden');
-    }
-});
-scrollBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-// --- CHECKOUT FUNCTIONALITY ---
-document.getElementById('checkout-button').addEventListener('click', () => {
-    const cart = obtenerCarrito();
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const isOpen = menu.classList.contains('max-h-96');
     
-    if (cart.length === 0) {
-        alert('Tu carrito está vacío. Agrega algunos productos antes de continuar.');
+    if (isOpen) {
+        menu.classList.remove('max-h-96');
+        menu.classList.add('max-h-0');
+    } else {
+        menu.classList.remove('max-h-0');
+        menu.classList.add('max-h-96');
+    }
+}
+
+// --- CARRITO SIDEBAR ---
+function toggleCarrito() {
+    const carrito = document.getElementById('carrito-sidebar');
+    const overlay = document.getElementById('carrito-overlay');
+    
+    const isOpen = carrito.classList.contains('translate-x-0');
+    
+    if (isOpen) {
+        carrito.classList.remove('translate-x-0');
+        carrito.classList.add('translate-x-full');
+        overlay.classList.add('hidden');
+    } else {
+        carrito.classList.remove('translate-x-full');
+        carrito.classList.add('translate-x-0');
+        overlay.classList.remove('hidden');
+    }
+}
+
+function procederAlCheckout() {
+    if (carrito.length === 0) {
+        alert('Tu carrito está vacío');
         return;
     }
     
-    // Google Analytics - Begin Checkout Event
-    if (typeof gtag !== 'undefined') {
-        const cartValue = cart.reduce((total, item) => {
-            const producto = productos.find(p => p.id === item.id);
-            return total + (producto.precio * item.quantity);
-        }, 0);
-        
-        gtag('event', 'begin_checkout', {
-            currency: 'USD',
-            value: cartValue,
-            items: cart.map(item => {
-                const producto = productos.find(p => p.id === item.id);
-                return {
-                    item_id: producto.id,
-                    item_name: producto.nombre,
-                    category: producto.categoria,
-                    quantity: item.quantity,
-                    price: producto.precio
-                };
-            })
-        });
-    }
+    // Guardar carrito en localStorage para el checkout
+    localStorage.setItem('carritoCheckout', JSON.stringify(carrito));
     
-    // Redirigir a la página de checkout
+    // Ir a la página de checkout
     window.location.href = 'checkout.html';
-});
-
-// --- FUNCIÓN PARA ASEGURAR VISIBILIDAD DE BOTONES ---
-function asegurarVisibilidadBotones() {
-    // Botón de checkout
-    const checkoutBtn = document.getElementById('checkout-button');
-    if (checkoutBtn) {
-        checkoutBtn.style.display = 'block';
-        checkoutBtn.style.width = '100%';
-        checkoutBtn.style.backgroundColor = 'var(--brand-naranja-mostaza)';
-        checkoutBtn.style.color = 'white';
-        checkoutBtn.style.fontWeight = 'bold';
-        checkoutBtn.style.padding = '0.75rem';
-        checkoutBtn.style.borderRadius = '0.5rem';
-        checkoutBtn.style.border = 'none';
-        checkoutBtn.style.cursor = 'pointer';
-        checkoutBtn.style.textAlign = 'center';
-        checkoutBtn.style.transition = 'all 0.2s ease-in-out';
-    }
-    
-    // Botón del carrito en el header
-    const cartBtn = document.getElementById('cart-button');
-    if (cartBtn) {
-        cartBtn.style.display = 'inline-flex';
-        cartBtn.style.alignItems = 'center';
-        cartBtn.style.justifyContent = 'center';
-        cartBtn.style.position = 'relative';
-        cartBtn.style.color = '#6b7280';
-        cartBtn.style.cursor = 'pointer';
-        cartBtn.style.transition = 'color 0.2s ease-in-out';
-    }
-    
-    // Botones de productos
-    const addButtons = document.querySelectorAll('.show-detail-btn');
-    addButtons.forEach(btn => {
-        btn.style.display = 'inline-flex';
-        btn.style.alignItems = 'center';
-        btn.style.justifyContent = 'center';
-        btn.style.backgroundColor = 'var(--brand-naranja-mostaza)';
-        btn.style.color = 'white';
-        btn.style.fontWeight = 'bold';
-        btn.style.padding = '0.5rem 1rem';
-        btn.style.borderRadius = '0.5rem';
-        btn.style.border = 'none';
-        btn.style.cursor = 'pointer';
-        btn.style.transition = 'all 0.2s ease-in-out';
-        btn.style.zIndex = '10';
-        btn.style.position = 'relative';
-    });
 }
 
-// Asegurar visibilidad de botones críticos al cargar
+// --- FUNCIONES DE VISIBILIDAD DE BOTONES ---
+function asegurarVisibilidadBotones() {
+    // Asegurar que todos los botones de compra sean visibles con estilos inline
+    const botonesCompra = document.querySelectorAll('[onclick*="agregarAlCarrito"]');
+    botonesCompra.forEach(boton => {
+        boton.style.backgroundColor = '#d79f49';
+        boton.style.color = 'white';
+        boton.style.display = 'block';
+        boton.style.visibility = 'visible';
+        boton.style.opacity = '1';
+        boton.style.pointerEvents = 'auto';
+    });
+    
+    // Asegurar que el botón de checkout sea visible
+    const botonCheckout = document.getElementById('checkout-btn');
+    if (botonCheckout) {
+        botonCheckout.style.backgroundColor = '#d79f49';
+        botonCheckout.style.color = 'white';
+        botonCheckout.style.display = 'block';
+        botonCheckout.style.visibility = 'visible';
+    }
+    
+    console.log(`Visibilidad asegurada para ${botonesCompra.length} botones de compra`);
+}
+
+// Ejecutar la función de visibilidad cuando sea necesario
 document.addEventListener('DOMContentLoaded', asegurarVisibilidadBotones);
 
-
+// --- GEOLOCALIZACIÓN Y MAPA MEJORADOS (Mapbox) ---
+document.addEventListener('DOMContentLoaded', () => {
+    const getLocationBtn = document.getElementById('getLocationBtn');
+    const locationInput = document.getElementById('location');
+    const geolocationInput = document.getElementById('geolocation');
+    const mapContainer = document.getElementById('map-container');
+    
+    let map = null;
+    let marker = null;
+    
+    // Token de Mapbox actualizado
+    const MAPBOX_TOKEN = 'pk.eyJ1IjoibGF0aWVycml0YXNob3AiLCJhIjoiY21jOWFzMHM4MXcyZjJtb3BuZzU0ZnVjdSJ9.uvBJT6wvbCSwc_ia4bSzUQ';
+    
+    if (getLocationBtn) {
+        getLocationBtn.addEventListener('click', obtenerUbicacion);
+    }
+    
+    function obtenerUbicacion() {
+        if (!navigator.geolocation) {
+            alert('La geolocalización no es compatible con este navegador.');
+            return;
+        }
+        
+        // Mostrar estado de carga
+        getLocationBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-brand-naranja-mostaza"></i>';
+        getLocationBtn.disabled = true;
+        
+        // Agregar texto de estado
+        let statusDiv = document.getElementById('location-status');
+        if (!statusDiv) {
+            statusDiv = document.createElement('div');
+            statusDiv.id = 'location-status';
+            statusDiv.className = 'text-sm text-gray-600 mt-2';
+            getLocationBtn.parentNode.appendChild(statusDiv);
+        }
+        statusDiv.textContent = 'Obteniendo tu ubicación...';
+        statusDiv.className = 'text-sm text-gray-600 mt-2';
+        
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                
+                // Actualizar estado
+                statusDiv.textContent = 'Procesando ubicación...';
+                statusDiv.className = 'text-sm text-blue-600 mt-2';
+                
+                // Guardar coordenadas
+                geolocationInput.value = `${lat},${lng}`;
+                
+                try {
+                    // Obtener dirección usando la función mejorada
+                    await procesarGeocoding(lat, lng);
+                    
+                    // Mostrar mapa
+                    mostrarMapa(lat, lng);
+                    
+                    // Actualizar estado final
+                    statusDiv.textContent = '✓ Ubicación obtenida correctamente';
+                    statusDiv.className = 'text-sm text-green-600 mt-2';
+                    
+                    // Ocultar mensaje después de 3 segundos
+                    setTimeout(() => {
+                        if (statusDiv && statusDiv.parentNode) {
+                            statusDiv.parentNode.removeChild(statusDiv);
+                        }
+                    }, 3000);
+                    
+                } catch (error) {
+                    console.error('Error en geocodificación:', error);
+                    // Mostrar mapa de todos modos
+                    mostrarMapa(lat, lng);
+                    
+                    statusDiv.textContent = '⚠ Ubicación obtenida, dirección aproximada';
+                    statusDiv.className = 'text-sm text-yellow-600 mt-2';
+                    
+                    setTimeout(() => {
+                        if (statusDiv && statusDiv.parentNode) {
+                            statusDiv.parentNode.removeChild(statusDiv);
+                        }
+                    }, 4000);
+                }
+                
+                // Restaurar botón
+                getLocationBtn.innerHTML = '<i class="fas fa-map-marker-alt text-brand-naranja-mostaza"></i>';
+                getLocationBtn.disabled = false;
+            },
+            (error) => {
+                console.error('Error obteniendo ubicación:', error);
+                let mensaje = 'No se pudo obtener la ubicación. ';
+                
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        mensaje += 'Permiso denegado por el usuario.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        mensaje += 'Información de ubicación no disponible.';
+                        break;
+                    case error.TIMEOUT:
+                        mensaje += 'Tiempo de espera agotado.';
+                        break;
+                    default:
+                        mensaje += 'Error desconocido.';
+                        break;
+                }
+                
+                // Actualizar estado de error
+                if (statusDiv) {
+                    statusDiv.textContent = '✗ ' + mensaje;
+                    statusDiv.className = 'text-sm text-red-600 mt-2';
+                    
+                    // Ocultar mensaje después de 5 segundos
+                    setTimeout(() => {
+                        if (statusDiv && statusDiv.parentNode) {
+                            statusDiv.parentNode.removeChild(statusDiv);
+                        }
+                    }, 5000);
+                } else {
+                    alert(mensaje);
+                }
+                
+                // Restaurar botón
+                getLocationBtn.innerHTML = '<i class="fas fa-map-marker-alt text-brand-naranja-mostaza"></i>';
+                getLocationBtn.disabled = false;
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 300000 // 5 minutos
+            }
+        );
+    }
+    
+    // Función mejorada para obtener dirección con Mapbox
+    async function obtenerDireccion(lat, lng) {
+        try {
+            // Múltiples consultas a Mapbox para obtener información más específica
+            const queries = [
+                // Consulta para dirección específica con mayor precisión
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&language=es&types=address&limit=1&reverseMode=distance`,
+                // Consulta para lugar/vecindario
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&language=es&types=poi,neighborhood&limit=1&reverseMode=distance`,
+                // Consulta general con todos los tipos
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&language=es&types=address,poi,place,locality,neighborhood&limit=3&reverseMode=score`
+            ];
+            
+            let direccionData = null;
+            let mejorDireccion = null;
+            
+            // Intentar cada consulta hasta obtener buenos resultados
+            for (const queryUrl of queries) {
+                try {
+                    const response = await fetch(queryUrl);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.features && data.features.length > 0) {
+                            direccionData = data;
+                            mejorDireccion = data.features[0];
+                            console.log('Mapbox consulta exitosa:', { query: queryUrl.split('types=')[1].split('&')[0], feature: mejorDireccion });
+                            break;
+                        }
+                    }
+                } catch (err) {
+                    console.warn('Consulta Mapbox falló:', err);
+                }
+            }
+            
+            if (!mejorDireccion) {
+                throw new Error('No se pudo obtener información de ubicación de Mapbox');
+            }
+            
+            // Procesar información de Mapbox con lógica mejorada
+            let calle = '';
+            let numero = '';
+            let barrio = '';
+            let ciudad = '';
+            let provincia = '';
+            let codigoPostal = '';
+            
+            console.log('Procesando información de Mapbox:', mejorDireccion);
+            
+            const placeName = mejorDireccion.place_name || '';
+            const placeText = mejorDireccion.text || '';
+            const properties = mejorDireccion.properties || {};
+            
+            // Extraer número de dirección del address si está disponible
+            if (properties.address) {
+                numero = properties.address;
+            }
+            
+            // Si es una dirección específica, extraer información detallada
+            if (mejorDireccion.place_type && mejorDireccion.place_type.includes('address')) {
+                calle = placeText;
+                
+                // Si no encontramos número en properties, intentar extraerlo del texto
+                if (!numero) {
+                    const numeroMatch = calle.match(/^(\d+[-\w]*)/);
+                    if (numeroMatch) {
+                        numero = numeroMatch[1];
+                        calle = calle.replace(/^\d+[-\w]*\s*/, '').trim();
+                    }
+                }
+            }
+            
+            // Procesar contexto jerárquico de Mapbox
+            if (mejorDireccion.context) {
+                mejorDireccion.context.forEach(item => {
+                    const id = item.id || '';
+                    const text = item.text || '';
+                    
+                    if (id.includes('neighborhood') || id.includes('locality')) {
+                        if (!barrio) barrio = text;
+                    } else if (id.includes('place') && !ciudad) {
+                        ciudad = text;
+                    } else if (id.includes('district') && !ciudad) {
+                        ciudad = text;
+                    } else if (id.includes('region') && !provincia) {
+                        provincia = text;
+                    } else if (id.includes('postcode')) {
+                        codigoPostal = text;
+                    }
+                });
+            }
+            
+            // Si no tenemos información suficiente de contexto, parsear el place_name
+            if (!ciudad || !provincia) {
+                const parts = placeName.split(',').map(part => part.trim());
+                
+                // Remover país si está presente
+                if (parts.length > 0 && (parts[parts.length - 1].toLowerCase().includes('ecuador') || parts[parts.length - 1] === 'EC')) {
+                    parts.pop();
+                }
+                
+                // Asignar provincia (penúltima parte)
+                if (parts.length > 0 && !provincia) {
+                    provincia = parts.pop();
+                }
+                
+                // Asignar ciudad (antepenúltima parte)
+                if (parts.length > 0 && !ciudad) {
+                    ciudad = parts.pop();
+                }
+                
+                // Si hay más partes y no tenemos calle/barrio, usarlas
+                if (parts.length > 0 && !calle && !barrio) {
+                    const resto = parts.join(', ');
+                    if (mejorDireccion.place_type && mejorDireccion.place_type.includes('address')) {
+                        calle = resto;
+                    } else {
+                        barrio = resto;
+                    }
+                }
+            }
+            
+            // Construir dirección final optimizada
+            const direccionCompleta = construirDireccionCompleta({
+                calle,
+                numero,
+                barrio,
+                ciudad,
+                provincia,
+                codigoPostal
+            });
+            
+            locationInput.value = direccionCompleta;
+            
+            console.log('Mapbox geocodificación exitosa:', {
+                calle,
+                numero,
+                barrio,
+                ciudad,
+                provincia,
+                codigoPostal,
+                direccionCompleta,
+                placeName
+            });
+            
+            return true;
+            
+        } catch (error) {
+            console.error('Error en geocodificación de Mapbox:', error);
+            throw error; // Re-lanzar para que el fallback se ejecute
+        }
+    }
+    
+    // Función auxiliar para construir dirección de forma inteligente
+    function construirDireccionCompleta({ calle, numero, barrio, ciudad, provincia, codigoPostal }) {
+        const partes = [];
+        
+        // Agregar calle con número si están disponibles
+        if (calle) {
+            if (numero) {
+                partes.push(`${calle} ${numero}`);
+            } else {
+                partes.push(calle);
+            }
+        }
+        
+        // Agregar barrio si es diferente de la ciudad
+        if (barrio && barrio !== ciudad && !calle) {
+            partes.push(barrio);
+        }
+        
+        // Agregar ciudad
+        if (ciudad) {
+            partes.push(ciudad);
+        }
+        
+        // Agregar provincia si es diferente de la ciudad
+        if (provincia && provincia !== ciudad) {
+            partes.push(provincia);
+        }
+        
+        let direccion = partes.join(', ');
+        
+        // Si la dirección es muy corta, intentar mejoras
+        if (partes.length < 2) {
+            if (barrio && barrio !== ciudad) {
+                direccion = [barrio, ciudad, provincia].filter(Boolean).join(', ');
+            } else if (ciudad && provincia) {
+                direccion = [ciudad, provincia].filter(Boolean).join(', ');
+            }
+        }
+        
+        return direccion || 'Ubicación no específica';
+    }
+    
+    // Función mejorada para el fallback con Nominatim
+    async function obtenerDireccionFallback(lat, lng) {
+        try {
+            console.log('Ejecutando fallback con Nominatim...');
+            const osmResponse = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=es&addressdetails=1&zoom=18&extratags=1`,
+                {
+                    headers: {
+                        'User-Agent': 'La Tierrita Distribuidor Form (contact@latierrita.com)'
+                    }
+                }
+            );
+            
+            if (!osmResponse.ok) {
+                throw new Error('Error en consulta a Nominatim');
+            }
+            
+            const osmData = await osmResponse.json();
+            const address = osmData.address || {};
+            
+            console.log('Respuesta de Nominatim:', osmData);
+            
+            let calle = address.road || address.street || address.footway || address.path || '';
+            let numero = address.house_number || '';
+            let barrio = address.neighbourhood || address.suburb || address.quarter || address.residential || '';
+            let ciudad = address.city || address.town || address.village || address.municipality || address.county || '';
+            let provincia = address.state || address.province || address.region || '';
+            
+            // Usar información adicional si está disponible
+            if (!calle && address.pedestrian) calle = address.pedestrian;
+            if (!barrio && address.city_district) barrio = address.city_district;
+            
+            const direccionCompleta = construirDireccionCompleta({
+                calle,
+                numero,
+                barrio,
+                ciudad,
+                provincia
+            });
+            
+            if (direccionCompleta && direccionCompleta !== 'Ubicación no específica') {
+                locationInput.value = direccionCompleta;
+                console.log('Fallback OSM exitoso:', { calle, numero, barrio, ciudad, provincia, direccionCompleta });
+                return true;
+            } else {
+                throw new Error('Información insuficiente en fallback');
+            }
+            
+        } catch (fallbackError) {
+            console.error('Error en fallback Nominatim:', fallbackError);
+            return false;
+        }
+    }
+    
+    // Función principal que maneja la obtención de dirección con fallback
+    async function procesarGeocoding(lat, lng) {
+        try {
+            // Intentar Mapbox primero
+            await obtenerDireccion(lat, lng);
+        } catch (mapboxError) {
+            console.warn('Mapbox falló, intentando fallback:', mapboxError);
+            
+            // Intentar fallback con Nominatim
+            const fallbackExitoso = await obtenerDireccionFallback(lat, lng);
+            
+            if (!fallbackExitoso) {
+                // Si todo falla, mostrar coordenadas
+                locationInput.value = `Coordenadas: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                console.warn('Todos los servicios de geocodificación fallaron, mostrando coordenadas');
+            }
+        }
+    }
+    
+    function mostrarMapa(lat, lng) {
+        // Mostrar contenedor del mapa
+        mapContainer.style.display = 'block';
+        
+        // Si ya existe un mapa, lo removemos completamente
+        if (map) {
+            map.remove();
+            map = null;
+        }
+        
+        // Pequeño delay para asegurar que el contenedor esté visible
+        setTimeout(() => {
+            try {
+                // Crear nuevo mapa con Mapbox
+                map = L.map('geoapify-map', {
+                    center: [lat, lng],
+                    zoom: 16,
+                    zoomControl: true,
+                    scrollWheelZoom: true,
+                    doubleClickZoom: true,
+                    boxZoom: true,
+                    keyboard: true
+                });
+                
+                // Agregar capa de Mapbox con el token correcto
+                const mapboxTileLayer = L.tileLayer(`https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`, {
+                    attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    maxZoom: 19
+                });
+                
+                mapboxTileLayer.addTo(map);
+                
+                // Esperar a que la capa se cargue antes de agregar el marcador
+                mapboxTileLayer.on('load', () => {
+                    agregarMarcador(lat, lng);
+                });
+                
+                // Agregar marcador inmediatamente también (por si 'load' no se dispara)
+                setTimeout(() => {
+                    agregarMarcador(lat, lng);
+                }, 500);
+                
+                // Ajustar el tamaño del mapa después de que se renderice
+                setTimeout(() => {
+                    map.invalidateSize();
+                    map.setView([lat, lng], 16);
+                }, 200);
+                
+                console.log('Mapa creado correctamente:', { lat, lng, mapboxToken: MAPBOX_TOKEN.substring(0, 20) + '...' });
+                
+            } catch (error) {
+                console.error('Error creando el mapa:', error);
+                // Mostrar mensaje de error en el contenedor del mapa
+                document.getElementById('geoapify-map').innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666; text-align: center; padding: 20px;">
+                        <div>
+                            <i class="fas fa-map-marker-alt" style="font-size: 48px; color: #d79f49; margin-bottom: 10px;"></i><br>
+                            <strong>Error al cargar el mapa</strong><br>
+                            <small>Ubicación: ${lat.toFixed(4)}, ${lng.toFixed(4)}</small>
+                        </div>
+                    </div>
+                `;
+            }
+        }, 100);
+    }
+    
+    function agregarMarcador(lat, lng) {
+        if (!map) return;
+        
+        try {
+            // Remover marcador anterior si existe
+            if (marker) {
+                map.removeLayer(marker);
+                marker = null;
+            }
+            
+            // Crear icono personalizado más visible
+            const customIcon = L.divIcon({
+                html: `
+                    <div style="position: relative;">
+                        <i class="fas fa-map-marker-alt" style="color: #d79f49; font-size: 32px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);"></i>
+                        <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: white; border-radius: 50%; border: 1px solid #d79f49;"></div>
+                    </div>
+                `,
+                iconSize: [32, 40],
+                iconAnchor: [16, 40],
+                popupAnchor: [0, -40],
+                className: 'custom-marker-icon'
+            });
+            
+            // Crear marcador con popup
+            marker = L.marker([lat, lng], { icon: customIcon })
+                .addTo(map)
+                .bindPopup(`
+                    <div style="text-align: center; padding: 8px; min-width: 200px;">
+                        <strong style="color: #d79f49;">📍 Tu ubicación actual</strong><br>
+                        <div style="margin: 8px 0; padding: 6px; background: #f8f9fa; border-radius: 4px; font-size: 12px;">
+                            <strong>Coordenadas:</strong><br>
+                            Lat: ${lat.toFixed(6)}<br>
+                            Lng: ${lng.toFixed(6)}
+                        </div>
+                        <small style="color: #666;">Click en el mapa para explorar</small>
+                    </div>
+                `, {
+                    maxWidth: 250,
+                    className: 'custom-popup'
+                })
+                .openPopup();
+            
+            console.log('Marcador agregado correctamente:', { lat, lng });
+            
+        } catch (error) {
+            console.error('Error agregando marcador:', error);
+        }
+    }
+});
