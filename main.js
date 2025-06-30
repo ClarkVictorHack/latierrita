@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializar productos y carrito
     renderizarProductos();
     actualizarCarrito();
+    
+    // Asegurar visibilidad de botones después de un pequeño delay
+    setTimeout(() => {
+        asegurarVisibilidadBotones();
+    }, 100);
 });
 
 // --- CATÁLOGO DE PRODUCTOS (orden: tradicionales primero, luego gourmet) ---
@@ -134,11 +139,12 @@ function renderizarProductos() {
         const catTitle = document.createElement('div');
         catTitle.className = `col-span-full text-2xl font-bold mb-2 mt-6 ${cat.color} rounded-lg py-2 px-4 text-gray-800`;
         catTitle.textContent = cat.nombre;
+        catTitle.style.backgroundColor = cat.color === 'bg-brand-amarillo-suave' ? 'var(--brand-amarillo-suave)' : 'var(--brand-amarillo-pastel)';
         lista.appendChild(catTitle);
         // Productos de la categoría
         productos.filter(p => p.categoria === cat.nombre).forEach(producto => {
             const card = document.createElement('div');
-            card.className = 'bg-white rounded-lg shadow-lg overflow-hidden flex flex-col cursor-pointer transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2';
+            card.className = 'product-card bg-white rounded-lg shadow-lg overflow-hidden flex flex-col cursor-pointer transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2';
             card.innerHTML = `
                 <div class="relative pb-[100%] bg-white">
                     <img src="${producto.imagen}" alt="[Imagen de ${producto.nombre}]" class="absolute h-full w-full object-contain">
@@ -151,13 +157,24 @@ function renderizarProductos() {
                         <span class="text-sm text-gray-500">${producto.peso}</span>
                     </div>
                     <div class="flex justify-between items-center mt-2">
-                        <span class="text-2xl font-bold text-brand-naranja-mostaza">$${producto.precio.toFixed(2)}</span>
-                        <button data-id="${producto.id}" class="show-detail-btn bg-brand-naranja-mostaza text-white font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-transform transform hover:scale-105">
+                        <span class="text-2xl font-bold text-brand-naranja-mostaza" style="color: var(--brand-naranja-mostaza);">$${producto.precio.toFixed(2)}</span>
+                        <button data-id="${producto.id}" class="show-detail-btn bg-brand-naranja-mostaza text-white font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-transform transform hover:scale-105" style="background-color: var(--brand-naranja-mostaza); color: white; display: inline-flex; align-items: center; justify-content: center;">
                             <i class="fas fa-plus mr-2"></i>Añadir
                         </button>
                     </div>
                 </div>
             `;
+            
+            // Aplicar estilos inline para asegurar visibilidad
+            card.style.backgroundColor = 'white';
+            card.style.borderRadius = '0.5rem';
+            card.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+            card.style.overflow = 'hidden';
+            card.style.display = 'flex';
+            card.style.flexDirection = 'column';
+            card.style.cursor = 'pointer';
+            card.style.transition = 'all 0.3s ease-in-out';
+            
             // Evento para mostrar modal desde cualquier parte de la tarjeta
             card.addEventListener('click', (e) => {
                 if (!e.target.closest('.show-detail-btn')) {
@@ -165,7 +182,20 @@ function renderizarProductos() {
                 }
             });
             // Evento para mostrar modal desde el botón Añadir
-            card.querySelector('.show-detail-btn').addEventListener('click', (e) => {
+            const addButton = card.querySelector('.show-detail-btn');
+            addButton.style.backgroundColor = 'var(--brand-naranja-mostaza)';
+            addButton.style.color = 'white';
+            addButton.style.border = 'none';
+            addButton.style.padding = '0.5rem 1rem';
+            addButton.style.borderRadius = '0.5rem';
+            addButton.style.fontWeight = 'bold';
+            addButton.style.cursor = 'pointer';
+            addButton.style.display = 'inline-flex';
+            addButton.style.alignItems = 'center';
+            addButton.style.justifyContent = 'center';
+            addButton.style.transition = 'all 0.2s ease-in-out';
+            
+            addButton.addEventListener('click', (e) => {
                 e.stopPropagation();
                 mostrarDetalleProducto(producto.id);
             });
@@ -232,6 +262,11 @@ function actualizarCarrito() {
     
     cartTotal.textContent = `$${total.toFixed(2)}`;
     cartCount.textContent = carrito.reduce((acc, item) => acc + item.quantity, 0);
+    
+    // Asegurar visibilidad de botones después de actualizar el carrito
+    setTimeout(() => {
+        asegurarVisibilidadBotones();
+    }, 50);
 }
 
 function agregarAlCarrito(id) {
@@ -401,5 +436,57 @@ document.getElementById('checkout-button').addEventListener('click', () => {
     // Redirigir a la página de checkout
     window.location.href = 'checkout.html';
 });
+
+// --- FUNCIÓN PARA ASEGURAR VISIBILIDAD DE BOTONES ---
+function asegurarVisibilidadBotones() {
+    // Botón de checkout
+    const checkoutBtn = document.getElementById('checkout-button');
+    if (checkoutBtn) {
+        checkoutBtn.style.display = 'block';
+        checkoutBtn.style.width = '100%';
+        checkoutBtn.style.backgroundColor = 'var(--brand-naranja-mostaza)';
+        checkoutBtn.style.color = 'white';
+        checkoutBtn.style.fontWeight = 'bold';
+        checkoutBtn.style.padding = '0.75rem';
+        checkoutBtn.style.borderRadius = '0.5rem';
+        checkoutBtn.style.border = 'none';
+        checkoutBtn.style.cursor = 'pointer';
+        checkoutBtn.style.textAlign = 'center';
+        checkoutBtn.style.transition = 'all 0.2s ease-in-out';
+    }
+    
+    // Botón del carrito en el header
+    const cartBtn = document.getElementById('cart-button');
+    if (cartBtn) {
+        cartBtn.style.display = 'inline-flex';
+        cartBtn.style.alignItems = 'center';
+        cartBtn.style.justifyContent = 'center';
+        cartBtn.style.position = 'relative';
+        cartBtn.style.color = '#6b7280';
+        cartBtn.style.cursor = 'pointer';
+        cartBtn.style.transition = 'color 0.2s ease-in-out';
+    }
+    
+    // Botones de productos
+    const addButtons = document.querySelectorAll('.show-detail-btn');
+    addButtons.forEach(btn => {
+        btn.style.display = 'inline-flex';
+        btn.style.alignItems = 'center';
+        btn.style.justifyContent = 'center';
+        btn.style.backgroundColor = 'var(--brand-naranja-mostaza)';
+        btn.style.color = 'white';
+        btn.style.fontWeight = 'bold';
+        btn.style.padding = '0.5rem 1rem';
+        btn.style.borderRadius = '0.5rem';
+        btn.style.border = 'none';
+        btn.style.cursor = 'pointer';
+        btn.style.transition = 'all 0.2s ease-in-out';
+        btn.style.zIndex = '10';
+        btn.style.position = 'relative';
+    });
+}
+
+// Asegurar visibilidad de botones críticos al cargar
+document.addEventListener('DOMContentLoaded', asegurarVisibilidadBotones);
 
 

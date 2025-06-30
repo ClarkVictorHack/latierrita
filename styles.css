@@ -1,7 +1,4 @@
-/* Configuración de Tailwind y variables personalizadas */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Variables personalizadas y estilos complementarios a Tailwind CDN */
 
 /* Variables CSS para colores de marca */
 :root {
@@ -21,55 +18,54 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Merriweather', serif;
 }
 
-/* Configuración de Tailwind personalizada */
-@layer utilities {
-  .bg-brand-naranja-mostaza {
-    background-color: var(--brand-naranja-mostaza);
-  }
-  
-  .bg-brand-verde-oliva {
-    background-color: var(--brand-verde-oliva);
-  }
-  
-  .bg-brand-amarillo-pastel {
-    background-color: var(--brand-amarillo-pastel);
-  }
-  
-  .bg-brand-amarillo-suave {
-    background-color: var(--brand-amarillo-suave);
-  }
-  
-  .text-brand-naranja-mostaza {
-    color: var(--brand-naranja-mostaza);
-  }
-  
-  .text-brand-verde-oliva {
-    color: var(--brand-verde-oliva);
-  }
-  
-  .text-brand-amarillo-pastel {
-    color: var(--brand-amarillo-pastel);
-  }
-  
-  .text-brand-amarillo-suave {
-    color: var(--brand-amarillo-suave);
-  }
-  
-  .border-brand-naranja-mostaza {
-    border-color: var(--brand-naranja-mostaza);
-  }
-  
-  .ring-brand-naranja-mostaza:focus {
-    --tw-ring-color: var(--brand-naranja-mostaza);
-  }
-  
-  .hover\:text-brand-naranja-mostaza:hover {
-    color: var(--brand-naranja-mostaza);
-  }
-  
-  .hover\:text-brand-amarillo-suave:hover {
-    color: var(--brand-amarillo-suave);
-  }
+/* Clases personalizadas de marca */
+.bg-brand-naranja-mostaza {
+  background-color: var(--brand-naranja-mostaza) !important;
+}
+
+.bg-brand-verde-oliva {
+  background-color: var(--brand-verde-oliva) !important;
+}
+
+.bg-brand-amarillo-pastel {
+  background-color: var(--brand-amarillo-pastel) !important;
+}
+
+.bg-brand-amarillo-suave {
+  background-color: var(--brand-amarillo-suave) !important;
+}
+
+.text-brand-naranja-mostaza {
+  color: var(--brand-naranja-mostaza) !important;
+}
+
+.text-brand-verde-oliva {
+  color: var(--brand-verde-oliva) !important;
+}
+
+.text-brand-amarillo-pastel {
+  color: var(--brand-amarillo-pastel) !important;
+}
+
+.text-brand-amarillo-suave {
+  color: var(--brand-amarillo-suave) !important;
+}
+
+.border-brand-naranja-mostaza {
+  border-color: var(--brand-naranja-mostaza) !important;
+}
+
+.ring-brand-naranja-mostaza:focus {
+  --tw-ring-color: var(--brand-naranja-mostaza);
+  box-shadow: 0 0 0 2px rgba(215, 159, 73, 0.5) !important;
+}
+
+.hover\:text-brand-naranja-mostaza:hover {
+  color: var(--brand-naranja-mostaza) !important;
+}
+
+.hover\:text-brand-amarillo-suave:hover {
+  color: var(--brand-amarillo-suave) !important;
 }
 
 /* Efectos personalizados */
@@ -138,6 +134,66 @@ button,
   transition: all 0.2s ease-in-out;
 }
 
+/* Estilos específicos para botones de productos */
+.show-detail-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: var(--brand-naranja-mostaza) !important;
+  color: white !important;
+  font-weight: bold !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 0.5rem !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease-in-out !important;
+  z-index: 10 !important;
+  position: relative !important;
+}
+
+.show-detail-btn:hover {
+  background-color: #c28d3d !important;
+  transform: scale(1.05) !important;
+  opacity: 0.9 !important;
+}
+
+/* Estilos específicos para botón de checkout */
+#checkout-button {
+  display: block !important;
+  width: 100% !important;
+  background-color: var(--brand-naranja-mostaza) !important;
+  color: white !important;
+  font-weight: bold !important;
+  padding: 0.75rem !important;
+  border-radius: 0.5rem !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+#checkout-button:hover {
+  background-color: #c28d3d !important;
+  transform: scale(1.05) !important;
+  opacity: 0.9 !important;
+}
+
+/* Botón del carrito en el header */
+#cart-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  color: #6b7280 !important;
+  cursor: pointer !important;
+  transition: color 0.2s ease-in-out !important;
+}
+
+#cart-button:hover {
+  color: var(--brand-naranja-mostaza) !important;
+}
+
 /* Loading state para imágenes */
 .loading-placeholder {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
@@ -155,12 +211,60 @@ button,
   transition: color 0.2s ease-in-out;
 }
 
-/* Responsive improvements */
-@media (max-width: 768px) {
-  .family-image-mask {
-    mask-image: none;
-    -webkit-mask-image: none;
-  }
+/* Estilos de debugging y forzado de visibilidad */
+.debug-visible {
+  visibility: visible !important;
+  display: block !important;
+  opacity: 1 !important;
+}
+
+/* Forzar visibilidad de elementos críticos */
+#product-list,
+#product-list * {
+  visibility: visible !important;
+}
+
+#cart-modal,
+#cart-modal * {
+  visibility: visible !important;
+}
+
+/* Estilos específicos para tarjetas de productos */
+.product-card {
+  background: white !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.product-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  transform: translateY(-0.5rem) !important;
+}
+
+/* Asegurar que los íconos de Font Awesome sean visibles */
+.fa,
+.fas,
+.far,
+.fab {
+  display: inline-block !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-rendering: auto !important;
+  line-height: 1 !important;
+}
+
+/* Forzar estilos para contenedores de productos */
+#product-list > div {
+  background: white !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1rem !important;
 }
 
 /* Print styles */
