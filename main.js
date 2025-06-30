@@ -910,3 +910,449 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// --- FUNCIONALIDAD DEL FORMULARIO DE DISTRIBUIDORES CON EMAILJS ---
+document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar EmailJS
+    if (typeof emailjs !== 'undefined') {
+        emailjs.init("KsWcM0Owsw__6IAUT"); // Public Key de EmailJS
+    }
+    
+    const distributorForm = document.getElementById('distributor-form');
+    const formContainer = document.getElementById('form-container');
+    const formConfirmation = document.getElementById('form-confirmation');
+    
+    if (distributorForm) {
+        distributorForm.addEventListener('submit', manejarEnvioFormulario);
+    }
+    
+    async function manejarEnvioFormulario(e) {
+        e.preventDefault();
+        
+        // Validar formulario
+        if (!validarFormulario()) {
+            return;
+        }
+        
+        // Mostrar estado de carga
+        const submitBtn = distributorForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
+        submitBtn.disabled = true;
+        
+        try {
+            // Recopilar datos del formulario
+            const formData = recopilarDatosFormulario();
+            
+            // Enviar email usando EmailJS
+            await enviarEmailDistribuidor(formData);
+            
+            // Mostrar confirmación
+            mostrarConfirmacion();
+            
+        } catch (error) {
+            console.error('Error enviando formulario:', error);
+            mostrarError('Hubo un problema al enviar el formulario. Por favor, inténtalo de nuevo.');
+            
+            // Restaurar botón
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }
+    
+    function validarFormulario() {
+        const requiredFields = [
+            'fullName',
+            'phone', 
+            'email',
+            'location'
+        ];
+        
+        let isValid = true;
+        
+        // Validar campos requeridos
+        requiredFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (!field || !field.value.trim()) {
+                mostrarErrorCampo(field, 'Este campo es obligatorio');
+                isValid = false;
+            } else {
+                limpiarErrorCampo(field);
+            }
+        });
+        
+        // Validar email
+        const emailField = document.getElementById('email');
+        if (emailField && emailField.value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailField.value)) {
+                mostrarErrorCampo(emailField, 'Por favor, ingresa un email válido');
+                isValid = false;
+            }
+        }
+        
+        // Validar teléfono
+        const phoneField = document.getElementById('phone');
+        if (phoneField && phoneField.value) {
+            const phoneRegex = /^[\+]?[\d\s\-\(\)]{8,}$/;
+            if (!phoneRegex.test(phoneField.value)) {
+                mostrarErrorCampo(phoneField, 'Por favor, ingresa un número de teléfono válido');
+                isValid = false;
+            }
+        }
+        
+        // Validar al menos un tipo de cliente seleccionado
+        const customerTypeBoxes = document.querySelectorAll('input[name="customerType"]:checked');
+        if (customerTypeBoxes.length === 0) {
+            mostrarError('Por favor, selecciona al menos un tipo de cliente objetivo.');
+            isValid = false;
+        }
+        
+        return isValid;
+    }
+    
+    function mostrarErrorCampo(field, mensaje) {
+        limpiarErrorCampo(field);
+        
+        field.classList.add('border-red-500');
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'text-red-500 text-sm mt-1 error-message';
+        errorDiv.textContent = mensaje;
+        
+        field.parentNode.appendChild(errorDiv);
+    }
+    
+    function limpiarErrorCampo(field) {
+        if (!field) return;
+        
+        field.classList.remove('border-red-500');
+        
+        const errorMsg = field.parentNode.querySelector('.error-message');
+        if (errorMsg) {
+            errorMsg.remove();
+        }
+    }
+    
+    function mostrarError(mensaje) {
+        // Crear notificación de error
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-md';
+        errorDiv.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <span>${mensaje}</span>
+                <button class="ml-4 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(errorDiv);
+        
+        // Auto-remover después de 5 segundos
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.parentNode.removeChild(errorDiv);
+            }
+        }, 5000);
+    }
+    
+    function recopilarDatosFormulario() {
+        // Información de contacto
+        const fullName = document.getElementById('fullName')?.value || '';
+        const phone = document.getElementById('phone')?.value || '';
+        const email = document.getElementById('email')?.value || '';
+        const location = document.getElementById('location')?.value || '';
+        const geolocation = document.getElementById('geolocation')?.value || '';
+        
+        // Perfil comercial
+        const businessStatus = document.querySelector('input[name="businessStatus"]:checked')?.value || '';
+        const businessName = document.getElementById('businessName')?.value || '';
+        
+        const customerTypes = Array.from(document.querySelectorAll('input[name="customerType"]:checked'))
+            .map(cb => cb.value);
+        const customerTypeOther = document.querySelector('input[name="customerTypeOther"]')?.value || '';
+        if (customerTypeOther) {
+            customerTypes.push(`Otro: ${customerTypeOther}`);
+        }
+        
+        // Capacidad y logística
+        const experience = document.getElementById('experience')?.value || '';
+        const freezerStatus = document.querySelector('input[name="freezerStatus"]:checked')?.value || '';
+        const delivery = document.getElementById('delivery')?.value || '';
+        
+        // Conociéndonos mejor
+        const howYouKnow = document.getElementById('howYouKnow')?.value || '';
+        const whyDistribute = document.getElementById('whyDistribute')?.value || '';
+        const comments = document.getElementById('comments')?.value || '';
+        
+        return {
+            // Información de contacto
+            fullName,
+            phone,
+            email,
+            location,
+            geolocation,
+            
+            // Perfil comercial
+            businessStatus,
+            businessName,
+            customerTypes: customerTypes.join(', '),
+            
+            // Capacidad y logística
+            experience,
+            freezerStatus,
+            delivery,
+            
+            // Conociéndonos mejor
+            howYouKnow,
+            whyDistribute,
+            comments,
+            
+            // Metadata
+            fechaEnvio: new Date().toLocaleString('es-EC'),
+            userAgent: navigator.userAgent
+        };
+    }
+    
+    async function enviarEmailDistribuidor(formData) {
+        if (typeof emailjs === 'undefined') {
+            throw new Error('EmailJS no está cargado');
+        }
+        
+        // Configuración de EmailJS - IDs reales de La Tierrita
+        const serviceID = 'service_1ylo4ll';
+        const templateID = 'template_5zoc2e4';
+        
+        // Formatear el mensaje para el email
+        const emailParams = {
+            to_name: 'Equipo La Tierrita',
+            from_name: formData.fullName,
+            from_email: formData.email,
+            subject: `Nuevo Distribuidor Interesado: ${formData.fullName}`,
+            
+            // Información de contacto
+            full_name: formData.fullName,
+            phone: formData.phone,
+            email: formData.email,
+            location: formData.location,
+            coordinates: formData.geolocation,
+            
+            // Perfil comercial
+            business_status: formData.businessStatus,
+            business_name: formData.businessName || 'N/A',
+            customer_types: formData.customerTypes,
+            
+            // Capacidad y logística
+            experience: formData.experience || 'No especificado',
+            freezer_status: formData.freezerStatus,
+            delivery: formData.delivery || 'No especificado',
+            
+            // Conociéndonos mejor
+            how_you_know: formData.howYouKnow || 'No especificado',
+            why_distribute: formData.whyDistribute || 'No especificado',
+            comments: formData.comments || 'Sin comentarios adicionales',
+            
+            // Metadata
+            fecha_envio: formData.fechaEnvio,
+            
+            // Mensaje completo formateado
+            message: formatearMensajeCompleto(formData)
+        };
+        
+        // Enviar email
+        const response = await emailjs.send(serviceID, templateID, emailParams);
+        
+        if (response.status !== 200) {
+            throw new Error('Error enviando email');
+        }
+        
+        return response;
+    }
+    
+    function formatearMensajeCompleto(data) {
+        return `
+NUEVO DISTRIBUIDOR INTERESADO - LA TIERRITA
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 INFORMACIÓN DE CONTACTO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👤 Nombre completo: ${data.fullName}
+📱 Teléfono (WhatsApp): ${data.phone}
+📧 Email: ${data.email}
+📍 Ubicación: ${data.location}
+🗺️ Coordenadas: ${data.geolocation || 'No proporcionadas'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏢 PERFIL COMERCIAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💼 Estado del negocio: ${data.businessStatus}
+🏪 Nombre comercial: ${data.businessName || 'N/A'}
+🎯 Tipos de clientes objetivo: ${data.customerTypes}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚚 CAPACIDAD Y LOGÍSTICA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📈 Experiencia en alimentos: ${data.experience || 'No especificado'}
+❄️ Equipos de congelación: ${data.freezerStatus}
+🚛 Método de entrega: ${data.delivery || 'No especificado'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💭 CONOCIÉNDONOS MEJOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🤝 Cómo conoció La Tierrita: ${data.howYouKnow || 'No especificado'}
+
+💡 Por qué quiere distribuir: ${data.whyDistribute || 'No especificado'}
+
+💬 Comentarios adicionales: ${data.comments || 'Sin comentarios adicionales'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 INFORMACIÓN DEL ENVÍO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🕐 Fecha y hora: ${data.fechaEnvio}
+💻 Navegador: ${data.userAgent}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Este mensaje fue enviado automáticamente desde el formulario de distribuidores de latierrita.com
+        `.trim();
+    }
+    
+    function mostrarConfirmacion() {
+        // Ocultar formulario y mostrar confirmación
+        formContainer.style.display = 'none';
+        formConfirmation.classList.remove('hidden');
+        
+        // Scroll hacia arriba para mostrar la confirmación
+        formConfirmation.scrollIntoView({ behavior: 'smooth' });
+        
+        // Limpiar formulario (por si el usuario quiere volver)
+        distributorForm.reset();
+        
+        // Limpiar errores
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.remove());
+        
+        const errorFields = document.querySelectorAll('.border-red-500');
+        errorFields.forEach(field => field.classList.remove('border-red-500'));
+        
+        // Mostrar notificación de éxito
+        const successDiv = document.createElement('div');
+        successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-md';
+        successDiv.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>¡Formulario enviado exitosamente!</span>
+                <button class="ml-4 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(successDiv);
+        
+        // Auto-remover después de 5 segundos
+        setTimeout(() => {
+            if (successDiv.parentNode) {
+                successDiv.parentNode.removeChild(successDiv);
+            }
+        }, 5000);
+    }
+    
+    // Agregar validación en tiempo real
+    const formFields = document.querySelectorAll('#distributor-form input, #distributor-form textarea');
+    formFields.forEach(field => {
+        field.addEventListener('blur', () => {
+            if (field.hasAttribute('required') && !field.value.trim()) {
+                mostrarErrorCampo(field, 'Este campo es obligatorio');
+            } else {
+                limpiarErrorCampo(field);
+            }
+        });
+        
+        field.addEventListener('input', () => {
+            limpiarErrorCampo(field);
+        });
+    });
+});
+
+// --- FUNCIONALIDAD ADICIONAL DEL MENÚ MÓVIL Y CARRITO ---
+document.addEventListener('DOMContentLoaded', () => {
+    // Menú móvil
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+    const closeMobileMenu = document.getElementById('close-mobile-menu');
+    
+    if (mobileMenuButton && mobileMenuPanel) {
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenuPanel.classList.toggle('-translate-x-full');
+            mobileMenuOverlay.classList.toggle('hidden');
+        });
+        
+        if (closeMobileMenu) {
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenuPanel.classList.add('-translate-x-full');
+                mobileMenuOverlay.classList.add('hidden');
+            });
+        }
+        
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', () => {
+                mobileMenuPanel.classList.add('-translate-x-full');
+                mobileMenuOverlay.classList.add('hidden');
+            });
+        }
+    }
+    
+    // Carrito
+    const cartButton = document.getElementById('cart-button');
+    const cartModal = document.getElementById('cart-modal');
+    const closeCartButton = document.getElementById('close-cart-button');
+    const checkoutButton = document.getElementById('checkout-button');
+    
+    if (cartButton && cartModal) {
+        cartButton.addEventListener('click', () => {
+            cartModal.classList.remove('hidden');
+        });
+        
+        if (closeCartButton) {
+            closeCartButton.addEventListener('click', () => {
+                cartModal.classList.add('hidden');
+            });
+        }
+        
+        // Cerrar carrito al hacer click fuera
+        cartModal.addEventListener('click', (e) => {
+            if (e.target === cartModal) {
+                cartModal.classList.add('hidden');
+            }
+        });
+    }
+    
+    if (checkoutButton) {
+        checkoutButton.addEventListener('click', procederAlCheckout);
+    }
+    
+    // Botón scroll to top
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    if (scrollToTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.remove('hidden');
+            } else {
+                scrollToTopBtn.classList.add('hidden');
+            }
+        });
+        
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+});
