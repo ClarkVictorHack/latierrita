@@ -319,3 +319,64 @@ button,
     display: none !important;
   }
 }
+
+/* PayPal Integration Styles */
+.paypal-buttons-container {
+  min-height: 60px;
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Loading state for PayPal */
+.paypal-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.paypal-loading::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  border: 2px solid #e9ecef;
+  border-top: 2px solid var(--brand-naranja-mostaza);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* PayPal button customization */
+.paypal-buttons {
+  border-radius: 8px !important;
+}
+
+/* Success/Error states */
+.payment-success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.payment-error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}

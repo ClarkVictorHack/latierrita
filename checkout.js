@@ -14,6 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
+    // Cargar PayPal SDK dinámicamente y luego inicializar
+    loadPayPalSDK().then(() => {
+        initializePayPal();
+    }).catch(error => {
+        console.error('Error cargando PayPal:', error);
+        showPayPalError('Error al cargar PayPal. Por favor recarga la página.');
+    });
+    
     // Event listeners con verificación de existencia
     const checkoutForm = document.getElementById('checkout-form');
     const applyCouponBtn = document.getElementById('applyCoupon');
@@ -102,7 +110,7 @@ function loadCartData() {
     cart.forEach(item => {
         const producto = productos.find(p => p.id === item.id);
         if (producto) {
-            const itemTotal = producto.precio * item.quantity;
+            const itemTotal = producto.precio * item.cantidad;
             subtotal += itemTotal;
             
             checkoutItems.innerHTML += `
@@ -112,7 +120,7 @@ function loadCartData() {
                     <div class="flex-1">
                         <h3 class="font-medium text-gray-900">${producto.nombre}</h3>
                         <p class="text-sm text-gray-500">${producto.peso}</p>
-                        <p class="text-sm text-gray-600">Cantidad: ${item.quantity}</p>
+                        <p class="text-sm text-gray-600">Cantidad: ${item.cantidad}</p>
                     </div>
                     <div class="text-right">
                         <p class="font-medium text-gray-900">$${itemTotal.toFixed(2)}</p>
@@ -135,7 +143,7 @@ function loadCartData() {
                 item_id: producto.id,
                 item_name: producto.nombre,
                 category: producto.categoria,
-                quantity: item.quantity,
+                quantity: item.cantidad,
                 price: producto.precio
             };
         })
@@ -253,7 +261,7 @@ function processOrder(orderData) {
                 item_id: producto.id,
                 item_name: producto.nombre,
                 category: producto.categoria,
-                quantity: item.quantity,
+                quantity: item.cantidad,
                 price: producto.precio
             };
         })
@@ -278,7 +286,7 @@ function prepareWhatsAppMessage(orderData) {
     
     orderData.cart.forEach(item => {
         const producto = productos.find(p => p.id === item.id);
-        message += `• ${producto.nombre} x${item.quantity} - $${(producto.precio * item.quantity).toFixed(2)}\n`;
+        message += `• ${producto.nombre} x${item.cantidad} - $${(producto.precio * item.cantidad).toFixed(2)}\n`;
     });
     
     message += `\n💰 *Total:* ${orderData.total}\n`;
@@ -490,3 +498,414 @@ window.addEventListener('beforeunload', function() {
         });
     }
 });
+
+// ==================== PAYPAL INTEGRATION ====================
+
+// Función para cargar el SDK de PayPal dinámicamente
+function loadPayPalSDK() {
+    return new Promise((resolve, reject) => {
+        // Verificar si PayPal ya está cargado
+        if (typeof paypal !== 'undefined') {
+            console.log('✅ PayPal SDK ya está cargado');
+            resolve();
+            return;
+        }
+
+        // Verificar configuración
+        if (typeof PAYPAL_CONFIG === 'undefined' || PAYPAL_CONFIG.clientId === 'TU_CLIENT_ID_AQUI') {
+            console.warn('⚠️ PayPal no configurado. Revisa paypal-config.js');
+            reject(new Error('PayPal no configurado'));
+            return;
+        }
+
+        console.log('🔄 Cargando PayPal SDK...');
+        
+        // Crear y cargar el script de PayPal
+        const script = document.createElement('script');
+        script.src = getPayPalSDKUrl();
+        script.async = true;
+        
+        script.onload = function() {
+            console.log('✅ PayPal SDK cargado correctamente');
+            resolve();
+        };
+        
+        script.onerror = function() {
+            console.error('❌ Error cargando PayPal SDK');
+            reject(new Error('Error cargando PayPal SDK'));
+        };
+        
+        document.head.appendChild(script);
+    });
+}
+
+// Verificar configuración de PayPal
+if (!validatePayPalConfig()) {
+    console.error('❌ Configuración de PayPal incompleta. Revisa paypal-config.js');
+}
+
+// Initialize PayPal Smart Payment Buttons
+function initializePayPal() {
+    // Verificar que PayPal esté disponible
+    if (typeof paypal === 'undefined') {
+        console.error('PayPal SDK no está cargado');
+        showPayPalError('Error al cargar PayPal. Por favor recarga la página.');
+        return;
+    }
+
+    // Verificar configuración
+    if (!validatePayPalConfig()) {
+        showPayPalError('Configuración de PayPal incompleta. Contacta al administrador.');
+        return;
+    }
+
+    // Mostrar loading mientras se inicializa
+    const container = document.getElementById('paypal-button-container');
+    if (!container) {
+        console.error('Contenedor de PayPal no encontrado');
+        return;
+    }
+
+    container.innerHTML = '<div class="paypal-loading text-center py-4 text-gray-500">🔄 Cargando PayPal...</div>';
+
+    try {
+        paypal.Buttons({
+            style: {
+                layout: 'vertical',
+                color: 'gold',
+                shape: 'rect',
+                label: 'paypal',
+                height: 45
+            },
+            
+            // Crear la orden
+            createOrder: function(data, actions) {
+                try {
+                    const orderData = createPayPalOrder();
+                    
+                    if (!orderData) {
+                        showPayPalError('Error al crear la orden');
+                        return Promise.reject(new Error('Invalid order data'));
+                    }
+
+                    console.log('Creando orden PayPal:', orderData);
+
+                    return actions.order.create({
+                        intent: 'CAPTURE',
+                        purchase_units: [{
+                            amount: {
+                                currency_code: 'USD',
+                                value: orderData.total.toFixed(2)
+                            },
+                            description: 'Productos de La Tierrita'
+                        }]
+                    });
+                } catch (error) {
+                    console.error('Error en createOrder:', error);
+                    showPayPalError('Error al procesar la orden');
+                    return Promise.reject(error);
+                }
+            },
+
+            // Aprobar el pago
+            onApprove: function(data, actions) {
+                showPayPalLoading();
+                
+                return actions.order.capture().then(function(details) {
+                    console.log('PayPal payment completed:', details);
+                    
+                    // Verificar el estado del pago
+                    if (details.status === 'COMPLETED') {
+                        handlePayPalSuccess(details);
+                    } else {
+                        throw new Error('Payment not completed');
+                    }
+                }).catch(function(error) {
+                    console.error('Error capturing PayPal payment:', error);
+                    handlePayPalError(error);
+                });
+            },
+
+            // Manejar cancelación
+            onCancel: function(data) {
+                console.log('PayPal payment cancelled:', data);
+                showPayPalError('Pago cancelado. Puedes intentar nuevamente.');
+            },
+
+            // Manejar errores
+            onError: function(err) {
+                console.error('PayPal error:', err);
+                handlePayPalError(err);
+            }
+
+        }).render('#paypal-button-container').then(function() {
+            console.log('✅ Botones de PayPal renderizados correctamente');
+        }).catch(function(error) {
+            console.error('❌ Error al renderizar botones de PayPal:', error);
+            showPayPalError('Error al cargar los botones de PayPal');
+        });
+        
+    } catch (error) {
+        console.error('❌ Error al inicializar PayPal:', error);
+        showPayPalError('Error al inicializar PayPal');
+    }
+}
+
+// Crear datos de orden para PayPal
+function createPayPalOrder() {
+    try {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        if (cart.length === 0) {
+            throw new Error('Carrito vacío');
+        }
+
+        let subtotal = 0;
+        const items = cart.map(item => {
+            const itemTotal = item.precio * item.cantidad;
+            subtotal += itemTotal;
+            
+            return {
+                name: item.nombre,
+                unit_amount: {
+                    currency_code: PAYPAL_CONFIG.currency,
+                    value: item.precio.toFixed(2)
+                },
+                quantity: item.cantidad.toString(),
+                description: `${item.peso || '500g'} - Producto tradicional ecuatoriano`,
+                category: 'PHYSICAL_GOODS'
+            };
+        });
+
+        // Calcular envío
+        const shipping = subtotal >= 50 ? 0 : 5.00;
+        
+        // Calcular descuento si hay cupón aplicado
+        const discountRow = document.getElementById('discount-row');
+        let discount = 0;
+        if (discountRow && !discountRow.classList.contains('hidden')) {
+            const discountText = document.getElementById('discount').textContent;
+            discount = Math.abs(parseFloat(discountText.replace('-$', ''))) || 0;
+        }
+
+        const total = subtotal + shipping - discount;
+
+        return {
+            items: items,
+            subtotal: subtotal.toFixed(2),
+            shipping: shipping.toFixed(2),
+            discount: discount.toFixed(2),
+            total: total.toFixed(2)
+        };
+
+    } catch (error) {
+        console.error('Error creating PayPal order:', error);
+        return null;
+    }
+}
+
+// Manejar éxito del pago de PayPal
+function handlePayPalSuccess(details) {
+    console.log('Processing PayPal success:', details);
+    
+    try {
+        // Extraer información del pago
+        const transactionId = details.id;
+        const payerInfo = details.payer;
+        const amount = details.purchase_units[0].amount.value;
+        
+        // Generar número de orden único
+        const orderNumber = 'LT' + Date.now() + Math.random().toString(36).substr(2, 9).toUpperCase();
+        
+        // Crear objeto de orden completa
+        const orderData = {
+            orderNumber: orderNumber,
+            transactionId: transactionId,
+            paymentMethod: 'PayPal',
+            amount: amount,
+            currency: PAYPAL_CONFIG.currency,
+            status: 'completed',
+            customer: {
+                email: payerInfo.email_address || '',
+                name: payerInfo.name ? `${payerInfo.name.given_name} ${payerInfo.name.surname}` : '',
+                paypalId: payerInfo.payer_id
+            },
+            items: JSON.parse(localStorage.getItem('cart')) || [],
+            timestamp: new Date().toISOString(),
+            formData: collectFormData()
+        };
+
+        // Guardar la orden
+        saveCompletedOrder(orderData);
+
+        // Limpiar carrito
+        localStorage.removeItem('cart');
+        
+        // Actualizar carrito en la página principal si está abierta
+        if (window.opener) {
+            try {
+                window.opener.postMessage({type: 'cart-cleared'}, '*');
+            } catch (e) {
+                console.log('No se pudo comunicar con la ventana principal');
+            }
+        }
+
+        // Google Analytics - Purchase Event
+        gtag('event', 'purchase', {
+            transaction_id: transactionId,
+            value: parseFloat(amount),
+            currency: PAYPAL_CONFIG.currency,
+            items: orderData.items.map(item => ({
+                item_id: item.id.toString(),
+                item_name: item.nombre,
+                category: 'Bocaditos Tradicionales',
+                quantity: item.cantidad,
+                price: item.precio
+            }))
+        });
+
+        // Mostrar modal de confirmación
+        showOrderConfirmation(orderData);
+        
+        // Mostrar mensaje de éxito
+        showPayPalSuccess('¡Pago procesado exitosamente!');
+
+    } catch (error) {
+        console.error('Error processing PayPal success:', error);
+        handlePayPalError(error);
+    }
+}
+
+// Manejar error del pago de PayPal
+function handlePayPalError(error) {
+    console.error('PayPal Error:', error);
+    
+    let message = 'Hubo un problema procesando tu pago.';
+    
+    if (error.message) {
+        if (error.message.includes('INSTRUMENT_DECLINED')) {
+            message = 'Tu método de pago fue rechazado. Por favor intenta con otro.';
+        } else if (error.message.includes('INSUFFICIENT_FUNDS')) {
+            message = 'Fondos insuficientes. Por favor verifica tu cuenta.';
+        } else if (error.message.includes('INVALID_ACCOUNT')) {
+            message = 'Problema con la cuenta de PayPal. Por favor intenta nuevamente.';
+        }
+    }
+    
+    showPayPalError(message + ' Puedes intentar nuevamente o usar otro método de pago.');
+    
+    // Google Analytics - Error Event
+    gtag('event', 'payment_error', {
+        event_category: 'ecommerce',
+        event_label: 'paypal_error',
+        value: error.message || 'unknown_error'
+    });
+}
+
+// Manejar cancelación del pago de PayPal
+function handlePayPalCancel() {
+    console.log('PayPal payment was cancelled by user');
+    
+    showNotification('Pago cancelado. Puedes intentar nuevamente cuando gustes.', 'info');
+    
+    // Google Analytics - Cancel Event
+    gtag('event', 'payment_cancel', {
+        event_category: 'ecommerce',
+        event_label: 'paypal_cancel'
+    });
+}
+
+// Utilidades para mostrar estados de PayPal
+function showPayPalLoading() {
+    const container = document.getElementById('paypal-button-container');
+    if (container) {
+        container.innerHTML = '<div class="paypal-loading">Procesando pago...</div>';
+    }
+}
+
+function showPayPalSuccess(message) {
+    const container = document.getElementById('paypal-button-container');
+    if (container) {
+        container.innerHTML = `<div class="payment-success"><i class="fas fa-check-circle mr-2"></i>${message}</div>`;
+    }
+}
+
+function showPayPalError(message) {
+    const container = document.getElementById('paypal-button-container');
+    if (container) {
+        container.innerHTML = `
+            <div class="payment-error">
+                <i class="fas fa-exclamation-triangle mr-2"></i>${message}
+                <button onclick="initializePayPal()" class="ml-4 text-sm underline hover:no-underline">
+                    Reintentar
+                </button>
+            </div>
+        `;
+    }
+}
+
+// Recopilar datos del formulario
+function collectFormData() {
+    const form = document.getElementById('checkout-form');
+    if (!form) return {};
+    
+    const formData = new FormData(form);
+    const data = {};
+    
+    for (let [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+    
+    return data;
+}
+
+// Guardar orden completada
+function saveCompletedOrder(orderData) {
+    try {
+        // Guardar en localStorage para historial local
+        const orders = JSON.parse(localStorage.getItem('completedOrders')) || [];
+        orders.unshift(orderData); // Agregar al inicio
+        
+        // Mantener solo las últimas 10 órdenes
+        if (orders.length > 10) {
+            orders.splice(10);
+        }
+        
+        localStorage.setItem('completedOrders', JSON.stringify(orders));
+        
+        // Aquí podrías enviar la orden a tu backend
+        // sendOrderToBackend(orderData);
+        
+        console.log('Orden guardada exitosamente:', orderData.orderNumber);
+        
+    } catch (error) {
+        console.error('Error saving completed order:', error);
+    }
+}
+
+// Mostrar modal de confirmación de orden
+function showOrderConfirmation(orderData) {
+    try {
+        // Actualizar el número de orden en el modal
+        const orderNumberElement = document.getElementById('order-number');
+        if (orderNumberElement) {
+            orderNumberElement.textContent = orderData.orderNumber;
+        }
+        
+        // Mostrar el modal
+        const modal = document.getElementById('order-confirmation-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+        }
+        
+        // Auto-cerrar después de 10 segundos
+        setTimeout(() => {
+            if (modal && !modal.classList.contains('hidden')) {
+                closeConfirmation();
+            }
+        }, 10000);
+        
+    } catch (error) {
+        console.error('Error showing order confirmation:', error);
+    }
+}

@@ -25,14 +25,30 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(hideIntro, 8000);
     }
     
+    // Migrar carrito anterior si existe
+    migrarCarritoAnterior();
+    
     // Inicializar productos y carrito
     renderizarProductos();
     actualizarCarrito();
+    
+    console.log('Productos cargados:', productos.length);
+    console.log('Carrito inicial:', carrito.length);
     
     // Asegurar visibilidad de botones después de un pequeño delay
     setTimeout(() => {
         asegurarVisibilidadBotones();
     }, 100);
+    
+    // Escuchar mensajes de otras ventanas (checkout)
+    window.addEventListener('message', function(event) {
+        if (event.data && event.data.type === 'cart-cleared') {
+            // Limpiar carrito local cuando se complete un pago
+            carrito = [];
+            guardarCarrito();
+            actualizarCarrito();
+        }
+    });
 });
 
 // --- CATÁLOGO DE PRODUCTOS (orden: tradicionales primero, luego gourmet) ---
@@ -122,23 +138,46 @@ const productos = [
 ];
 
 // --- GESTIÓN DEL CARRITO ---
-let carrito = JSON.parse(localStorage.getItem('carritoLaTierrita')) || [];
+let carrito = JSON.parse(localStorage.getItem('cart')) || [];
+
+// Función para migrar datos del carrito anterior
+function migrarCarritoAnterior() {
+    const carritoAnterior = localStorage.getItem('carritoLaTierrita');
+    if (carritoAnterior && carrito.length === 0) {
+        try {
+            carrito = JSON.parse(carritoAnterior);
+            localStorage.setItem('cart', carritoAnterior);
+            localStorage.removeItem('carritoLaTierrita');
+            console.log('Carrito migrado exitosamente');
+        } catch (error) {
+            console.error('Error migrando carrito anterior:', error);
+        }
+    }
+}
 
 function agregarAlCarrito(productoId) {
     const producto = productos.find(p => p.id === productoId);
-    if (!producto) return;
+    if (!producto) {
+        console.error('Producto no encontrado:', productoId);
+        return;
+    }
+    
+    console.log('Agregando producto al carrito:', producto);
     
     const itemExistente = carrito.find(item => item.id === productoId);
     if (itemExistente) {
         itemExistente.cantidad += 1;
+        console.log('Cantidad actualizada:', itemExistente);
     } else {
-        carrito.push({
+        const nuevoItem = {
             id: producto.id,
             nombre: producto.nombre,
-            precio: producto.precio,
+            precio: parseFloat(producto.precio), // Asegurar que sea número
             imagen: producto.imagen,
             cantidad: 1
-        });
+        };
+        carrito.push(nuevoItem);
+        console.log('Nuevo item agregado:', nuevoItem);
     }
     
     guardarCarrito();
@@ -167,11 +206,27 @@ function cambiarCantidad(productoId, nuevaCantidad) {
 }
 
 function guardarCarrito() {
-    localStorage.setItem('carritoLaTierrita', JSON.stringify(carrito));
+    localStorage.setItem('cart', JSON.stringify(carrito));
 }
 
 function obtenerTotalCarrito() {
-    return carrito.reduce((total, item) => total + (item.precio * item.cantidad), 0);
+    const total = carrito.reduce((total, item) => {
+        // Validar que el item tenga precio y cantidad válidos
+        const precio = parseFloat(item.precio);
+        const cantidad = parseInt(item.cantidad);
+        
+        if (isNaN(precio) || isNaN(cantidad)) {
+            console.error('Item con datos inválidos:', item);
+            return total;
+        }
+        
+        const subtotal = precio * cantidad;
+        console.log(`Item: ${item.nombre}, Precio: ${precio}, Cantidad: ${cantidad}, Subtotal: ${subtotal}`);
+        return total + subtotal;
+    }, 0);
+    
+    console.log('Total calculado del carrito:', total);
+    return total;
 }
 
 function obtenerCantidadTotal() {
@@ -188,7 +243,7 @@ function actualizarCarrito() {
     const contadorCarrito = document.getElementById('cart-count');
     const listaCarrito = document.getElementById('cart-items');
     const totalCarrito = document.getElementById('cart-total');
-    const botonCheckout = document.getElementById('checkout-btn');
+    const botonCheckout = document.getElementById('checkout-button');
     
     const cantidadTotal = obtenerCantidadTotal();
     const precioTotal = obtenerTotalCarrito();
@@ -271,8 +326,21 @@ function mostrarNotificacionCarrito(nombreProducto) {
 
 // --- RENDERIZADO DE PRODUCTOS ---
 function renderizarProductos() {
-    const contenedor = document.getElementById('productos-grid');
-    if (!contenedor) return;
+    const contenedor = document.getElementById('product-list');
+    if (!contenedor) {
+        console.error('Contenedor de productos no encontrado');
+        return;
+    }
+    
+    console.log('Renderizando productos en contenedor:', contenedor);
+    console.log('Productos disponibles:', productos);
+    
+    // Verificar que tenemos productos
+    if (!productos || productos.length === 0) {
+        console.error('No hay productos para mostrar');
+        contenedor.innerHTML = '<p class="text-center text-gray-500">No hay productos disponibles</p>';
+        return;
+    }
     
     // Agrupar productos por categoría manteniendo el orden
     const categorias = ['Bocaditos Tradicionales', 'Bocaditos Gourmet'];
@@ -280,6 +348,8 @@ function renderizarProductos() {
     let html = '';
     categorias.forEach(categoria => {
         const productosCategoria = productos.filter(p => p.categoria === categoria);
+        console.log(`Productos en categoría ${categoria}:`, productosCategoria);
+        
         if (productosCategoria.length > 0) {
             html += `
                 <div class="col-span-full mb-8">
@@ -313,10 +383,19 @@ function renderizarProductos() {
         }
     });
     
-    contenedor.innerHTML = html;
-    
-    // Asegurar visibilidad de botones después del renderizado
-    setTimeout(asegurarVisibilidadBotones, 100);
+    if (html) {
+        contenedor.innerHTML = html;
+        console.log('HTML generado para productos:', html.length, 'caracteres');
+        console.log('Productos renderizados exitosamente');
+        
+        // Asegurar visibilidad de botones después del renderizado
+        setTimeout(() => {
+            asegurarVisibilidadBotones();
+        }, 100);
+    } else {
+        console.warn('No se generó HTML para productos');
+        contenedor.innerHTML = '<p class="text-center text-gray-500">No hay productos disponibles en las categorías especificadas</p>';
+    }
 }
 
 // --- MENÚ MÓVIL ---
@@ -378,7 +457,7 @@ function asegurarVisibilidadBotones() {
     });
     
     // Asegurar que el botón de checkout sea visible
-    const botonCheckout = document.getElementById('checkout-btn');
+    const botonCheckout = document.getElementById('checkout-button');
     if (botonCheckout) {
         botonCheckout.style.backgroundColor = '#d79f49';
         botonCheckout.style.color = 'white';
