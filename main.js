@@ -2,7 +2,99 @@
 // Incluye: animación de introducción, menú móvil, productos, carrito, formulario distribuidores, geolocalización y mapa mejorados.
 
 // --- ANIMACIÓN DE INTRODUCCIÓN ---
+
+// Asegurar que las funciones estén disponibles globalmente desde el inicio
+let carrito = JSON.parse(localStorage.getItem('cart')) || [];
+
+// Función para migrar datos del carrito anterior
+function migrarCarritoAnterior() {
+    const carritoAnterior = localStorage.getItem('carritoLaTierrita');
+    if (carritoAnterior && carrito.length === 0) {
+        try {
+            carrito = JSON.parse(carritoAnterior);
+            localStorage.setItem('cart', carritoAnterior);
+            localStorage.removeItem('carritoLaTierrita');
+            console.log('Carrito migrado exitosamente');
+        } catch (error) {
+            console.error('Error migrando carrito anterior:', error);
+        }
+    }
+}
+
+function agregarAlCarrito(productoId) {
+    console.log('� agregarAlCarrito llamado con ID:', productoId);
+    console.log('🔍 Estado actual:');
+    console.log('  - productos disponibles:', productos ? productos.length : 'undefined');
+    console.log('  - carrito actual:', carrito ? carrito.length : 'undefined');
+    console.log('  - localStorage:', localStorage.getItem('cart'));
+    
+    if (!productos || productos.length === 0) {
+        console.error('❌ No hay productos definidos');
+        alert('Error: No hay productos disponibles');
+        return;
+    }
+    
+    const producto = productos.find(p => p.id === productoId);
+    if (!producto) {
+        console.error('❌ Producto no encontrado:', productoId);
+        console.log('Productos disponibles:', productos.map(p => ({id: p.id, nombre: p.nombre})));
+        alert(`Error: Producto con ID ${productoId} no encontrado`);
+        return;
+    }
+    
+    console.log('✅ Producto encontrado:', producto);
+    
+    // Asegurar que carrito existe
+    if (!carrito) {
+        console.warn('⚠️ Carrito no inicializado, creando nuevo');
+        carrito = [];
+    }
+    
+    const itemExistente = carrito.find(item => item.id === productoId);
+    if (itemExistente) {
+        itemExistente.cantidad += 1;
+        console.log('📈 Cantidad actualizada:', itemExistente);
+    } else {
+        const nuevoItem = {
+            id: producto.id,
+            nombre: producto.nombre,
+            precio: parseFloat(producto.precio), // Asegurar que sea número
+            imagen: producto.imagen,
+            cantidad: 1
+        };
+        carrito.push(nuevoItem);
+        console.log('➕ Nuevo item agregado:', nuevoItem);
+    }
+    
+    try {
+        guardarCarrito();
+        actualizarCarrito();
+        mostrarNotificacionCarrito(producto.nombre);
+        console.log('🛒 Carrito actualizado exitosamente. Total items:', carrito.length);
+    } catch (error) {
+        console.error('❌ Error al actualizar carrito:', error);
+        alert('Error al actualizar el carrito: ' + error.message);
+    }
+}
+
+// Hacer funciones disponibles globalmente desde el inicio
+window.agregarAlCarrito = agregarAlCarrito;
+
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 DOM cargado, inicializando La Tierrita...');
+    
+    // Migrar carrito anterior
+    migrarCarritoAnterior();
+    
+    // Asegurar que las funciones estén disponibles globalmente
+    window.agregarAlCarrito = agregarAlCarrito;
+    window.removerDelCarrito = removerDelCarrito;
+    window.cambiarCantidad = cambiarCantidad;
+    
+    // Inicializar funcionalidad básica
+    inicializarMenuMovil();
+    inicializarCarrito();
+    
     const introBg = document.getElementById('intro-animation-bg');
     const introVideo = document.getElementById('intro-animation-video');
     if (introBg && introVideo) {
@@ -25,31 +117,98 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(hideIntro, 8000);
     }
     
+    console.log('🎉 La Tierrita inicializada correctamente');
+    console.log('🔧 Funciones globales disponibles:', {
+        agregarAlCarrito: typeof window.agregarAlCarrito,
+        removerDelCarrito: typeof window.removerDelCarrito,
+        cambiarCantidad: typeof window.cambiarCantidad
+    });
+});
+
+// Nueva función de inicialización del carrito
+function inicializarCarrito() {
+    console.log('🛒 Inicializando carrito...');
+    
     // Migrar carrito anterior si existe
     migrarCarritoAnterior();
     
-    // Inicializar productos y carrito
+    // Renderizar productos
     renderizarProductos();
+    
+    // Actualizar carrito
     actualizarCarrito();
     
-    console.log('Productos cargados:', productos.length);
-    console.log('Carrito inicial:', carrito.length);
-    
-    // Asegurar visibilidad de botones después de un pequeño delay
-    setTimeout(() => {
-        asegurarVisibilidadBotones();
-    }, 100);
+    // Configurar botones del carrito
+    configurarBotonesCarrito();
     
     // Escuchar mensajes de otras ventanas (checkout)
     window.addEventListener('message', function(event) {
         if (event.data && event.data.type === 'cart-cleared') {
-            // Limpiar carrito local cuando se complete un pago
             carrito = [];
             guardarCarrito();
             actualizarCarrito();
         }
     });
-});
+    
+    // Verificar que las funciones estén disponibles
+    setTimeout(() => {
+        console.log('🔍 Verificando funciones después de inicialización:');
+        console.log('  - agregarAlCarrito:', typeof window.agregarAlCarrito);
+        console.log('  - productos definidos:', typeof productos !== 'undefined');
+        console.log('  - carrito definido:', typeof carrito !== 'undefined');
+        console.log('  - productos count:', productos ? productos.length : 0);
+        console.log('  - carrito count:', carrito ? carrito.length : 0);
+        
+        // Verificar botones en el DOM
+        const botones = document.querySelectorAll('[onclick*="agregarAlCarrito"], .btn-agregar-carrito');
+        console.log('  - botones encontrados:', botones.length);
+        
+        botones.forEach((boton, index) => {
+            console.log(`    Botón ${index + 1}:`, {
+                onclick: boton.onclick,
+                visible: boton.offsetParent !== null,
+                style: boton.style.display
+            });
+        });
+    }, 500);
+    
+    console.log('✅ Carrito inicializado. Productos:', productos ? productos.length : 0, 'Items:', carrito ? carrito.length : 0);
+}
+
+// Nueva función para configurar botones del carrito
+function configurarBotonesCarrito() {
+    console.log('🔧 Configurando botones del carrito...');
+    
+    // Configurar botón del carrito en header
+    const cartButton = document.getElementById('cart-button');
+    if (cartButton) {
+        cartButton.addEventListener('click', function() {
+            document.getElementById('cart-modal').classList.remove('hidden');
+        });
+    }
+    
+    // Configurar botón de cerrar carrito
+    const closeCartButton = document.getElementById('close-cart-button');
+    if (closeCartButton) {
+        closeCartButton.addEventListener('click', function() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        });
+    }
+    
+    // Configurar botón de checkout
+    const checkoutButton = document.getElementById('checkout-button');
+    if (checkoutButton) {
+        checkoutButton.addEventListener('click', function() {
+            if (carrito.length > 0) {
+                window.location.href = 'checkout.html';
+            } else {
+                alert('Tu carrito está vacío');
+            }
+        });
+    }
+    
+    console.log('✅ Botones del carrito configurados');
+}
 
 // --- CATÁLOGO DE PRODUCTOS (orden: tradicionales primero, luego gourmet) ---
 const productos = [
@@ -62,7 +221,8 @@ const productos = [
         descripcion: "Deliciosas bolitas de queso hechas con plátano cocinadas a la perfección.",
         precio: 3.50,
         peso: "500g",
-        ingredientes: "Plátano, leche, sal, hierbita y queso."
+        ingredientes: "Plátano, leche, sal, hierbita y queso.",
+        pagina: "mini-bolon-de-verde.html"
     },
     {
         id: 4,
@@ -72,7 +232,8 @@ const productos = [
         descripcion: "Hechos con plátano maduro cuidadosamente seleccionado mezclado con queso.",
         precio: 3.50,
         peso: "500g",
-        ingredientes: "Maduro, grasa vegetal, sal y queso."
+        ingredientes: "Maduro, grasa vegetal, sal y queso.",
+        pagina: "mini-bolon-de-maduro.html"
     },
     {
         id: 1,
@@ -82,7 +243,8 @@ const productos = [
         descripcion: "¡Mini muchines, máximo sabor! Crujientes, con queso, y hechos 100% con yuca natural.",
         precio: 3.50,
         peso: "500g",
-        ingredientes: "Yuca, sal y queso."
+        ingredientes: "Yuca, sal y queso.",
+        pagina: "mini-muchin-de-yuca.html"
     },
     {
         id: 2,
@@ -92,7 +254,8 @@ const productos = [
         descripcion: "¡Ligereza y sabor en cada bocado! Panes suaves, crocantes y 100% sin gluten.",
         precio: 3.50,
         peso: "500g",
-        ingredientes: "Almidón, queso, crema de leche, grasa vegetal, sal, agua."
+        ingredientes: "Almidón, queso, crema de leche, grasa vegetal, sal, agua.",
+        pagina: "pan-de-yuca.html"
     },
     // Bocaditos Gourmet
     {
@@ -103,7 +266,8 @@ const productos = [
         descripcion: "Dulces, suaves y con un relleno irresistible de queso.",
         precio: 3.00,
         peso: "400g",
-        ingredientes: "Maduro, sal, grasa vegetal y queso."
+        ingredientes: "Maduro, sal, grasa vegetal y queso.",
+        pagina: "maria-pipona-de-maduro.html"
     },
     {
         id: 5,
@@ -113,7 +277,8 @@ const productos = [
         descripcion: "Hechas con plátano verde y rellenas de puro sabor, son perfectas para resolver el desayuno.",
         precio: 3.00,
         peso: "400g",
-        ingredientes: "Verde, sal, grasa vegetal y queso."
+        ingredientes: "Verde, sal, grasa vegetal y queso.",
+        pagina: "maria-pipona-de-verde.html"
     },
     {
         id: 7,
@@ -123,7 +288,8 @@ const productos = [
         descripcion: "Crujientes por fuera, suaves por dentro. Hechos con yuca 100% natural y el toque perfecto de sal.",
         precio: 3.00,
         peso: "400g",
-        ingredientes: "Yuca, sal y grasa vegetal."
+        ingredientes: "Yuca, sal y grasa vegetal.",
+        pagina: "muchines-de-yuca.html"
     },
     {
         id: 8,
@@ -133,57 +299,13 @@ const productos = [
         descripcion: "Esponjosas y doradas, perfectas para acompañar con café o chocolate caliente.",
         precio: 3.00,
         peso: "400g",
-        ingredientes: "Harina, huevo, leche, azúcar, sal."
+        ingredientes: "Harina, huevo, leche, azúcar, sal.",
+        pagina: "torrejas.html"
     }
 ];
 
 // --- GESTIÓN DEL CARRITO ---
-let carrito = JSON.parse(localStorage.getItem('cart')) || [];
-
-// Función para migrar datos del carrito anterior
-function migrarCarritoAnterior() {
-    const carritoAnterior = localStorage.getItem('carritoLaTierrita');
-    if (carritoAnterior && carrito.length === 0) {
-        try {
-            carrito = JSON.parse(carritoAnterior);
-            localStorage.setItem('cart', carritoAnterior);
-            localStorage.removeItem('carritoLaTierrita');
-            console.log('Carrito migrado exitosamente');
-        } catch (error) {
-            console.error('Error migrando carrito anterior:', error);
-        }
-    }
-}
-
-function agregarAlCarrito(productoId) {
-    const producto = productos.find(p => p.id === productoId);
-    if (!producto) {
-        console.error('Producto no encontrado:', productoId);
-        return;
-    }
-    
-    console.log('Agregando producto al carrito:', producto);
-    
-    const itemExistente = carrito.find(item => item.id === productoId);
-    if (itemExistente) {
-        itemExistente.cantidad += 1;
-        console.log('Cantidad actualizada:', itemExistente);
-    } else {
-        const nuevoItem = {
-            id: producto.id,
-            nombre: producto.nombre,
-            precio: parseFloat(producto.precio), // Asegurar que sea número
-            imagen: producto.imagen,
-            cantidad: 1
-        };
-        carrito.push(nuevoItem);
-        console.log('Nuevo item agregado:', nuevoItem);
-    }
-    
-    guardarCarrito();
-    actualizarCarrito();
-    mostrarNotificacionCarrito(producto.nombre);
-}
+// carrito ya está declarado al inicio del archivo
 
 function removerDelCarrito(productoId) {
     carrito = carrito.filter(item => item.id !== productoId);
@@ -298,7 +420,7 @@ function actualizarCarrito() {
 function mostrarNotificacionCarrito(nombreProducto) {
     // Crear notificación
     const notificacion = document.createElement('div');
-    notificacion.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 transform transition-transform duration-300 translate-x-full';
+    notificacion.className = 'fixed top-24 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-40 transform transition-transform duration-300 translate-x-full';
     notificacion.innerHTML = `
         <div class="flex items-center space-x-2">
             <i class="fas fa-check-circle"></i>
@@ -368,12 +490,21 @@ function renderizarProductos() {
                                         <span class="text-2xl font-bold text-brand-naranja-mostaza">$${producto.precio.toFixed(2)}</span>
                                         <span class="text-sm text-gray-500">${producto.peso}</span>
                                     </div>
-                                    <button onclick="agregarAlCarrito(${producto.id})" 
-                                            style="background-color: #d79f49 !important; color: white !important;" 
-                                            class="w-full py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-brand-naranja-mostaza focus:ring-opacity-50">
-                                        <i class="fas fa-shopping-cart mr-2"></i>
-                                        Agregar al Carrito
-                                    </button>
+                                    <div class="space-y-2">
+                                        <a href="${producto.pagina}" 
+                                           class="w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 border-2 border-brand-naranja-mostaza text-brand-naranja-mostaza hover:bg-brand-naranja-mostaza hover:text-white flex items-center justify-center">
+                                            <i class="fas fa-eye mr-2"></i>
+                                            Ver Detalles
+                                        </a>
+                                        <button type="button" 
+                                                onclick="agregarAlCarrito(${producto.id})"
+                                                data-product-id="${producto.id}"
+                                                class="btn-agregar-carrito w-full py-3 px-4 rounded-lg font-medium transition-all duration-200"
+                                                style="background-color: #d79f49 !important; color: white !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; border: none !important;">
+                                            <i class="fas fa-shopping-cart mr-2"></i>
+                                            Agregar al Carrito
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         `).join('')}
@@ -412,6 +543,42 @@ function toggleMobileMenu() {
     }
 }
 
+// Nueva función para inicializar el menú móvil
+function inicializarMenuMovil() {
+    console.log('📱 Inicializando menú móvil...');
+    
+    const menuButton = document.getElementById('mobile-menu-button');
+    const menuPanel = document.getElementById('mobile-menu-panel');
+    const closeMenuButton = document.getElementById('close-mobile-menu');
+    const menuOverlay = document.getElementById('mobile-menu-overlay');
+    
+    if (menuButton && menuPanel) {
+        menuButton.addEventListener('click', function() {
+            menuPanel.classList.remove('-translate-x-full');
+            menuOverlay.classList.remove('hidden');
+            menuButton.setAttribute('aria-expanded', 'true');
+        });
+    }
+    
+    if (closeMenuButton && menuPanel) {
+        closeMenuButton.addEventListener('click', function() {
+            menuPanel.classList.add('-translate-x-full');
+            menuOverlay.classList.add('hidden');
+            menuButton.setAttribute('aria-expanded', 'false');
+        });
+    }
+    
+    if (menuOverlay && menuPanel) {
+        menuOverlay.addEventListener('click', function() {
+            menuPanel.classList.add('-translate-x-full');
+            menuOverlay.classList.add('hidden');
+            menuButton.setAttribute('aria-expanded', 'false');
+        });
+    }
+    
+    console.log('✅ Menú móvil inicializado');
+}
+
 // --- CARRITO SIDEBAR ---
 function toggleCarrito() {
     const carrito = document.getElementById('carrito-sidebar');
@@ -445,27 +612,57 @@ function procederAlCheckout() {
 
 // --- FUNCIONES DE VISIBILIDAD DE BOTONES ---
 function asegurarVisibilidadBotones() {
+    console.log('🔧 Asegurando visibilidad de botones...');
+    
     // Asegurar que todos los botones de compra sean visibles con estilos inline
-    const botonesCompra = document.querySelectorAll('[onclick*="agregarAlCarrito"]');
-    botonesCompra.forEach(boton => {
-        boton.style.backgroundColor = '#d79f49';
-        boton.style.color = 'white';
-        boton.style.display = 'block';
-        boton.style.visibility = 'visible';
-        boton.style.opacity = '1';
-        boton.style.pointerEvents = 'auto';
+    const botonesCompra = document.querySelectorAll('[onclick*="agregarAlCarrito"], .btn-agregar-carrito');
+    console.log(`🔍 Encontrados ${botonesCompra.length} botones de compra`);
+    
+    botonesCompra.forEach((boton, index) => {
+        console.log(`🔧 Configurando botón ${index + 1}`);
+        
+        // Aplicar estilos inline para garantizar visibilidad
+        boton.style.setProperty('display', 'inline-flex', 'important');
+        boton.style.setProperty('align-items', 'center', 'important');
+        boton.style.setProperty('justify-content', 'center', 'important');
+        boton.style.setProperty('width', '100%', 'important');
+        boton.style.setProperty('background-color', '#d79f49', 'important');
+        boton.style.setProperty('color', 'white', 'important');
+        boton.style.setProperty('font-weight', '600', 'important');
+        boton.style.setProperty('padding', '0.75rem 1rem', 'important');
+        boton.style.setProperty('border-radius', '0.5rem', 'important');
+        boton.style.setProperty('border', 'none', 'important');
+        boton.style.setProperty('cursor', 'pointer', 'important');
+        boton.style.setProperty('text-align', 'center', 'important');
+        boton.style.setProperty('transition', 'all 0.2s ease-in-out', 'important');
+        boton.style.setProperty('visibility', 'visible', 'important');
+        boton.style.setProperty('opacity', '1', 'important');
+        boton.style.setProperty('pointer-events', 'auto', 'important');
+        boton.style.setProperty('z-index', '10', 'important');
+        boton.style.setProperty('position', 'relative', 'important');
+        
+        // Agregar clase para identificación
+        boton.classList.add('btn-agregar-carrito');
+        
+        // Verificar que el onclick esté presente
+        if (!boton.onclick) {
+            console.warn(`⚠️ Botón ${index + 1} no tiene función onclick asignada`);
+        }
     });
     
     // Asegurar que el botón de checkout sea visible
     const botonCheckout = document.getElementById('checkout-button');
     if (botonCheckout) {
-        botonCheckout.style.backgroundColor = '#d79f49';
-        botonCheckout.style.color = 'white';
-        botonCheckout.style.display = 'block';
-        botonCheckout.style.visibility = 'visible';
+        botonCheckout.style.setProperty('background-color', '#d79f49', 'important');
+        botonCheckout.style.setProperty('color', 'white', 'important');
+        botonCheckout.style.setProperty('display', 'block', 'important');
+        botonCheckout.style.setProperty('visibility', 'visible', 'important');
+        console.log('✅ Botón de checkout configurado');
+    } else {
+        console.log('ℹ️ Botón de checkout no encontrado (normal si no estamos en la página principal)');
     }
     
-    console.log(`Visibilidad asegurada para ${botonesCompra.length} botones de compra`);
+    console.log(`✅ Visibilidad asegurada para ${botonesCompra.length} botones de compra`);
 }
 
 // Ejecutar la función de visibilidad cuando sea necesario
@@ -1435,3 +1632,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Ejecutar la función de visibilidad cuando sea necesario
+document.addEventListener('DOMContentLoaded', asegurarVisibilidadBotones);

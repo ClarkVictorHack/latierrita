@@ -59,37 +59,87 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Datos de productos (sincronizado con main.js)
 const productos = [
+    // Bocaditos Tradicionales
     {
         id: 3,
         nombre: "Mini Bolón de Verde",
         categoria: "Bocaditos Tradicionales",
         imagen: "img/mini bolon de verde.png",
+        descripcion: "Deliciosas bolitas de queso hechas con plátano cocinadas a la perfección.",
         precio: 3.50,
-        peso: "500g"
+        peso: "500g",
+        ingredientes: "Plátano, leche, sal, hierbita y queso."
     },
     {
         id: 4,
         nombre: "Mini Bolón de Maduro",
-        categoria: "Bocaditos Tradicionales", 
+        categoria: "Bocaditos Tradicionales",
         imagen: "img/mini bolon de maduro.png",
+        descripcion: "Hechos con plátano maduro cuidadosamente seleccionado mezclado con queso.",
         precio: 3.50,
-        peso: "500g"
+        peso: "500g",
+        ingredientes: "Maduro, grasa vegetal, sal y queso."
     },
     {
-        id: 6,
+        id: 1,
+        nombre: "Mini Muchin de Yuca",
+        categoria: "Bocaditos Tradicionales",
+        imagen: "img/mini muchin.png",
+        descripcion: "¡Mini muchines, máximo sabor! Crujientes, con queso, y hechos 100% con yuca natural.",
+        precio: 3.50,
+        peso: "500g",
+        ingredientes: "Yuca, sal y queso."
+    },
+    {
+        id: 2,
         nombre: "Pan de Yuca",
         categoria: "Bocaditos Tradicionales",
         imagen: "img/pan de yuca.png",
-        precio: 4.00,
-        peso: "500g"
+        descripcion: "¡Ligereza y sabor en cada bocado! Panes suaves, crocantes y 100% sin gluten.",
+        precio: 3.50,
+        peso: "500g",
+        ingredientes: "Almidón, queso, crema de leche, grasa vegetal, sal, agua."
+    },
+    // Bocaditos Gourmet
+    {
+        id: 6,
+        nombre: "Maria Pipona de Maduro",
+        categoria: "Bocaditos Gourmet",
+        imagen: "img/maria pipona de maduro.jpg",
+        descripcion: "Dulces, suaves y con un relleno irresistible de queso.",
+        precio: 3.00,
+        peso: "400g",
+        ingredientes: "Maduro, sal, grasa vegetal y queso."
     },
     {
         id: 5,
-        nombre: "Mini Muchín",
-        categoria: "Bocaditos Tradicionales",
-        imagen: "img/mini muchin.png",
+        nombre: "Maria Pipona de Verde",
+        categoria: "Bocaditos Gourmet",
+        imagen: "img/maria pipona de verde.jpg",
+        descripcion: "Hechas con plátano verde y rellenas de puro sabor, son perfectas para resolver el desayuno.",
         precio: 3.00,
-        peso: "500g"
+        peso: "400g",
+        ingredientes: "Verde, sal, grasa vegetal y queso."
+    },
+    {
+        id: 7,
+        nombre: "Muchines de Yuca",
+        categoria: "Bocaditos Gourmet",
+        imagen: "img/muchines de yuca.jpg",
+        descripcion: "Crujientes por fuera, suaves por dentro. Hechos con yuca 100% natural y el toque perfecto de sal.",
+        precio: 3.00,
+        peso: "400g",
+        ingredientes: "Yuca, sal y grasa vegetal."
+    },
+    {
+        id: 8,
+        nombre: "Torrejas",
+        categoria: "Bocaditos Gourmet",
+        imagen: "img/torrejas.jpg",
+        descripcion: "Esponjosas y doradas, perfectas para acompañar con café o chocolate caliente.",
+        precio: 3.00,
+        peso: "400g",
+        ingredientes: "Harina, huevo, leche, azúcar, sal."
     }
 ];
 
@@ -583,23 +633,50 @@ function initializePayPal() {
                 try {
                     const orderData = createPayPalOrder();
                     
-                    if (!orderData) {
-                        showPayPalError('Error al crear la orden');
-                        return Promise.reject(new Error('Invalid order data'));
+                    if (!orderData || !orderData.total || parseFloat(orderData.total) <= 0) {
+                        showPayPalError('Error al crear la orden: total inválido');
+                        return Promise.reject(new Error('Invalid order total'));
                     }
 
-                    console.log('Creando orden PayPal:', orderData);
+                    console.log('🔄 Creando orden PayPal:', orderData);
 
-                    return actions.order.create({
+                    const orderStructure = {
                         intent: 'CAPTURE',
                         purchase_units: [{
                             amount: {
-                                currency_code: 'USD',
-                                value: orderData.total.toFixed(2)
+                                currency_code: PAYPAL_CONFIG.currency,
+                                value: orderData.total,
+                                breakdown: {
+                                    item_total: {
+                                        currency_code: PAYPAL_CONFIG.currency,
+                                        value: orderData.subtotal
+                                    }
+                                }
                             },
-                            description: 'Productos de La Tierrita'
+                            description: 'Productos tradicionales de La Tierrita',
+                            items: orderData.items
                         }]
-                    });
+                    };
+
+                    // Agregar envío si existe
+                    if (parseFloat(orderData.shipping) > 0) {
+                        orderStructure.purchase_units[0].amount.breakdown.shipping = {
+                            currency_code: PAYPAL_CONFIG.currency,
+                            value: orderData.shipping
+                        };
+                    }
+
+                    // Agregar descuento si existe
+                    if (parseFloat(orderData.discount) > 0) {
+                        orderStructure.purchase_units[0].amount.breakdown.discount = {
+                            currency_code: PAYPAL_CONFIG.currency,
+                            value: orderData.discount
+                        };
+                    }
+
+                    console.log('📦 Estructura de orden final:', orderStructure);
+
+                    return actions.order.create(orderStructure);
                 } catch (error) {
                     console.error('Error en createOrder:', error);
                     showPayPalError('Error al procesar la orden');
@@ -661,20 +738,26 @@ function createPayPalOrder() {
         }
 
         let subtotal = 0;
-        const items = cart.map(item => {
-            const itemTotal = item.precio * item.cantidad;
-            subtotal += itemTotal;
-            
-            return {
-                name: item.nombre,
-                unit_amount: {
-                    currency_code: PAYPAL_CONFIG.currency,
-                    value: item.precio.toFixed(2)
-                },
-                quantity: item.cantidad.toString(),
-                description: `${item.peso || '500g'} - Producto tradicional ecuatoriano`,
-                category: 'PHYSICAL_GOODS'
-            };
+        const items = [];
+        
+        // Calcular correctamente el subtotal usando los productos base
+        cart.forEach(item => {
+            const producto = productos.find(p => p.id === item.id);
+            if (producto) {
+                const itemTotal = producto.precio * item.cantidad;
+                subtotal += itemTotal;
+                
+                items.push({
+                    name: producto.nombre,
+                    unit_amount: {
+                        currency_code: PAYPAL_CONFIG.currency,
+                        value: producto.precio.toFixed(2)
+                    },
+                    quantity: item.cantidad.toString(),
+                    description: `${producto.peso || '500g'} - Producto tradicional ecuatoriano`,
+                    category: 'PHYSICAL_GOODS'
+                });
+            }
         });
 
         // Calcular envío
@@ -689,6 +772,14 @@ function createPayPalOrder() {
         }
 
         const total = subtotal + shipping - discount;
+
+        console.log('🧮 Orden PayPal calculada:', {
+            subtotal: subtotal.toFixed(2),
+            shipping: shipping.toFixed(2),
+            discount: discount.toFixed(2),
+            total: total.toFixed(2),
+            items: items.length
+        });
 
         return {
             items: items,

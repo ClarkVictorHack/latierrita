@@ -380,3 +380,45 @@ button,
   border-radius: 6px;
   margin-bottom: 16px;
 }
+
+/* Estilos específicos para botones de agregar al carrito */
+.btn-agregar-carrito,
+button[onclick*="agregarAlCarrito"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  background-color: var(--brand-naranja-mostaza) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 0.5rem !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease-in-out !important;
+  z-index: 10 !important;
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.btn-agregar-carrito:hover,
+button[onclick*="agregarAlCarrito"]:hover {
+  background-color: #c28d3d !important;
+  transform: scale(1.02) !important;
+  opacity: 0.95 !important;
+}
+
+.btn-agregar-carrito:focus,
+button[onclick*="agregarAlCarrito"]:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(215, 159, 73, 0.5) !important;
+}
+
+.btn-agregar-carrito:active,
+button[onclick*="agregarAlCarrito"]:active {
+  transform: scale(0.98) !important;
+}

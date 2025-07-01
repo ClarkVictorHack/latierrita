@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Carrito - La Tierrita</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-6">Test del Carrito de La Tierrita</h1>
+        
+        <!-- Contenedor para mostrar el carrito -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 class="text-xl font-semibold mb-4">Carrito de Compras</h2>
+            <div id="cart-items"></div>
+            <div class="mt-4 text-right">
+                <span class="text-lg font-bold">Total: $<span id="cart-total">0.00</span></span>
+            </div>
+        </div>
+        
+        <!-- Productos de prueba -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="product-list">
+            <!-- Los productos se cargarán dinámicamente -->
+        </div>
+        
+        <!-- Botón de checkout -->
+        <div class="mt-6 text-center">
+            <button id="checkout-button" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600">
+                Ir al Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- Incluir el JavaScript principal -->
+    <script src="main.js"></script>
+    
+    <!-- Script de depuración avanzado -->
+    <script src="debug-carrito.js"></script>
+</body>
+</html>
