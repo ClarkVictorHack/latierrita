@@ -668,523 +668,393 @@ function asegurarVisibilidadBotones() {
 // Ejecutar la función de visibilidad cuando sea necesario
 document.addEventListener('DOMContentLoaded', asegurarVisibilidadBotones);
 
-// --- GEOLOCALIZACIÓN Y MAPA MEJORADOS (Mapbox) ---
-document.addEventListener('DOMContentLoaded', () => {
-    const getLocationBtn = document.getElementById('getLocationBtn');
-    const locationInput = document.getElementById('location');
-    const geolocationInput = document.getElementById('geolocation');
-    const mapContainer = document.getElementById('map-container');
-    
-    let map = null;
-    let marker = null;
-    
-    // Token de Mapbox actualizado
-    const MAPBOX_TOKEN = 'pk.eyJ1IjoibGF0aWVycml0YXNob3AiLCJhIjoiY21jOWFzMHM4MXcyZjJtb3BuZzU0ZnVjdSJ9.uvBJT6wvbCSwc_ia4bSzUQ';
-    
-    if (getLocationBtn) {
-        getLocationBtn.addEventListener('click', obtenerUbicacion);
+// --- MAPA DE PUNTOS DE VENTA ---
+
+// Datos de puntos de venta (coordenadas aproximadas de Ecuador)
+const puntosDeVenta = [
+    // Guayas
+    {
+        id: 1,
+        nombre: "Supermaxi Policentro",
+        tipo: "supermercado",
+        lat: -2.1894,
+        lng: -79.8890,
+        ciudad: "Guayaquil",
+        provincia: "Guayas",
+        direccion: "Av. Francisco de Orellana, Policentro",
+        telefono: "04-2680000"
+    },
+    {
+        id: 2,
+        nombre: "Mi Comisariato Urdesa",
+        tipo: "supermercado",
+        lat: -2.1651,
+        lng: -79.9014,
+        ciudad: "Guayaquil",
+        provincia: "Guayas",
+        direccion: "Av. Víctor Emilio Estrada, Urdesa",
+        telefono: "04-2881500"
+    },
+    {
+        id: 3,
+        nombre: "Tienda Los Andes",
+        tipo: "punto-venta",
+        lat: -2.2105,
+        lng: -79.8862,
+        ciudad: "Guayaquil",
+        provincia: "Guayas",
+        direccion: "Av. 25 de Julio, Mapasingue",
+        telefono: "04-2201234"
+    },
+    {
+        id: 4,
+        nombre: "Minimarket Tradición",
+        tipo: "punto-venta",
+        lat: -2.1709,
+        lng: -79.9225,
+        ciudad: "Guayaquil",
+        provincia: "Guayas",
+        direccion: "Malecón 2000, Zona Rosa",
+        telefono: "04-2567890"
+    },
+
+    // Manabí
+    {
+        id: 5,
+        nombre: "Supermaxi Manta",
+        tipo: "supermercado",
+        lat: -0.9677,
+        lng: -80.7088,
+        ciudad: "Manta",
+        provincia: "Manabí",
+        direccion: "Av. 4 de Noviembre, Centro Comercial Multiplaza",
+        telefono: "05-2620000"
+    },
+    {
+        id: 6,
+        nombre: "Tía Portoviejo",
+        tipo: "supermercado",
+        lat: -1.0546,
+        lng: -80.4545,
+        ciudad: "Portoviejo",
+        provincia: "Manabí",
+        direccion: "Av. Universitaria, Centro",
+        telefono: "05-2650000"
+    },
+    {
+        id: 7,
+        nombre: "Tienda Costa Verde",
+        tipo: "punto-venta",
+        lat: -0.9515,
+        lng: -80.7340,
+        ciudad: "Manta",
+        provincia: "Manabí",
+        direccion: "Av. Malecón, Sector Tarqui",
+        telefono: "05-2923456"
+    },
+    {
+        id: 8,
+        nombre: "Despensa La Yuca",
+        tipo: "punto-venta",
+        lat: -1.0483,
+        lng: -80.4501,
+        ciudad: "Portoviejo",
+        provincia: "Manabí",
+        direccion: "Parque Central, Calle Chile",
+        telefono: "05-2634567"
+    },
+
+    // Pichincha
+    {
+        id: 9,
+        nombre: "Supermaxi Quicentro Sur",
+        tipo: "supermercado",
+        lat: -0.2575,
+        lng: -78.5260,
+        ciudad: "Quito",
+        provincia: "Pichincha",
+        direccion: "Av. Morán Valverde, Quicentro Sur",
+        telefono: "02-3980000"
+    },
+    {
+        id: 10,
+        nombre: "Megamaxi CCI",
+        tipo: "supermercado",
+        lat: -0.1807,
+        lng: -78.4678,
+        ciudad: "Quito",
+        provincia: "Pichincha",
+        direccion: "Av. Amazonas y Naciones Unidas, CCI",
+        telefono: "02-2980000"
+    },
+    {
+        id: 11,
+        nombre: "Tienda Andina",
+        tipo: "punto-venta",
+        lat: -0.2298,
+        lng: -78.5249,
+        ciudad: "Quito",
+        provincia: "Pichincha",
+        direccion: "Av. Teniente Hugo Ortiz, Sur de Quito",
+        telefono: "02-2456789"
+    },
+    {
+        id: 12,
+        nombre: "Despensa del Ecuador",
+        tipo: "punto-venta",
+        lat: -0.2201,
+        lng: -78.5123,
+        ciudad: "Quito",
+        provincia: "Pichincha",
+        direccion: "La Mariscal, Zona Rosa",
+        telefono: "02-2234567"
+    },
+
+    // Azuay
+    {
+        id: 13,
+        nombre: "Coral Cuenca",
+        tipo: "supermercado",
+        lat: -2.8972,
+        lng: -79.0058,
+        ciudad: "Cuenca",
+        provincia: "Azuay",
+        direccion: "Av. España, Mall del Río",
+        telefono: "07-4050000"
+    },
+    {
+        id: 14,
+        nombre: "Minimarket Austral",
+        tipo: "punto-venta",
+        lat: -2.9001,
+        lng: -79.0059,
+        ciudad: "Cuenca",
+        provincia: "Azuay",
+        direccion: "Av. de las Américas, Centro",
+        telefono: "07-2876543"
+    },
+
+    // El Oro
+    {
+        id: 15,
+        nombre: "Tía Machala",
+        tipo: "supermercado",
+        lat: -3.2581,
+        lng: -79.9553,
+        ciudad: "Machala",
+        provincia: "El Oro",
+        direccion: "Av. 25 de Junio, Centro Comercial Paseo Shopping",
+        telefono: "07-2930000"
+    },
+
+    // Los Ríos
+    {
+        id: 16,
+        nombre: "Akí Babahoyo",
+        tipo: "supermercado",
+        lat: -1.8049,
+        lng: -79.5341,
+        ciudad: "Babahoyo",
+        provincia: "Los Ríos",
+        direccion: "Av. 10 de Agosto, Centro",
+        telefono: "05-2730000"
     }
-    
-    function obtenerUbicacion() {
-        if (!navigator.geolocation) {
-            alert('La geolocalización no es compatible con este navegador.');
-            return;
-        }
-        
-        // Mostrar estado de carga
-        getLocationBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-brand-naranja-mostaza"></i>';
-        getLocationBtn.disabled = true;
-        
-        // Agregar texto de estado
-        let statusDiv = document.getElementById('location-status');
-        if (!statusDiv) {
-            statusDiv = document.createElement('div');
-            statusDiv.id = 'location-status';
-            statusDiv.className = 'text-sm text-gray-600 mt-2';
-            getLocationBtn.parentNode.appendChild(statusDiv);
-        }
-        statusDiv.textContent = 'Obteniendo tu ubicación...';
-        statusDiv.className = 'text-sm text-gray-600 mt-2';
-        
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                
-                // Actualizar estado
-                statusDiv.textContent = 'Procesando ubicación...';
-                statusDiv.className = 'text-sm text-blue-600 mt-2';
-                
-                // Guardar coordenadas
-                geolocationInput.value = `${lat},${lng}`;
-                
-                try {
-                    // Obtener dirección usando la función mejorada
-                    await procesarGeocoding(lat, lng);
-                    
-                    // Mostrar mapa
-                    mostrarMapa(lat, lng);
-                    
-                    // Actualizar estado final
-                    statusDiv.textContent = '✓ Ubicación obtenida correctamente';
-                    statusDiv.className = 'text-sm text-green-600 mt-2';
-                    
-                    // Ocultar mensaje después de 3 segundos
-                    setTimeout(() => {
-                        if (statusDiv && statusDiv.parentNode) {
-                            statusDiv.parentNode.removeChild(statusDiv);
-                        }
-                    }, 3000);
-                    
-                } catch (error) {
-                    console.error('Error en geocodificación:', error);
-                    // Mostrar mapa de todos modos
-                    mostrarMapa(lat, lng);
-                    
-                    statusDiv.textContent = '⚠ Ubicación obtenida, dirección aproximada';
-                    statusDiv.className = 'text-sm text-yellow-600 mt-2';
-                    
-                    setTimeout(() => {
-                        if (statusDiv && statusDiv.parentNode) {
-                            statusDiv.parentNode.removeChild(statusDiv);
-                        }
-                    }, 4000);
-                }
-                
-                // Restaurar botón
-                getLocationBtn.innerHTML = '<i class="fas fa-map-marker-alt text-brand-naranja-mostaza"></i>';
-                getLocationBtn.disabled = false;
-            },
-            (error) => {
-                console.error('Error obteniendo ubicación:', error);
-                let mensaje = 'No se pudo obtener la ubicación. ';
-                
-                switch(error.code) {
-                    case error.PERMISSION_DENIED:
-                        mensaje += 'Permiso denegado por el usuario.';
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        mensaje += 'Información de ubicación no disponible.';
-                        break;
-                    case error.TIMEOUT:
-                        mensaje += 'Tiempo de espera agotado.';
-                        break;
-                    default:
-                        mensaje += 'Error desconocido.';
-                        break;
-                }
-                
-                // Actualizar estado de error
-                if (statusDiv) {
-                    statusDiv.textContent = '✗ ' + mensaje;
-                    statusDiv.className = 'text-sm text-red-600 mt-2';
-                    
-                    // Ocultar mensaje después de 5 segundos
-                    setTimeout(() => {
-                        if (statusDiv && statusDiv.parentNode) {
-                            statusDiv.parentNode.removeChild(statusDiv);
-                        }
-                    }, 5000);
-                } else {
-                    alert(mensaje);
-                }
-                
-                // Restaurar botón
-                getLocationBtn.innerHTML = '<i class="fas fa-map-marker-alt text-brand-naranja-mostaza"></i>';
-                getLocationBtn.disabled = false;
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 300000 // 5 minutos
-            }
-        );
+];
+
+// Variables globales del mapa
+let mapaStores = null;
+let marcadores = [];
+let tipoFiltroActual = 'todos';
+
+// Función para inicializar el mapa de puntos de venta
+function initializeStoresMap() {
+    // Verificar si Leaflet está disponible
+    if (typeof L === 'undefined') {
+        console.error('Leaflet no está disponible');
+        return;
     }
-    
-    // Función mejorada para obtener dirección con Mapbox
-    async function obtenerDireccion(lat, lng) {
-        try {
-            // Múltiples consultas a Mapbox para obtener información más específica
-            const queries = [
-                // Consulta para dirección específica con mayor precisión
-                `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&language=es&types=address&limit=1&reverseMode=distance`,
-                // Consulta para lugar/vecindario
-                `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&language=es&types=poi,neighborhood&limit=1&reverseMode=distance`,
-                // Consulta general con todos los tipos
-                `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&language=es&types=address,poi,place,locality,neighborhood&limit=3&reverseMode=score`
-            ];
-            
-            let direccionData = null;
-            let mejorDireccion = null;
-            
-            // Intentar cada consulta hasta obtener buenos resultados
-            for (const queryUrl of queries) {
-                try {
-                    const response = await fetch(queryUrl);
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.features && data.features.length > 0) {
-                            direccionData = data;
-                            mejorDireccion = data.features[0];
-                            console.log('Mapbox consulta exitosa:', { query: queryUrl.split('types=')[1].split('&')[0], feature: mejorDireccion });
-                            break;
-                        }
-                    }
-                } catch (err) {
-                    console.warn('Consulta Mapbox falló:', err);
-                }
-            }
-            
-            if (!mejorDireccion) {
-                throw new Error('No se pudo obtener información de ubicación de Mapbox');
-            }
-            
-            // Procesar información de Mapbox con lógica mejorada
-            let calle = '';
-            let numero = '';
-            let barrio = '';
-            let ciudad = '';
-            let provincia = '';
-            let codigoPostal = '';
-            
-            console.log('Procesando información de Mapbox:', mejorDireccion);
-            
-            const placeName = mejorDireccion.place_name || '';
-            const placeText = mejorDireccion.text || '';
-            const properties = mejorDireccion.properties || {};
-            
-            // Extraer número de dirección del address si está disponible
-            if (properties.address) {
-                numero = properties.address;
-            }
-            
-            // Si es una dirección específica, extraer información detallada
-            if (mejorDireccion.place_type && mejorDireccion.place_type.includes('address')) {
-                calle = placeText;
-                
-                // Si no encontramos número en properties, intentar extraerlo del texto
-                if (!numero) {
-                    const numeroMatch = calle.match(/^(\d+[-\w]*)/);
-                    if (numeroMatch) {
-                        numero = numeroMatch[1];
-                        calle = calle.replace(/^\d+[-\w]*\s*/, '').trim();
-                    }
-                }
-            }
-            
-            // Procesar contexto jerárquico de Mapbox
-            if (mejorDireccion.context) {
-                mejorDireccion.context.forEach(item => {
-                    const id = item.id || '';
-                    const text = item.text || '';
-                    
-                    if (id.includes('neighborhood') || id.includes('locality')) {
-                        if (!barrio) barrio = text;
-                    } else if (id.includes('place') && !ciudad) {
-                        ciudad = text;
-                    } else if (id.includes('district') && !ciudad) {
-                        ciudad = text;
-                    } else if (id.includes('region') && !provincia) {
-                        provincia = text;
-                    } else if (id.includes('postcode')) {
-                        codigoPostal = text;
-                    }
-                });
-            }
-            
-            // Si no tenemos información suficiente de contexto, parsear el place_name
-            if (!ciudad || !provincia) {
-                const parts = placeName.split(',').map(part => part.trim());
-                
-                // Remover país si está presente
-                if (parts.length > 0 && (parts[parts.length - 1].toLowerCase().includes('ecuador') || parts[parts.length - 1] === 'EC')) {
-                    parts.pop();
-                }
-                
-                // Asignar provincia (penúltima parte)
-                if (parts.length > 0 && !provincia) {
-                    provincia = parts.pop();
-                }
-                
-                // Asignar ciudad (antepenúltima parte)
-                if (parts.length > 0 && !ciudad) {
-                    ciudad = parts.pop();
-                }
-                
-                // Si hay más partes y no tenemos calle/barrio, usarlas
-                if (parts.length > 0 && !calle && !barrio) {
-                    const resto = parts.join(', ');
-                    if (mejorDireccion.place_type && mejorDireccion.place_type.includes('address')) {
-                        calle = resto;
-                    } else {
-                        barrio = resto;
-                    }
-                }
-            }
-            
-            // Construir dirección final optimizada
-            const direccionCompleta = construirDireccionCompleta({
-                calle,
-                numero,
-                barrio,
-                ciudad,
-                provincia,
-                codigoPostal
+
+    const mapContainer = document.getElementById('stores-map');
+    if (!mapContainer) {
+        console.log('Contenedor del mapa no encontrado');
+        return;
+    }
+
+    try {
+        // Crear el mapa centrado en Ecuador
+        mapaStores = L.map('stores-map').setView([-1.8312, -78.1834], 6);
+
+        // Agregar tile layer (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 18
+        }).addTo(mapaStores);
+
+        // Agregar todos los marcadores inicialmente
+        mostrarMarcadores('todos');
+
+        // Event listeners para los botones de filtro
+        setupMapFilters();
+
+        console.log('Mapa de puntos de venta inicializado correctamente');
+    } catch (error) {
+        console.error('Error inicializando mapa de puntos de venta:', error);
+    }
+}
+
+// Función para configurar los filtros del mapa
+function setupMapFilters() {
+    const buttons = {
+        'show-all-stores': 'todos',
+        'show-supermarkets': 'supermercado'
+    };
+
+    Object.entries(buttons).forEach(([buttonId, tipo]) => {
+        const button = document.getElementById(buttonId);
+        if (button) {
+            button.addEventListener('click', () => {
+                // Actualizar estado visual de botones
+                updateActiveFilterButton(buttonId);
+                // Mostrar marcadores filtrados
+                mostrarMarcadores(tipo);
             });
-            
-            locationInput.value = direccionCompleta;
-            
-            console.log('Mapbox geocodificación exitosa:', {
-                calle,
-                numero,
-                barrio,
-                ciudad,
-                provincia,
-                codigoPostal,
-                direccionCompleta,
-                placeName
-            });
-            
-            return true;
-            
-        } catch (error) {
-            console.error('Error en geocodificación de Mapbox:', error);
-            throw error; // Re-lanzar para que el fallback se ejecute
         }
-    }
-    
-    // Función auxiliar para construir dirección de forma inteligente
-    function construirDireccionCompleta({ calle, numero, barrio, ciudad, provincia, codigoPostal }) {
-        const partes = [];
-        
-        // Agregar calle con número si están disponibles
-        if (calle) {
-            if (numero) {
-                partes.push(`${calle} ${numero}`);
+    });
+}
+
+// Función para actualizar el botón activo
+function updateActiveFilterButton(activeButtonId) {
+    const allButtons = [
+        'show-all-stores',
+        'show-supermarkets'
+    ];
+
+    allButtons.forEach(buttonId => {
+        const button = document.getElementById(buttonId);
+        if (button) {
+            if (buttonId === activeButtonId) {
+                button.className = 'bg-brand-naranja-mostaza text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors';
             } else {
-                partes.push(calle);
+                button.className = 'bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors';
             }
         }
-        
-        // Agregar barrio si es diferente de la ciudad
-        if (barrio && barrio !== ciudad && !calle) {
-            partes.push(barrio);
-        }
-        
-        // Agregar ciudad
-        if (ciudad) {
-            partes.push(ciudad);
-        }
-        
-        // Agregar provincia si es diferente de la ciudad
-        if (provincia && provincia !== ciudad) {
-            partes.push(provincia);
-        }
-        
-        let direccion = partes.join(', ');
-        
-        // Si la dirección es muy corta, intentar mejoras
-        if (partes.length < 2) {
-            if (barrio && barrio !== ciudad) {
-                direccion = [barrio, ciudad, provincia].filter(Boolean).join(', ');
-            } else if (ciudad && provincia) {
-                direccion = [ciudad, provincia].filter(Boolean).join(', ');
-            }
-        }
-        
-        return direccion || 'Ubicación no específica';
+    });
+}
+
+// Función para mostrar marcadores según el filtro
+function mostrarMarcadores(tipoFiltro) {
+    if (!mapaStores) return;
+
+    // Limpiar marcadores existentes
+    marcadores.forEach(marker => {
+        mapaStores.removeLayer(marker);
+    });
+    marcadores = [];
+
+    // Filtrar puntos según el tipo
+    let puntosFiltrados;
+    if (tipoFiltro === 'todos') {
+        puntosFiltrados = puntosDeVenta;
+    } else if (tipoFiltro === 'supermercado') {
+        puntosFiltrados = puntosDeVenta.filter(punto => punto.tipo === 'supermercado');
+    } else {
+        puntosFiltrados = puntosDeVenta.filter(punto => punto.tipo === tipoFiltro);
     }
+
+    // Agregar marcadores filtrados
+    puntosFiltrados.forEach(punto => {
+        const marker = crearMarcador(punto);
+        marcadores.push(marker);
+        marker.addTo(mapaStores);
+    });
+
+    // Ajustar vista del mapa si hay marcadores
+    if (marcadores.length > 0) {
+        const group = new L.featureGroup(marcadores);
+        mapaStores.fitBounds(group.getBounds().pad(0.1));
+    }
+
+    tipoFiltroActual = tipoFiltro;
+}
+
+// Función para crear un marcador
+function crearMarcador(punto) {
+    // Iconos personalizados según el tipo
+    const iconos = {
+        supermercado: {
+            icon: '🏪',
+            color: '#3B82F6' // blue-500
+        },
+        'punto-venta': {
+            icon: '🏬',
+            color: '#10B981' // green-500
+        }
+    };
+
+    const config = iconos[punto.tipo] || { icon: '📍', color: '#6B7280' };
+
+    // Crear icono personalizado
+    const customIcon = L.divIcon({
+        html: `<div style="
+            background-color: ${config.color};
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        ">${config.icon}</div>`,
+        className: 'custom-marker',
+        iconSize: [40, 40],
+        iconAnchor: [20, 20]
+    });
+
+    // Crear contenido del popup
+    const tipoTexto = punto.tipo === 'punto-venta' ? 'Punto de Venta' : capitalizarPrimeraLetra(punto.tipo);
     
-    // Función mejorada para el fallback con Nominatim
-    async function obtenerDireccionFallback(lat, lng) {
-        try {
-            console.log('Ejecutando fallback con Nominatim...');
-            const osmResponse = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=es&addressdetails=1&zoom=18&extratags=1`,
-                {
-                    headers: {
-                        'User-Agent': 'La Tierrita Distribuidor Form (contact@latierrita.com)'
-                    }
-                }
-            );
-            
-            if (!osmResponse.ok) {
-                throw new Error('Error en consulta a Nominatim');
-            }
-            
-            const osmData = await osmResponse.json();
-            const address = osmData.address || {};
-            
-            console.log('Respuesta de Nominatim:', osmData);
-            
-            let calle = address.road || address.street || address.footway || address.path || '';
-            let numero = address.house_number || '';
-            let barrio = address.neighbourhood || address.suburb || address.quarter || address.residential || '';
-            let ciudad = address.city || address.town || address.village || address.municipality || address.county || '';
-            let provincia = address.state || address.province || address.region || '';
-            
-            // Usar información adicional si está disponible
-            if (!calle && address.pedestrian) calle = address.pedestrian;
-            if (!barrio && address.city_district) barrio = address.city_district;
-            
-            const direccionCompleta = construirDireccionCompleta({
-                calle,
-                numero,
-                barrio,
-                ciudad,
-                provincia
-            });
-            
-            if (direccionCompleta && direccionCompleta !== 'Ubicación no específica') {
-                locationInput.value = direccionCompleta;
-                console.log('Fallback OSM exitoso:', { calle, numero, barrio, ciudad, provincia, direccionCompleta });
-                return true;
-            } else {
-                throw new Error('Información insuficiente en fallback');
-            }
-            
-        } catch (fallbackError) {
-            console.error('Error en fallback Nominatim:', fallbackError);
-            return false;
-        }
-    }
-    
-    // Función principal que maneja la obtención de dirección con fallback
-    async function procesarGeocoding(lat, lng) {
-        try {
-            // Intentar Mapbox primero
-            await obtenerDireccion(lat, lng);
-        } catch (mapboxError) {
-            console.warn('Mapbox falló, intentando fallback:', mapboxError);
-            
-            // Intentar fallback con Nominatim
-            const fallbackExitoso = await obtenerDireccionFallback(lat, lng);
-            
-            if (!fallbackExitoso) {
-                // Si todo falla, mostrar coordenadas
-                locationInput.value = `Coordenadas: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-                console.warn('Todos los servicios de geocodificación fallaron, mostrando coordenadas');
-            }
-        }
-    }
-    
-    function mostrarMapa(lat, lng) {
-        // Mostrar contenedor del mapa
-        mapContainer.style.display = 'block';
-        
-        // Si ya existe un mapa, lo removemos completamente
-        if (map) {
-            map.remove();
-            map = null;
-        }
-        
-        // Pequeño delay para asegurar que el contenedor esté visible
-        setTimeout(() => {
-            try {
-                // Crear nuevo mapa con Mapbox
-                map = L.map('geoapify-map', {
-                    center: [lat, lng],
-                    zoom: 16,
-                    zoomControl: true,
-                    scrollWheelZoom: true,
-                    doubleClickZoom: true,
-                    boxZoom: true,
-                    keyboard: true
-                });
-                
-                // Agregar capa de Mapbox con el token correcto
-                const mapboxTileLayer = L.tileLayer(`https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`, {
-                    attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>',
-                    tileSize: 512,
-                    zoomOffset: -1,
-                    maxZoom: 19
-                });
-                
-                mapboxTileLayer.addTo(map);
-                
-                // Esperar a que la capa se cargue antes de agregar el marcador
-                mapboxTileLayer.on('load', () => {
-                    agregarMarcador(lat, lng);
-                });
-                
-                // Agregar marcador inmediatamente también (por si 'load' no se dispara)
-                setTimeout(() => {
-                    agregarMarcador(lat, lng);
-                }, 500);
-                
-                // Ajustar el tamaño del mapa después de que se renderice
-                setTimeout(() => {
-                    map.invalidateSize();
-                    map.setView([lat, lng], 16);
-                }, 200);
-                
-                console.log('Mapa creado correctamente:', { lat, lng, mapboxToken: MAPBOX_TOKEN.substring(0, 20) + '...' });
-                
-            } catch (error) {
-                console.error('Error creando el mapa:', error);
-                // Mostrar mensaje de error en el contenedor del mapa
-                document.getElementById('geoapify-map').innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666; text-align: center; padding: 20px;">
-                        <div>
-                            <i class="fas fa-map-marker-alt" style="font-size: 48px; color: #d79f49; margin-bottom: 10px;"></i><br>
-                            <strong>Error al cargar el mapa</strong><br>
-                            <small>Ubicación: ${lat.toFixed(4)}, ${lng.toFixed(4)}</small>
-                        </div>
-                    </div>
-                `;
-            }
-        }, 100);
-    }
-    
-    function agregarMarcador(lat, lng) {
-        if (!map) return;
-        
-        try {
-            // Remover marcador anterior si existe
-            if (marker) {
-                map.removeLayer(marker);
-                marker = null;
-            }
-            
-            // Crear icono personalizado más visible
-            const customIcon = L.divIcon({
-                html: `
-                    <div style="position: relative;">
-                        <i class="fas fa-map-marker-alt" style="color: #d79f49; font-size: 32px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);"></i>
-                        <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: white; border-radius: 50%; border: 1px solid #d79f49;"></div>
-                    </div>
-                `,
-                iconSize: [32, 40],
-                iconAnchor: [16, 40],
-                popupAnchor: [0, -40],
-                className: 'custom-marker-icon'
-            });
-            
-            // Crear marcador con popup
-            marker = L.marker([lat, lng], { icon: customIcon })
-                .addTo(map)
-                .bindPopup(`
-                    <div style="text-align: center; padding: 8px; min-width: 200px;">
-                        <strong style="color: #d79f49;">📍 Tu ubicación actual</strong><br>
-                        <div style="margin: 8px 0; padding: 6px; background: #f8f9fa; border-radius: 4px; font-size: 12px;">
-                            <strong>Coordenadas:</strong><br>
-                            Lat: ${lat.toFixed(6)}<br>
-                            Lng: ${lng.toFixed(6)}
-                        </div>
-                        <small style="color: #666;">Click en el mapa para explorar</small>
-                    </div>
-                `, {
-                    maxWidth: 250,
-                    className: 'custom-popup'
-                })
-                .openPopup();
-            
-            console.log('Marcador agregado correctamente:', { lat, lng });
-            
-        } catch (error) {
-            console.error('Error agregando marcador:', error);
-        }
-    }
+    const popupContent = `
+        <div class="font-sans max-w-xs">
+            <h3 class="font-bold text-lg text-gray-800 mb-2">${punto.nombre}</h3>
+            <div class="space-y-1 text-sm">
+                <p><span class="font-medium">Tipo:</span> ${tipoTexto}</p>
+                <p><span class="font-medium">Ciudad:</span> ${punto.ciudad}, ${punto.provincia}</p>
+                <p><span class="font-medium">Dirección:</span> ${punto.direccion}</p>
+                <p><span class="font-medium">Teléfono:</span> ${punto.telefono}</p>
+            </div>
+            <div class="mt-3 pt-3 border-t border-gray-200">
+                <p class="text-xs text-gray-600">
+                    <i class="fas fa-store mr-1"></i>
+                    Punto de venta autorizado La Tierrita
+                </p>
+            </div>
+        </div>
+    `;
+
+    // Crear marcador
+    const marker = L.marker([punto.lat, punto.lng], { icon: customIcon })
+        .bindPopup(popupContent, {
+            maxWidth: 300,
+            className: 'custom-popup'
+        });
+
+    return marker;
+}
+
+// Función auxiliar para capitalizar
+function capitalizarPrimeraLetra(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Inicializar el mapa cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    // Esperar un poco para asegurar que Leaflet esté completamente cargado
+    setTimeout(() => {
+        initializeStoresMap();
+    }, 100);
 });
 
 // --- FUNCIONALIDAD DEL FORMULARIO DE DISTRIBUIDORES CON EMAILJS ---

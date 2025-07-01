@@ -124,6 +124,7 @@
             <div class="hidden md:flex space-x-6 items-center">
                 <a href="#inicio" class="text-gray-600 hover:text-brand-naranja-mostaza transition-colors">Inicio</a>
                 <a href="#productos" class="text-gray-600 hover:text-brand-naranja-mostaza transition-colors">Productos</a>
+                <a href="#puntos-venta" class="text-gray-600 hover:text-brand-naranja-mostaza transition-colors">Puntos de Venta</a>
                 <a href="#distribuidores" class="text-gray-600 hover:text-brand-naranja-mostaza transition-colors">Distribuidores</a>
                 <a href="#contacto" class="text-gray-600 hover:text-brand-naranja-mostaza transition-colors">Contacto</a>
             </div>
@@ -155,6 +156,7 @@
             <nav class="flex flex-col p-6 space-y-4" role="navigation" aria-label="Navegación móvil">
                 <a href="#inicio" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg transition-colors">Inicio</a>
                 <a href="#productos" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg transition-colors">Productos</a>
+                <a href="#puntos-venta" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg transition-colors">Puntos de Venta</a>
                 <a href="#distribuidores" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg transition-colors">Distribuidores</a>
                 <a href="#contacto" class="text-gray-700 hover:text-brand-naranja-mostaza text-lg transition-colors">Contacto</a>
             </nav>
@@ -443,6 +445,63 @@
 
     </main>
 
+    <!-- Puntos de Venta Section -->
+    <section id="puntos-venta" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-naranja-mostaza mb-4">Encuentra Nuestros Productos</h2>
+                <p class="text-gray-600 leading-relaxed max-w-3xl mx-auto">
+                    Descubre dónde puedes encontrar los auténticos bocaditos de La Tierrita. 
+                    Nuestros productos están disponibles en puntos de venta seleccionados para garantizar 
+                    la mejor calidad y frescura.
+                </p>
+            </div>
+
+            <!-- Controles del mapa -->
+            <div class="mb-6">
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button id="show-all-stores" 
+                            class="bg-brand-naranja-mostaza text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors">
+                        <i class="fas fa-store mr-2"></i>Todos los puntos
+                    </button>
+                    <button id="show-supermarkets" 
+                            class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-shopping-cart mr-2"></i>Supermercados
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mapa -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden max-w-2xl mx-auto">
+                <div id="stores-map" class="w-full h-64 md:h-64"></div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div class="text-center p-6 bg-blue-50 rounded-lg">
+                    <i class="fas fa-store text-3xl text-blue-600 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2">Puntos de Venta</h3>
+                    <p class="text-sm text-gray-600">Encuentra nuestros productos en tiendas locales y distribuidores cercanos</p>
+                </div>
+                <div class="text-center p-6 bg-green-50 rounded-lg">
+                    <i class="fas fa-shopping-cart text-3xl text-green-600 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2">Supermercados</h3>
+                    <p class="text-sm text-gray-600">Disponibles en las principales cadenas de supermercados del país</p>
+                </div>
+            </div>
+
+            <!-- Call to action -->
+            <div class="mt-12 text-center">
+                <h3 class="text-2xl font-bold text-brand-naranja-mostaza mb-4">¿Quieres ser punto de venta?</h3>
+                <p class="text-gray-600 mb-6">Únete a nuestra red de distribuidores y lleva el sabor tradicional a tu comunidad</p>
+                <a href="#distribuidores" 
+                   class="bg-brand-naranja-mostaza text-white font-bold px-8 py-3 rounded-lg hover:bg-opacity-90 transition-transform transform hover:scale-105">
+                    Ser Distribuidor
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer id="contacto" class="bg-gray-800 text-white">
         <div class="container mx-auto px-6 py-12">
@@ -457,6 +516,7 @@
                         <li class="mb-2"><a href="#inicio" class="hover:text-brand-amarillo-suave">Inicio</a></li>
                         <li class="mb-2"><a href="#productos" class="hover:text-brand-amarillo-suave">Productos</a></li>
                         <li class="mb-2"><a href="#nosotros" class="hover:text-brand-amarillo-suave">Nosotros</a></li>
+                        <li class="mb-2"><a href="#puntos-venta" class="hover:text-brand-amarillo-suave">Puntos de Venta</a></li>
                         <li class="mb-2"><a href="#distribuidores"
                                 class="hover:text-brand-amarillo-suave">Distribuidores</a></li>
                     </ul>
