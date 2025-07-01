@@ -200,19 +200,111 @@ function loadCartData() {
     });
 }
 
+// Calcular costo de envío por provincia
+function calculateShippingByProvince(province, subtotal) {
+    // Envío gratis para compras mayores a $20
+    if (subtotal >= 20) {
+        return 0;
+    }
+    
+    // Tarifas de envío por provincia
+    const shippingRates = {
+        'manabi': 3.00,           // Manabí (más barato por ser local)
+        'guayas': 4.50,           // Guayas
+        'pichincha': 4.50,        // Pichincha
+        'azuay': 5.50,           // Azuay
+        'el-oro': 5.50,          // El Oro
+        'los-rios': 4.00,        // Los Ríos
+        'santa-elena': 4.00,     // Santa Elena
+        'esmeraldas': 5.00,      // Esmeraldas
+        'santo-domingo': 4.50,   // Santo Domingo
+        'cotopaxi': 5.00,        // Cotopaxi
+        'tungurahua': 5.50,      // Tungurahua
+        'chimborazo': 5.50,      // Chimborazo
+        'bolivar': 6.00,         // Bolívar
+        'canar': 6.00,           // Cañar
+        'carchi': 6.50,          // Carchi
+        'imbabura': 5.50,        // Imbabura
+        'loja': 6.50,            // Loja
+        'morona-santiago': 7.00, // Morona Santiago
+        'napo': 7.00,            // Napo
+        'orellana': 7.50,        // Orellana
+        'pastaza': 7.00,         // Pastaza
+        'sucumbios': 7.50,       // Sucumbíos
+        'zamora-chinchipe': 7.00, // Zamora Chinchipe
+        'galapagos': 15.00       // Galápagos (especial)
+    };
+    
+    return shippingRates[province] || 5.00; // Tarifa por defecto si no se encuentra la provincia
+}
+
 // Actualizar resumen del pedido
 function updateOrderSummary(subtotal) {
-    const shipping = subtotal >= 50 ? 0 : 5.00;
+    const provinceSelect = document.getElementById('province');
+    const selectedProvince = provinceSelect ? provinceSelect.value : '';
+    
+    // Si no hay provincia seleccionada, mostrar mensaje
+    if (!selectedProvince) {
+        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('shipping').innerHTML = '<span class="text-amber-600">Selecciona provincia</span>';
+        document.getElementById('total').textContent = `$${subtotal.toFixed(2)}`;
+        return;
+    }
+    
+    const shipping = calculateShippingByProvince(selectedProvince, subtotal);
     const discount = parseFloat(document.getElementById('discount').textContent.replace('-$', '')) || 0;
     const total = subtotal + shipping - discount;
     
     document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-    document.getElementById('shipping').textContent = shipping === 0 ? 'GRATIS' : `$${shipping.toFixed(2)}`;
+    
+    // Mostrar costo de envío
+    if (shipping === 0) {
+        document.getElementById('shipping').innerHTML = '<span class="text-green-600 font-medium">GRATIS</span>';
+    } else {
+        document.getElementById('shipping').textContent = `$${shipping.toFixed(2)}`;
+    }
+    
     document.getElementById('total').textContent = `$${total.toFixed(2)}`;
     
-    // Mostrar mensaje de envío gratis
-    if (subtotal >= 50) {
-        document.getElementById('shipping').innerHTML = '<span class="text-green-600 font-medium">GRATIS</span>';
+    // Mostrar información de envío gratis
+    updateShippingInfo(subtotal, shipping);
+}
+
+// Actualizar información de envío
+function updateShippingInfo(subtotal, shipping) {
+    const shippingInfoContainer = document.querySelector('.bg-blue-50');
+    if (!shippingInfoContainer) return;
+    
+    const remainingForFree = 20 - subtotal;
+    
+    if (subtotal >= 20) {
+        // Ya tiene envío gratis
+        shippingInfoContainer.innerHTML = `
+            <h3 class="font-medium text-green-900 mb-2 flex items-center">
+                <i class="fas fa-check-circle mr-2" aria-hidden="true"></i>
+                ¡Felicidades! Tienes envío gratis
+            </h3>
+            <ul class="text-sm text-green-800 space-y-1">
+                <li>• Tiempo de entrega: 2-5 días hábiles</li>
+                <li>• Productos congelados en empaques especiales</li>
+                <li>• Confirmación por WhatsApp</li>
+                <li>• Seguimiento del pedido</li>
+            </ul>
+        `;
+    } else {
+        // Mostrar cuánto falta para envío gratis
+        shippingInfoContainer.innerHTML = `
+            <h3 class="font-medium text-blue-900 mb-2 flex items-center">
+                <i class="fas fa-info-circle mr-2" aria-hidden="true"></i>
+                Información de Envío
+            </h3>
+            <ul class="text-sm text-blue-800 space-y-1">
+                <li>• Tiempo de entrega: 2-5 días hábiles</li>
+                <li class="text-orange-600 font-medium">• ¡Agrega $${remainingForFree.toFixed(2)} más y obtén envío GRATIS!</li>
+                <li>• Productos congelados en empaques especiales</li>
+                <li>• Confirmación por WhatsApp</li>
+            </ul>
+        `;
     }
 }
 
@@ -760,8 +852,10 @@ function createPayPalOrder() {
             }
         });
 
-        // Calcular envío
-        const shipping = subtotal >= 50 ? 0 : 5.00;
+        // Calcular envío por provincia
+        const provinceSelect = document.getElementById('province');
+        const selectedProvince = provinceSelect ? provinceSelect.value : '';
+        const shipping = calculateShippingByProvince(selectedProvince, subtotal);
         
         // Calcular descuento si hay cupón aplicado
         const discountRow = document.getElementById('discount-row');
@@ -999,4 +1093,35 @@ function showOrderConfirmation(orderData) {
     } catch (error) {
         console.error('Error showing order confirmation:', error);
     }
+}
+
+// Event listener para cambio de provincia
+    const provinceSelect = document.getElementById('province');
+    if (provinceSelect) {
+        provinceSelect.addEventListener('change', function() {
+            // Recalcular totales cuando cambie la provincia
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let subtotal = 0;
+            cart.forEach(item => {
+                const producto = productos.find(p => p.id === item.id);
+                if (producto) {
+                    subtotal += producto.precio * item.cantidad;
+                }
+            });
+            updateOrderSummary(subtotal);
+        });
+    }
+
+// Validar que se haya seleccionado una provincia antes de calcular envío
+function validateProvinceSelection() {
+    const provinceSelect = document.getElementById('province');
+    const shippingElement = document.getElementById('shipping');
+    
+    if (!provinceSelect || !provinceSelect.value) {
+        if (shippingElement) {
+            shippingElement.innerHTML = '<span class="text-amber-600">Selecciona provincia</span>';
+        }
+        return false;
+    }
+    return true;
 }
