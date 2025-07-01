@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkoutForm = document.getElementById('checkout-form');
     const applyCouponBtn = document.getElementById('applyCoupon');
     const closeConfirmationBtn = document.getElementById('close-confirmation');
+    const contactWhatsAppBtn = document.getElementById('contact-whatsapp');
     
     if (checkoutForm) {
         checkoutForm.addEventListener('submit', handleFormSubmit);
@@ -38,6 +39,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeConfirmationBtn) {
         closeConfirmationBtn.addEventListener('click', closeConfirmation);
     }
+    
+    if (contactWhatsAppBtn) {
+        contactWhatsAppBtn.addEventListener('click', openWhatsApp);
+    }
+    
+    // Event listeners para métodos de pago
+    setupPaymentMethodListeners();
     
     // Botón de prueba temporal
     const testModalBtn = document.getElementById('test-modal-btn');
@@ -385,6 +393,9 @@ function processOrder(orderData) {
     // Limpiar carrito
     localStorage.removeItem('cart');
     
+    // Configurar modal según método de pago
+    setupConfirmationModal(orderData);
+    
     // Mostrar confirmación
     document.getElementById('order-number').textContent = orderData.orderNumber;
     document.getElementById('order-confirmation-modal').classList.remove('hidden');
@@ -413,6 +424,45 @@ function processOrder(orderData) {
     
     // Enviar datos por WhatsApp (opcional)
     prepareWhatsAppMessage(orderData);
+}
+
+// Configurar modal de confirmación según método de pago
+function setupConfirmationModal(orderData) {
+    const confirmationMessage = document.getElementById('confirmation-message');
+    const transferInstructions = document.getElementById('transfer-instructions');
+    const contactWhatsAppBtn = document.getElementById('contact-whatsapp');
+    
+    if (orderData.paymentMethod === 'transfer') {
+        // Mostrar instrucciones específicas para transferencia
+        if (confirmationMessage) {
+            confirmationMessage.innerHTML = `
+                <p class="mb-2">Gracias por tu pedido. Para completar tu compra, sigue los pasos a continuación:</p>
+            `;
+        }
+        
+        if (transferInstructions) {
+            transferInstructions.classList.remove('hidden');
+        }
+        
+        if (contactWhatsAppBtn) {
+            contactWhatsAppBtn.classList.remove('hidden');
+        }
+    } else {
+        // Mensaje estándar para otros métodos
+        if (confirmationMessage) {
+            confirmationMessage.innerHTML = `
+                <p>Gracias por tu compra. Te contactaremos por WhatsApp para confirmar los detalles de tu pedido.</p>
+            `;
+        }
+        
+        if (transferInstructions) {
+            transferInstructions.classList.add('hidden');
+        }
+        
+        if (contactWhatsAppBtn) {
+            contactWhatsAppBtn.classList.add('hidden');
+        }
+    }
 }
 
 // Preparar mensaje de WhatsApp
@@ -1124,4 +1174,72 @@ function validateProvinceSelection() {
         return false;
     }
     return true;
+}
+
+// Configurar listeners para métodos de pago
+function setupPaymentMethodListeners() {
+    const paymentMethods = document.querySelectorAll('input[name="paymentMethod"]');
+    const transferInfo = document.getElementById('transfer-info');
+    const placeOrderText = document.getElementById('place-order-text');
+    const placeOrderIcon = document.querySelector('#place-order-btn i');
+    
+    paymentMethods.forEach(method => {
+        method.addEventListener('change', function() {
+            updatePaymentUI(this.value);
+        });
+    });
+    
+    // Inicializar con el método seleccionado por defecto
+    const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked');
+    if (selectedMethod) {
+        updatePaymentUI(selectedMethod.value);
+    }
+}
+
+// Actualizar UI según método de pago seleccionado
+function updatePaymentUI(paymentMethod) {
+    const transferInfo = document.getElementById('transfer-info');
+    const placeOrderText = document.getElementById('place-order-text');
+    const placeOrderIcon = document.querySelector('#place-order-btn i');
+    
+    // Mostrar/ocultar información de transferencia
+    if (transferInfo) {
+        if (paymentMethod === 'transfer') {
+            transferInfo.style.display = 'block';
+        } else {
+            transferInfo.style.display = 'none';
+        }
+    }
+    
+    // Actualizar texto del botón
+    if (placeOrderText && placeOrderIcon) {
+        switch (paymentMethod) {
+            case 'transfer':
+                placeOrderText.textContent = 'Solicitar Datos Bancarios';
+                placeOrderIcon.className = 'fas fa-university mr-2';
+                break;
+            case 'paypal':
+                placeOrderText.textContent = 'Proceder con PayPal';
+                placeOrderIcon.className = 'fab fa-paypal mr-2';
+                break;
+            case 'cash':
+                placeOrderText.textContent = 'Confirmar Pedido (Pago Contraentrega)';
+                placeOrderIcon.className = 'fas fa-money-bill-wave mr-2';
+                break;
+            default:
+                placeOrderText.textContent = 'Finalizar Pedido';
+                placeOrderIcon.className = 'fas fa-credit-card mr-2';
+        }
+    }
+}
+
+// Abrir WhatsApp con mensaje preparado
+function openWhatsApp() {
+    const whatsappUrl = localStorage.getItem('lastWhatsAppMessage');
+    if (whatsappUrl) {
+        window.open(whatsappUrl, '_blank');
+    } else {
+        // Fallback a WhatsApp directo
+        window.open('https://wa.me/593987654321', '_blank');
+    }
 }

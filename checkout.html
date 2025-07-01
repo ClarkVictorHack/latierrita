@@ -247,10 +247,32 @@
                                         <i class="fas fa-university text-2xl text-blue-600 mr-3" aria-hidden="true"></i>
                                         <div>
                                             <div class="font-medium">Transferencia Bancaria</div>
-                                            <div class="text-sm text-gray-500">Te enviaremos los datos bancarios por WhatsApp</div>
+                                            <div class="text-sm text-gray-500">Te contactaremos por WhatsApp con los datos bancarios</div>
                                         </div>
                                     </div>
                                 </label>
+                                
+                                <!-- Información de transferencia bancaria -->
+                                <div id="transfer-info" class="ml-10 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                                    <h4 class="font-medium text-blue-900 mb-2 flex items-center">
+                                        <i class="fas fa-info-circle mr-2"></i>
+                                        Cómo funciona la transferencia bancaria:
+                                    </h4>
+                                    <ul class="text-sm text-blue-800 space-y-1">
+                                        <li>• Te enviaremos los datos bancarios por WhatsApp</li>
+                                        <li>• Realiza la transferencia desde tu banco</li>
+                                        <li>• Envíanos el comprobante por WhatsApp</li>
+                                        <li>• Confirmamos tu pago y preparamos tu pedido</li>
+                                    </ul>
+                                    <div class="mt-3 p-3 bg-white rounded border">
+                                        <p class="text-sm font-medium text-gray-700 mb-1">📱 WhatsApp de La Tierrita:</p>
+                                        <a href="https://wa.me/593987654321" target="_blank" 
+                                           class="text-brand-naranja-mostaza hover:underline font-medium">
+                                            <i class="fab fa-whatsapp mr-1"></i>
+                                            +593 98 765 4321
+                                        </a>
+                                    </div>
+                                </div>
                                 
                                 <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-brand-naranja-mostaza">
                                     <input type="radio" name="paymentMethod" value="paypal" class="mr-3">
@@ -324,7 +346,7 @@
                         <button type="submit" id="place-order-btn"
                                 class="w-full bg-brand-naranja-mostaza text-white font-bold py-4 px-6 rounded-lg hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
                             <i class="fas fa-credit-card mr-2" aria-hidden="true"></i>
-                            Pagar con Transferencia / Otros
+                            <span id="place-order-text">Finalizar Pedido</span>
                         </button>
                         
                         <p class="text-xs text-gray-500 text-center mt-3">
@@ -487,22 +509,67 @@
 
     <!-- Modal de Confirmación -->
     <div id="order-confirmation-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg">
             <div class="p-6 text-center">
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-check text-2xl text-green-600"></i>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-2">¡Pedido Recibido!</h3>
-                <p class="text-gray-600 mb-4">
-                    Gracias por tu compra. Te contactaremos por WhatsApp para confirmar los detalles de tu pedido.
-                </p>
+                
+                <!-- Mensaje principal -->
+                <div id="confirmation-message" class="text-gray-600 mb-4">
+                    <p>Gracias por tu compra. Te contactaremos por WhatsApp para confirmar los detalles de tu pedido.</p>
+                </div>
+                
+                <!-- Información específica para transferencia bancaria -->
+                <div id="transfer-instructions" class="hidden bg-blue-50 p-4 rounded-lg mb-4 text-left">
+                    <h4 class="font-medium text-blue-900 mb-2 text-center">
+                        <i class="fas fa-university mr-2"></i>
+                        Pasos para completar tu compra:
+                    </h4>
+                    <ol class="text-sm text-blue-800 space-y-2">
+                        <li class="flex items-start">
+                            <span class="bg-blue-200 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">1</span>
+                            Te enviaremos los datos bancarios por WhatsApp
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-blue-200 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">2</span>
+                            Realiza la transferencia desde tu banco
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-blue-200 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">3</span>
+                            Envíanos el comprobante por WhatsApp
+                        </li>
+                        <li class="flex items-start">
+                            <span class="bg-blue-200 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">4</span>
+                            Confirmaremos tu pago y prepararemos tu pedido
+                        </li>
+                    </ol>
+                    <div class="mt-4 p-3 bg-white rounded border text-center">
+                        <p class="text-sm font-medium text-gray-700 mb-2">📱 Contáctanos por WhatsApp:</p>
+                        <a href="https://wa.me/593987654321" target="_blank" 
+                           class="inline-flex items-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                            <i class="fab fa-whatsapp mr-2"></i>
+                            +593 98 765 4321
+                        </a>
+                    </div>
+                </div>
+                
                 <p class="text-sm text-gray-500 mb-6">
-                    Número de pedido: <span id="order-number" class="font-mono"></span>
+                    Número de pedido: <span id="order-number" class="font-mono font-bold"></span>
                 </p>
-                <button id="close-confirmation" 
-                        class="bg-brand-naranja-mostaza text-white px-6 py-2 rounded-lg hover:bg-opacity-90 transition-colors">
-                    Continuar
-                </button>
+                
+                <div class="flex space-x-3">
+                    <button id="close-confirmation" 
+                            class="flex-1 bg-gray-200 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+                        Continuar Comprando
+                    </button>
+                    <button id="contact-whatsapp" 
+                            class="hidden flex-1 bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                        <i class="fab fa-whatsapp mr-2"></i>
+                        Ir a WhatsApp
+                    </button>
+                </div>
             </div>
         </div>
     </div>
