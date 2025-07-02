@@ -497,12 +497,11 @@ function renderizarProductos() {
                                         <span class="text-sm text-gray-500">${producto.peso}</span>
                                     </div>
                                     <div class="space-y-2">
-                                        <button type="button" 
-                                               onclick="mostrarDetalleProducto(${producto.id})"
-                                               class="w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 border-2 border-brand-naranja-mostaza text-brand-naranja-mostaza hover:bg-brand-naranja-mostaza hover:text-white flex items-center justify-center">
+                                        <a href="${producto.pagina}" 
+                                           class="w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 border-2 border-brand-naranja-mostaza text-brand-naranja-mostaza hover:bg-brand-naranja-mostaza hover:text-white flex items-center justify-center">
                                             <i class="fas fa-eye mr-2"></i>
                                             Ver Detalles
-                                        </button>
+                                        </a>
                                         <button type="button" 
                                                 onclick="agregarAlCarrito(${producto.id})"
                                                 data-product-id="${producto.id}"

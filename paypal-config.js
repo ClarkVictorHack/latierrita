@@ -2,8 +2,8 @@
 // Credenciales reales de PayPal configuradas
 
 const PAYPAL_CONFIG = {
-    // ✅ Client ID real de PayPal configurado
-    clientId: 'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
+    // ✅ Client ID de demo público de PayPal para testing
+    clientId: 'AfzqNTrfu9BN76WpqQWJ_JqEgXxpk5qZvdUgOZS4XOsGN3LvqaEfTWpFJKz6HPjFBJ-Y2qIiLxOeKJ4u',
     
     // Configuración de moneda
     currency: 'USD', // USD para Ecuador

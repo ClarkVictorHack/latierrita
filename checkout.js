@@ -896,7 +896,17 @@ function initializePayPal() {
             console.log('✅ Botones de PayPal renderizados correctamente');
         }).catch(function(error) {
             console.error('❌ Error al renderizar botones de PayPal:', error);
-            showPayPalError('Error al cargar los botones de PayPal');
+            console.error('❌ Detalles del error:');
+            console.error('  - Mensaje:', error.message);
+            console.error('  - Stack:', error.stack);
+            console.error('❌ Configuración actual:');
+            console.error('  - Client ID:', PAYPAL_CONFIG.clientId);
+            console.error('  - Entorno:', PAYPAL_CONFIG.environment);
+            console.error('  - Moneda:', PAYPAL_CONFIG.currency);
+            if (typeof getPayPalSDKUrl === 'function') {
+                console.error('  - URL del SDK:', getPayPalSDKUrl());
+            }
+            showPayPalError('Error al cargar los botones de PayPal: ' + error.message);
         });
         
     } catch (error) {
