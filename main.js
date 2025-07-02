@@ -79,6 +79,10 @@ function agregarAlCarrito(productoId) {
 
 // Hacer funciones disponibles globalmente desde el inicio
 window.agregarAlCarrito = agregarAlCarrito;
+window.removerDelCarrito = removerDelCarrito;
+window.cambiarCantidad = cambiarCantidad;
+window.mostrarDetalleProducto = mostrarDetalleProducto;
+window.cerrarModalProducto = cerrarModalProducto;
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 DOM cargado, inicializando La Tierrita...');
@@ -90,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.agregarAlCarrito = agregarAlCarrito;
     window.removerDelCarrito = removerDelCarrito;
     window.cambiarCantidad = cambiarCantidad;
+    window.mostrarDetalleProducto = mostrarDetalleProducto;
+    window.cerrarModalProducto = cerrarModalProducto;
     
     // Inicializar funcionalidad básica
     inicializarMenuMovil();
@@ -491,11 +497,12 @@ function renderizarProductos() {
                                         <span class="text-sm text-gray-500">${producto.peso}</span>
                                     </div>
                                     <div class="space-y-2">
-                                        <a href="${producto.pagina}" 
-                                           class="w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 border-2 border-brand-naranja-mostaza text-brand-naranja-mostaza hover:bg-brand-naranja-mostaza hover:text-white flex items-center justify-center">
+                                        <button type="button" 
+                                               onclick="mostrarDetalleProducto(${producto.id})"
+                                               class="w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 border-2 border-brand-naranja-mostaza text-brand-naranja-mostaza hover:bg-brand-naranja-mostaza hover:text-white flex items-center justify-center">
                                             <i class="fas fa-eye mr-2"></i>
                                             Ver Detalles
-                                        </a>
+                                        </button>
                                         <button type="button" 
                                                 onclick="agregarAlCarrito(${producto.id})"
                                                 data-product-id="${producto.id}"
@@ -527,6 +534,120 @@ function renderizarProductos() {
         console.warn('No se generó HTML para productos');
         contenedor.innerHTML = '<p class="text-center text-gray-500">No hay productos disponibles en las categorías especificadas</p>';
     }
+}
+
+// Función para mostrar detalles del producto en modal
+function mostrarDetalleProducto(productoId) {
+    const producto = productos.find(p => p.id === productoId);
+    if (!producto) {
+        console.error('Producto no encontrado:', productoId);
+        return;
+    }
+
+    const modal = document.getElementById('product-modal');
+    const modalContent = document.getElementById('product-modal-content');
+    
+    if (!modal || !modalContent) {
+        console.error('Modal de producto no encontrado en el DOM');
+        return;
+    }
+
+    // Generar contenido del modal
+    modalContent.innerHTML = `
+        <div class="relative modal-product-content">
+            <!-- Botón cerrar -->
+            <button onclick="cerrarModalProducto()" 
+                    class="absolute top-4 right-4 z-10 bg-white/80 hover:bg-white text-gray-600 hover:text-gray-800 rounded-full w-8 h-8 flex items-center justify-center transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <!-- Contenido del modal -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+                <!-- Imagen del producto -->
+                <div class="aspect-square bg-gray-50 rounded-lg flex items-center justify-center p-6">
+                    <img src="${producto.imagen}" 
+                         alt="${producto.nombre}" 
+                         class="max-w-full max-h-full object-contain rounded-lg">
+                </div>
+                
+                <!-- Información del producto -->
+                <div class="flex flex-col justify-center space-y-4">
+                    <div>
+                        <span class="inline-block bg-brand-amarillo-pastel text-brand-verde-oliva px-3 py-1 rounded-full text-sm font-medium mb-2">
+                            ${producto.categoria}
+                        </span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">${producto.nombre}</h2>
+                        <p class="text-gray-600 leading-relaxed mb-4">${producto.descripcion}</p>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-3xl font-bold text-brand-naranja-mostaza">$${producto.precio.toFixed(2)}</span>
+                            <span class="text-lg text-gray-500 bg-gray-100 px-3 py-1 rounded-full">${producto.peso}</span>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">
+                                <i class="fas fa-list-ul mr-2 text-brand-naranja-mostaza"></i>
+                                Ingredientes:
+                            </h4>
+                            <p class="text-gray-600">${producto.ingredientes}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Botones de acción -->
+                    <div class="space-y-3 pt-4">
+                        <button type="button" 
+                                onclick="agregarAlCarrito(${producto.id}); cerrarModalProducto();"
+                                class="w-full bg-brand-naranja-mostaza text-white py-3 px-6 rounded-lg font-semibold hover:bg-opacity-90 transition-all duration-200 flex items-center justify-center">
+                            <i class="fas fa-shopping-cart mr-2"></i>
+                            Agregar al Carrito
+                        </button>
+                        
+                        <button type="button" 
+                                onclick="cerrarModalProducto()"
+                                class="w-full border-2 border-gray-300 text-gray-600 py-2 px-6 rounded-lg font-medium hover:bg-gray-50 transition-all duration-200">
+                            Continuar Viendo Productos
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Mostrar modal
+    modal.classList.remove('hidden');
+    
+    // Prevenir scroll del body
+    document.body.style.overflow = 'hidden';
+}
+
+// Función para cerrar modal de producto
+function cerrarModalProducto() {
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        // Restaurar scroll del body
+        document.body.style.overflow = '';
+    }
+}
+
+// Modal de detalles del producto
+const productModal = document.getElementById('product-modal');
+if (productModal) {
+    // Cerrar modal del producto al hacer click fuera
+    productModal.addEventListener('click', (e) => {
+        if (e.target === productModal) {
+            cerrarModalProducto();
+        }
+    });
+    
+    // Cerrar modal con tecla Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !productModal.classList.contains('hidden')) {
+            cerrarModalProducto();
+        }
+    });
 }
 
 // --- MENÚ MÓVIL ---

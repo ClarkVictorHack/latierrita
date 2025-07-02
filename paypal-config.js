@@ -3,7 +3,7 @@
 
 const PAYPAL_CONFIG = {
     // ✅ Client ID real de PayPal configurado
-    clientId: 'BAA9dIdaO89f8zanzO-8S1Rsz7F7Vx16kiP2IfcmjZhonAuzDpwE8MPgz0CHZr4f0vAgIGj95q-CqJYxho',
+    clientId: 'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
     
     // Configuración de moneda
     currency: 'USD', // USD para Ecuador
@@ -41,9 +41,15 @@ function validatePayPalConfig() {
         return false;
     }
     
-    // Validar que el Client ID tenga el formato correcto de PayPal
-    if (!PAYPAL_CONFIG.clientId.startsWith('BA') || PAYPAL_CONFIG.clientId.length < 50) {
-        console.warn('⚠️ ATENCIÓN: El Client ID no parece tener el formato correcto de PayPal');
+    // Validar que el Client ID tenga el formato correcto de PayPal (más flexible)
+    if (PAYPAL_CONFIG.clientId.length < 50) {
+        console.warn('⚠️ ATENCIÓN: El Client ID parece ser muy corto');
+        return false;
+    }
+    
+    // Permitir tanto Client IDs de sandbox (AZ...) como live (BA...)
+    if (!PAYPAL_CONFIG.clientId.startsWith('AZ') && !PAYPAL_CONFIG.clientId.startsWith('BA')) {
+        console.warn('⚠️ ATENCIÓN: El Client ID no parece tener un formato reconocido de PayPal');
         return false;
     }
     
