@@ -47,7 +47,7 @@
     <!-- PayPal Configuration -->
     <script src="paypal-config.js"></script>
     <!-- PayPal SDK con Client ID real de producción -->
-    <script src="https://www.paypal.com/sdk/js?client-id=BAA9dIdaO89f8zanzO-8S1Rsz7F7Vx16kiP2IfcmjZhonAuzDpwE8MPgz0CHZr4f0vAgIGj95q-CqJYxho&currency=USD" data-sdk-integration-source="button-factory"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=BAA9dIdaO89f8zanzO-8S1Rsz7F7Vx16kiP2IfcmjZhonAuzDpwE8MPgz0CHZr4f0vAgIGj95q-CqJYxho&currency=USD"></script>
     <!-- Fin PayPal SDK -->
     
     <!-- Structured Data for Checkout -->
@@ -252,29 +252,6 @@
                                         </div>
                                     </div>
                                 </label>
-                                
-                                <!-- Información de transferencia bancaria -->
-                                <div id="transfer-info" class="ml-10 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-400">
-                                    <h4 class="font-medium text-blue-900 mb-2 flex items-center">
-                                        <i class="fas fa-info-circle mr-2"></i>
-                                        Cómo funciona la transferencia bancaria:
-                                    </h4>
-                                    <ul class="text-sm text-blue-800 space-y-1">
-                                        <li>• Te enviaremos los datos bancarios por WhatsApp</li>
-                                        <li>• Realiza la transferencia desde tu banco</li>
-                                        <li>• Envíanos el comprobante por WhatsApp</li>
-                                        <li>• Confirmamos tu pago y preparamos tu pedido</li>
-                                    </ul>
-                                    <div class="mt-3 p-3 bg-white rounded border">
-                                        <p class="text-sm font-medium text-gray-700 mb-1">📱 WhatsApp de La Tierrita:</p>
-                                        <a href="https://wa.me/593987843771" target="_blank" 
-                                           class="text-brand-naranja-mostaza hover:underline font-medium">
-                                            <i class="fab fa-whatsapp mr-1"></i>
-                                            +593 98 784 3771
-                                        </a>
-                                    </div>
-                                </div>
-                                
                                 <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-brand-naranja-mostaza">
                                     <input type="radio" name="paymentMethod" value="paypal" class="mr-3">
                                     <div class="flex items-center">
@@ -285,7 +262,6 @@
                                         </div>
                                     </div>
                                 </label>
-                                
                                 <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-brand-naranja-mostaza">
                                     <input type="radio" name="paymentMethod" value="cash" class="mr-3">
                                     <div class="flex items-center">
@@ -297,6 +273,8 @@
                                     </div>
                                 </label>
                             </div>
+                            <!-- Contenedor dinámico para mostrar la opción seleccionada -->
+                            <div id="payment-method-info" class="mt-4"></div>
                         </div>
                     </section>
 
@@ -331,10 +309,36 @@
                         
                         <!-- PayPal Buttons Container -->
                         <div class="mb-6">
-                            <div id="paypal-button-container" class="paypal-buttons-container">
-                                <!-- PayPal buttons will be rendered here -->
-                            </div>
+                            <div id="paypal-button-container" class="paypal-buttons-container"></div>
                         </div>
+                        <script>
+                        // Renderizar el botón de PayPal con integración directa
+                        if (window.paypal) {
+                            paypal.Buttons({
+                                createOrder: function(data, actions) {
+                                    // Aquí deberías crear la orden en tu backend real, pero para demo:
+                                    return actions.order.create({
+                                        purchase_units: [{
+                                            amount: {
+                                                value: document.getElementById('total') ? document.getElementById('total').textContent.replace('$','') : '5.00',
+                                                currency_code: 'USD'
+                                            }
+                                        }]
+                                    });
+                                },
+                                onApprove: function(data, actions) {
+                                    return actions.order.capture().then(function(orderData) {
+                                        // Éxito: mostrar mensaje o redirigir
+                                        var transaction = orderData.purchase_units[0].payments.captures[0];
+                                        alert('Transacción ' + transaction.status + ': ' + transaction.id + '\n\n¡Gracias por tu pago!');
+                                    });
+                                },
+                                onError: function(err) {
+                                    alert('Ocurrió un error con PayPal. Intenta de nuevo o usa otro método.');
+                                }
+                            }).render('#paypal-button-container');
+                        }
+                        </script>
                         
                         <!-- Separador -->
                         <div class="flex items-center my-6">

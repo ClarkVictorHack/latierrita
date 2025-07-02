@@ -1105,19 +1105,67 @@ function setupPaymentMethodListeners() {
 
 // Actualizar UI según método de pago seleccionado
 function updatePaymentUI(paymentMethod) {
-    const transferInfo = document.getElementById('transfer-info');
+    const paymentInfo = document.getElementById('payment-method-info');
     const placeOrderText = document.getElementById('place-order-text');
     const placeOrderIcon = document.querySelector('#place-order-btn i');
-    
-    // Mostrar/ocultar información de transferencia
-    if (transferInfo) {
+
+    // Mostrar solo la información relevante según el método seleccionado
+    if (paymentInfo) {
         if (paymentMethod === 'transfer') {
-            transferInfo.style.display = 'block';
+            paymentInfo.innerHTML = `
+                <div class="ml-2 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                    <h4 class="font-medium text-blue-900 mb-2 flex items-center">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Cómo funciona la transferencia bancaria:
+                    </h4>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• Te enviaremos los datos bancarios por WhatsApp</li>
+                        <li>• Realiza la transferencia desde tu banco</li>
+                        <li>• Envíanos el comprobante por WhatsApp</li>
+                        <li>• Confirmamos tu pago y preparamos tu pedido</li>
+                    </ul>
+                    <div class="mt-3 p-3 bg-white rounded border">
+                        <p class="text-sm font-medium text-gray-700 mb-1">📱 WhatsApp de La Tierrita:</p>
+                        <a href="https://wa.me/593987843771" target="_blank" class="text-brand-naranja-mostaza hover:underline font-medium">
+                            <i class="fab fa-whatsapp mr-1"></i>
+                            +593 98 784 3771
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else if (paymentMethod === 'paypal') {
+            paymentInfo.innerHTML = `
+                <div class="ml-2 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+                    <h4 class="font-medium text-yellow-900 mb-2 flex items-center">
+                        <i class="fab fa-paypal mr-2"></i>
+                        Pago seguro con PayPal
+                    </h4>
+                    <ul class="text-sm text-yellow-800 space-y-1">
+                        <li>• Serás redirigido a PayPal para completar el pago</li>
+                        <li>• Recibirás confirmación automática de tu pedido</li>
+                        <li>• Soporte prioritario ante cualquier inconveniente</li>
+                    </ul>
+                </div>
+            `;
+        } else if (paymentMethod === 'cash') {
+            paymentInfo.innerHTML = `
+                <div class="ml-2 p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
+                    <h4 class="font-medium text-green-900 mb-2 flex items-center">
+                        <i class="fas fa-money-bill-wave mr-2"></i>
+                        Pago contra entrega
+                    </h4>
+                    <ul class="text-sm text-green-800 space-y-1">
+                        <li>• Paga en efectivo al recibir tu pedido</li>
+                        <li>• Recibirás confirmación por WhatsApp</li>
+                        <li>• Opción válida solo para entregas en Ecuador</li>
+                    </ul>
+                </div>
+            `;
         } else {
-            transferInfo.style.display = 'none';
+            paymentInfo.innerHTML = '';
         }
     }
-    
+
     // Actualizar texto del botón
     if (placeOrderText && placeOrderIcon) {
         switch (paymentMethod) {
