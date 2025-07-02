@@ -312,31 +312,73 @@
                             <div id="paypal-button-container" class="paypal-buttons-container"></div>
                         </div>
                         <script>
-                        // Renderizar el botón de PayPal con integración directa
-                        if (window.paypal) {
+                        function getOrderDetails() {
+                            // Aquí puedes armar el objeto con los datos reales del carrito
+                            var totalEl = document.getElementById('total');
+                            var total = totalEl ? totalEl.textContent.replace('$','').trim() : '';
+                            var items = [];
+                            // Si tienes los productos en localStorage/cart, puedes agregarlos aquí
+                            // Ejemplo:
+                            // var cart = JSON.parse(localStorage.getItem('cart')) || [];
+                            // cart.forEach(item => items.push({ nombre: item.nombre, precio: item.precio, cantidad: item.cantidad }));
+                            return {
+                                producto: {
+                                    nombre: 'Pedido La Tierrita',
+                                    precio: total
+                                },
+                                // items: items // Si quieres enviar el detalle
+                            };
+                        }
+                        function renderPayPalButton() {
+                            var totalEl = document.getElementById('total');
+                            var total = totalEl ? totalEl.textContent.replace('$','').trim() : '';
+                            var container = document.getElementById('paypal-button-container');
+                            if (!window.paypal || !container) return;
+                            container.innerHTML = '';
+                            if (!total || isNaN(total) || Number(total) <= 0) {
+                                // No renderizar botón si el total no es válido
+                                return;
+                            }
                             paypal.Buttons({
+                                style: {
+                                    layout: 'vertical',
+                                    color:  'blue',
+                                    shape:  'rect',
+                                    label:  'pay'
+                                },
                                 createOrder: function(data, actions) {
-                                    // Aquí deberías crear la orden en tu backend real, pero para demo:
-                                    return actions.order.create({
-                                        purchase_units: [{
-                                            amount: {
-                                                value: document.getElementById('total') ? document.getElementById('total').textContent.replace('$','') : '5.00',
-                                                currency_code: 'USD'
-                                            }
-                                        }]
-                                    });
+                                    // Llama a tu backend para crear la orden
+                                    return fetch('/api/paypal/crear-orden.php', {
+                                        method: 'post',
+                                        headers: { 'content-type': 'application/json' },
+                                        body: JSON.stringify(getOrderDetails())
+                                    })
+                                    .then(res => res.json())
+                                    .then(orderData => orderData.id);
                                 },
                                 onApprove: function(data, actions) {
-                                    return actions.order.capture().then(function(orderData) {
-                                        // Éxito: mostrar mensaje o redirigir
-                                        var transaction = orderData.purchase_units[0].payments.captures[0];
-                                        alert('Transacción ' + transaction.status + ': ' + transaction.id + '\n\n¡Gracias por tu pago!');
+                                    // Llama a tu backend para capturar la orden
+                                    return fetch('/api/paypal/capturar-orden.php', {
+                                        method: 'post',
+                                        headers: { 'content-type': 'application/json' },
+                                        body: JSON.stringify({ orderID: data.orderID })
+                                    })
+                                    .then(res => res.json())
+                                    .then(orderData => {
+                                        alert('¡Pago completado con éxito!');
                                     });
                                 },
                                 onError: function(err) {
-                                    alert('Ocurrió un error con PayPal. Intenta de nuevo o usa otro método.');
+                                    alert('Lo sentimos, no se pudo procesar tu pago. Por favor, intenta de nuevo.');
                                 }
                             }).render('#paypal-button-container');
+                        }
+                        // Renderizar al cargar y cuando cambie el total
+                        document.addEventListener('DOMContentLoaded', renderPayPalButton);
+                        var observer = new MutationObserver(renderPayPalButton);
+                        var totalEl = document.getElementById('total');
+                        if (totalEl) {
+                            observer.observe(totalEl, { childList: true, characterData: true, subtree: true });
                         }
                         </script>
                         
