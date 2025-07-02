@@ -14,20 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    // Verificar configuración de PayPal al inicio
+    // Inicializar PayPal si el SDK está disponible
     setTimeout(() => {
-        if (!checkPayPalConfig()) {
-            console.error('❌ PayPal no está correctamente configurado');
-            showPayPalError('PayPal no disponible temporalmente. Por favor usa otro método de pago.');
+        if (typeof paypal !== 'undefined') {
+            initializePayPal();
         } else {
-            console.log('✅ Configuración de PayPal verificada');
-            // Cargar PayPal SDK dinámicamente y luego inicializar
-            loadPayPalSDK().then(() => {
-                initializePayPal();
-            }).catch(error => {
-                console.error('Error cargando PayPal:', error);
-                showPayPalError('Error al cargar PayPal. Por favor recarga la página.');
-            });
+            showPayPalError('PayPal no disponible temporalmente. Por favor usa otro método de pago.');
+            console.error('❌ PayPal SDK no está cargado');
         }
     }, 200);
     
@@ -701,88 +694,12 @@ window.addEventListener('beforeunload', function() {
 
 // ==================== PAYPAL INTEGRATION ====================
 
-// Función para cargar el SDK de PayPal dinámicamente
-function loadPayPalSDK() {
-    return new Promise((resolve, reject) => {
-        // Verificar si PayPal ya está cargado
-        if (typeof paypal !== 'undefined') {
-            console.log('✅ PayPal SDK ya está cargado');
-            resolve();
-            return;
-        }
-
-        // Verificar configuración (con timeout para asegurar que paypal-config.js esté cargado)
-        setTimeout(() => {
-            if (typeof PAYPAL_CONFIG === 'undefined' || !PAYPAL_CONFIG.clientId || PAYPAL_CONFIG.clientId === 'TU_CLIENT_ID_AQUI') {
-                console.warn('⚠️ PayPal no configurado. Revisa paypal-config.js');
-                reject(new Error('PayPal no configurado'));
-                return;
-            }
-
-            // Verificar que las funciones auxiliares estén disponibles
-            if (typeof getPayPalSDKUrl !== 'function') {
-                console.error('❌ Función getPayPalSDKUrl no disponible');
-                reject(new Error('Funciones de PayPal no disponibles'));
-                return;
-            }
-
-            console.log('🔄 Cargando PayPal SDK...');
-            
-            // Crear y cargar el script de PayPal
-            const script = document.createElement('script');
-            script.src = getPayPalSDKUrl();
-            script.async = true;
-            
-            script.onload = function() {
-                console.log('✅ PayPal SDK cargado correctamente');
-                resolve();
-            };
-            
-            script.onerror = function() {
-                console.error('❌ Error cargando PayPal SDK');
-                reject(new Error('Error cargando PayPal SDK'));
-            };
-            
-            document.head.appendChild(script);
-        }, 100); // Pequeño timeout para asegurar que paypal-config.js esté cargado
-    });
-}
-
-// Verificar configuración de PayPal con mejor manejo de errores
-function checkPayPalConfig() {
-    try {
-        if (typeof validatePayPalConfig === 'function') {
-            if (!validatePayPalConfig()) {
-                console.error('❌ Configuración de PayPal incompleta. Revisa paypal-config.js');
-                return false;
-            }
-        } else {
-            console.warn('⚠️ Función validatePayPalConfig no disponible');
-            // Verificación básica sin la función
-            if (typeof PAYPAL_CONFIG === 'undefined' || !PAYPAL_CONFIG.clientId) {
-                console.error('❌ PAYPAL_CONFIG no configurado correctamente');
-                return false;
-            }
-        }
-        return true;
-    } catch (error) {
-        console.error('❌ Error verificando configuración de PayPal:', error);
-        return false;
-    }
-}
-
 // Initialize PayPal Smart Payment Buttons
 function initializePayPal() {
     // Verificar que PayPal esté disponible
     if (typeof paypal === 'undefined') {
         console.error('PayPal SDK no está cargado');
         showPayPalError('Error al cargar PayPal. Por favor recarga la página.');
-        return;
-    }
-
-    // Verificar configuración con mejor manejo de errores
-    if (!checkPayPalConfig()) {
-        showPayPalError('Configuración de PayPal incompleta. Contacta al administrador.');
         return;
     }
 
@@ -804,28 +721,24 @@ function initializePayPal() {
                 label: 'paypal',
                 height: 45
             },
-            
             // Crear la orden
             createOrder: function(data, actions) {
                 try {
                     const orderData = createPayPalOrder();
-                    
                     if (!orderData || !orderData.total || parseFloat(orderData.total) <= 0) {
                         showPayPalError('Error al crear la orden: total inválido');
                         return Promise.reject(new Error('Invalid order total'));
                     }
-
-                    console.log('🔄 Creando orden PayPal:', orderData);
-
+                    // Estructura de orden simplificada (moneda USD fija)
                     const orderStructure = {
                         intent: 'CAPTURE',
                         purchase_units: [{
                             amount: {
-                                currency_code: PAYPAL_CONFIG.currency,
+                                currency_code: 'USD',
                                 value: orderData.total,
                                 breakdown: {
                                     item_total: {
-                                        currency_code: PAYPAL_CONFIG.currency,
+                                        currency_code: 'USD',
                                         value: orderData.subtotal
                                     }
                                 }
@@ -834,83 +747,48 @@ function initializePayPal() {
                             items: orderData.items
                         }]
                     };
-
-                    // Agregar envío si existe
                     if (parseFloat(orderData.shipping) > 0) {
                         orderStructure.purchase_units[0].amount.breakdown.shipping = {
-                            currency_code: PAYPAL_CONFIG.currency,
+                            currency_code: 'USD',
                             value: orderData.shipping
                         };
                     }
-
-                    // Agregar descuento si existe
                     if (parseFloat(orderData.discount) > 0) {
                         orderStructure.purchase_units[0].amount.breakdown.discount = {
-                            currency_code: PAYPAL_CONFIG.currency,
+                            currency_code: 'USD',
                             value: orderData.discount
                         };
                     }
-
-                    console.log('📦 Estructura de orden final:', orderStructure);
-
                     return actions.order.create(orderStructure);
                 } catch (error) {
-                    console.error('Error en createOrder:', error);
                     showPayPalError('Error al procesar la orden');
                     return Promise.reject(error);
                 }
             },
-
-            // Aprobar el pago
             onApprove: function(data, actions) {
                 showPayPalLoading();
-                
                 return actions.order.capture().then(function(details) {
-                    console.log('PayPal payment completed:', details);
-                    
-                    // Verificar el estado del pago
                     if (details.status === 'COMPLETED') {
                         handlePayPalSuccess(details);
                     } else {
                         throw new Error('Payment not completed');
                     }
                 }).catch(function(error) {
-                    console.error('Error capturing PayPal payment:', error);
                     handlePayPalError(error);
                 });
             },
-
-            // Manejar cancelación
             onCancel: function(data) {
-                console.log('PayPal payment cancelled:', data);
                 showPayPalError('Pago cancelado. Puedes intentar nuevamente.');
             },
-
-            // Manejar errores
             onError: function(err) {
-                console.error('PayPal error:', err);
                 handlePayPalError(err);
             }
-
         }).render('#paypal-button-container').then(function() {
-            console.log('✅ Botones de PayPal renderizados correctamente');
+            // Botones renderizados
         }).catch(function(error) {
-            console.error('❌ Error al renderizar botones de PayPal:', error);
-            console.error('❌ Detalles del error:');
-            console.error('  - Mensaje:', error.message);
-            console.error('  - Stack:', error.stack);
-            console.error('❌ Configuración actual:');
-            console.error('  - Client ID:', PAYPAL_CONFIG.clientId);
-            console.error('  - Entorno:', PAYPAL_CONFIG.environment);
-            console.error('  - Moneda:', PAYPAL_CONFIG.currency);
-            if (typeof getPayPalSDKUrl === 'function') {
-                console.error('  - URL del SDK:', getPayPalSDKUrl());
-            }
             showPayPalError('Error al cargar los botones de PayPal: ' + error.message);
         });
-        
     } catch (error) {
-        console.error('❌ Error al inicializar PayPal:', error);
         showPayPalError('Error al inicializar PayPal');
     }
 }
