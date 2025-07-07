@@ -312,10 +312,18 @@
                             <div id="paypal-button-container" class="paypal-buttons-container"></div>
                         </div>
                         <script>
+                        // Obtener el total del carrito de forma segura
+                        function getCartTotal() {
+                            var totalEl = document.getElementById('total');
+                            if (!totalEl) return 0;
+                            // Extraer solo números y punto decimal
+                            var raw = totalEl.textContent.replace(/[^0-9.]/g, '');
+                            return parseFloat(raw) || 0;
+                        }
+
                         function getOrderDetails() {
                             // Aquí puedes armar el objeto con los datos reales del carrito
-                            var totalEl = document.getElementById('total');
-                            var total = totalEl ? totalEl.textContent.replace('$','').trim() : '';
+                            var total = getCartTotal().toFixed(2);
                             var items = [];
                             // Si tienes los productos en localStorage/cart, puedes agregarlos aquí
                             // Ejemplo:
@@ -330,8 +338,7 @@
                             };
                         }
                         function renderPayPalButton() {
-                            var totalEl = document.getElementById('total');
-                            var total = totalEl ? totalEl.textContent.replace('$','').trim() : '';
+                            var total = getCartTotal();
                             var container = document.getElementById('paypal-button-container');
                             if (!window.paypal || !container) return;
                             container.innerHTML = '';
@@ -368,8 +375,10 @@
                                         alert('¡Pago completado con éxito!');
                                     });
                                 },
+                                // Manejo de errores con mensaje en consola y alerta para el usuario
                                 onError: function(err) {
-                                    alert('Lo sentimos, no se pudo procesar tu pago. Por favor, intenta de nuevo.');
+                                    console.error('Error de PayPal:', err);
+                                    alert('Lo sentimos, no se pudo procesar tu pago. Revisa la consola para más detalles.');
                                 }
                             }).render('#paypal-button-container');
                         }
