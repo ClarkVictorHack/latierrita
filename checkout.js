@@ -793,6 +793,11 @@ function initializePayPal() {
     }
 }
 
+// Validar que el monto sea una cadena numérica con dos decimales mayor a 0
+function isValidAmount(value) {
+    return typeof value === 'string' && /^\d+(?:\.\d{2})$/.test(value) && parseFloat(value) > 0;
+}
+
 // Crear datos de orden para PayPal
 function createPayPalOrder() {
     try {
@@ -811,7 +816,7 @@ function createPayPalOrder() {
             if (producto) {
                 const itemTotal = producto.precio * item.cantidad;
                 subtotal += itemTotal;
-                
+
                 items.push({
                     name: producto.nombre,
                     unit_amount: {
@@ -824,6 +829,12 @@ function createPayPalOrder() {
                 });
             }
         });
+
+        const subtotalCheck = items.reduce((s, it) => s + (parseFloat(it.unit_amount.value) * parseInt(it.quantity, 10)), 0);
+        if (Math.abs(subtotalCheck - subtotal) > 0.01) {
+            console.error('Descuadre de subtotal:', subtotalCheck, subtotal);
+            return null;
+        }
 
         // Calcular envío por provincia
         const provinceSelect = document.getElementById('province');
@@ -839,12 +850,18 @@ function createPayPalOrder() {
         }
 
         const total = subtotal + shipping - discount;
+        const totalStr = total.toFixed(2);
+
+        if (!isValidAmount(totalStr)) {
+            console.error('Total inválido para PayPal:', totalStr);
+            return null;
+        }
 
         console.log('🧮 Orden PayPal calculada:', {
             subtotal: subtotal.toFixed(2),
             shipping: shipping.toFixed(2),
             discount: discount.toFixed(2),
-            total: total.toFixed(2),
+            total: totalStr,
             items: items.length
         });
 
@@ -853,7 +870,7 @@ function createPayPalOrder() {
             subtotal: subtotal.toFixed(2),
             shipping: shipping.toFixed(2),
             discount: discount.toFixed(2),
-            total: total.toFixed(2)
+            total: totalStr
         };
 
     } catch (error) {

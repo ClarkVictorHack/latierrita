@@ -7,11 +7,34 @@ $paypalApi = 'https://api-m.paypal.com'; // Producción
 
 // Obtener datos del pedido desde el frontend
 $body = json_decode(file_get_contents('php://input'), true);
-$total = isset($body['producto']['precio']) ? floatval($body['producto']['precio']) : 0.0;
 
-if ($total <= 0) {
+// ===== Validaciones de la orden recibida =====
+function isValidAmount($value)
+{
+    return is_string($value) && preg_match('/^\d+(?:\.\d{2})$/', $value) && floatval($value) > 0;
+}
+
+$items = $body['items'] ?? [];
+$subtotalCalculated = 0.0;
+foreach ($items as $item) {
+    $price = isset($item['unit_amount']['value']) ? floatval($item['unit_amount']['value']) : 0.0;
+    $qty = isset($item['quantity']) ? intval($item['quantity']) : 0;
+    $subtotalCalculated += ($price * $qty);
+}
+
+$total = $body['total'] ?? '0.00';
+$shipping = $body['shipping'] ?? '0.00';
+$discount = $body['discount'] ?? '0.00';
+
+if (!isValidAmount($total)) {
     http_response_code(400);
     echo json_encode(['error' => 'Total inválido']);
+    exit;
+}
+
+if (abs($subtotalCalculated + floatval($shipping) - floatval($discount) - floatval($total)) > 0.01) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Descuadre de totales']);
     exit;
 }
 
@@ -38,16 +61,15 @@ if (!$accessToken) {
     exit;
 }
 
-// Crear la orden en PayPal
+// Crear la orden en PayPal con la estructura solicitada
 $order = [
     'intent' => 'CAPTURE',
     'purchase_units' => [
         [
             'amount' => [
-                'currency_code' => 'USD',
-                'value' => number_format($total, 2, '.', '')
-            ],
-            'description' => $body['producto']['nombre'] ?? 'Pedido La Tierrita'
+                'value' => number_format($total, 2, '.', ''),
+                'currency_code' => 'USD'
+            ]
         ]
     ]
 ];
@@ -67,6 +89,9 @@ if (curl_errno($ch)) {
     exit;
 }
 curl_close($ch);
+
+// Registrar la respuesta de PayPal para depuración
+file_put_contents(__DIR__ . '/paypal.log', $result . PHP_EOL, FILE_APPEND);
 
 header('Content-Type: application/json');
 echo $result;
