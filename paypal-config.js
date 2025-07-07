@@ -1,6 +1,15 @@
+// Ejemplo de configuración básica de PayPal
+// Copia este archivo como 'paypal-config.js' y reemplaza con tu Client ID real
 
-// Archivo deprecado: la configuración de PayPal ahora se gestiona directamente en el HTML.
-// No uses este archivo para definir el Client ID ni la lógica de entorno.
-// Mantener solo para compatibilidad o referencia histórica.
+const PAYPAL_CLIENT_ID = 'TU_CLIENT_ID';
 
-// Si necesitas cambiar el Client ID, hazlo en el <script> de checkout.html.
+function loadPayPalSdk(callback) {
+    if (typeof PAYPAL_CLIENT_ID === 'undefined' || PAYPAL_CLIENT_ID === 'TU_CLIENT_ID') {
+        console.warn('Configura PAYPAL_CLIENT_ID en paypal-config.js');
+        return;
+    }
+    const script = document.createElement('script');
+    script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`;
+    script.onload = callback;
+    document.head.appendChild(script);
+}

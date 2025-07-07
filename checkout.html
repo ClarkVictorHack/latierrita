@@ -46,9 +46,14 @@
     
     <!-- PayPal Configuration -->
     <script src="paypal-config.js"></script>
-    <!-- PayPal SDK con Client ID real de producción -->
-    <script src="https://www.paypal.com/sdk/js?client-id=BAA9dIdaO89f8zanzO-8S1Rsz7F7Vx16kiP2IfcmjZhonAuzDpwE8MPgz0CHZr4f0vAgIGj95q-CqJYxho&currency=USD"></script>
-    <!-- Fin PayPal SDK -->
+    <!-- Cargar PayPal SDK de manera segura -->
+    <script>
+      loadPayPalSdk(function() {
+        if (typeof renderPayPalButton === 'function') {
+          renderPayPalButton();
+        }
+      });
+    </script>
     
     <!-- Structured Data for Checkout -->
     <script type="application/ld+json">
