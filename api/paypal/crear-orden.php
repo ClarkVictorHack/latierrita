@@ -1,9 +1,10 @@
 <?php
 // Configuración de PayPal
 
-$clientId = 'BAA9dIdaO89f8zanzO-8S1Rsz7F7Vx16kiP2IfcmjZhonAuzDpwE8MPgz0CHZr4f0vAgIGj95q-CqJYxho';
-$clientSecret = 'EN6SKqkXYJHOatV0n0tT_3jb1OpVqJuPsc-92ag4tgW5_Nl2R9fTNEP8hAPZIdiOa8RJbDlHfSpD_6y8';
-$paypalApi = 'https://api-m.paypal.com'; // Producción
+// Carga las credenciales desde un archivo externo no versionado
+// Copia 'credenciales-privadas.example.php' como 'credenciales-privadas.php'
+// y coloca allí tu Client ID y Secret reales
+require_once __DIR__ . '/credenciales-privadas.php';
 
 // Obtener datos del pedido desde el frontend
 $body = json_decode(file_get_contents('php://input'), true);
