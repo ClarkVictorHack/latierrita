@@ -313,20 +313,20 @@
                         </div>
                         <script>
                         function getOrderDetails() {
-                            // Aquí puedes armar el objeto con los datos reales del carrito
+                            // Reutilizar la lógica de checkout.js para obtener los detalles
+                            if (typeof createPayPalOrder === 'function') {
+                                return createPayPalOrder() || {};
+                            }
+
+                            // Fallback mínimo en caso de que el script principal no esté disponible
                             var totalEl = document.getElementById('total');
                             var total = totalEl ? totalEl.textContent.replace('$','').trim() : '';
-                            var items = [];
-                            // Si tienes los productos en localStorage/cart, puedes agregarlos aquí
-                            // Ejemplo:
-                            // var cart = JSON.parse(localStorage.getItem('cart')) || [];
-                            // cart.forEach(item => items.push({ nombre: item.nombre, precio: item.precio, cantidad: item.cantidad }));
                             return {
-                                producto: {
-                                    nombre: 'Pedido La Tierrita',
-                                    precio: total
-                                },
-                                // items: items // Si quieres enviar el detalle
+                                items: [],
+                                subtotal: total,
+                                shipping: '0.00',
+                                discount: '0.00',
+                                total: total
                             };
                         }
                         function renderPayPalButton() {

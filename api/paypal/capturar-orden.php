@@ -61,6 +61,9 @@ if (curl_errno($ch)) {
 }
 curl_close($ch);
 
+// Registrar la respuesta de PayPal para depurar
+file_put_contents(__DIR__ . '/paypal.log', $result . PHP_EOL, FILE_APPEND);
+
 $orderData = json_decode($result, true);
 
 if (!isset($orderData['status']) || $orderData['status'] !== 'COMPLETED') {
