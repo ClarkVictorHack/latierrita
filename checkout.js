@@ -1198,3 +1198,29 @@ function openWhatsApp() {
         window.open('https://wa.me/593987654321', '_blank');
     }
 }
+
+// ==================== UTILIDADES DE ORDEN ====================
+
+// Obtener datos del formulario de checkout como objeto simple
+function collectFormData() {
+    const form = document.getElementById('checkout-form');
+    const data = {};
+    if (form) {
+        const formData = new FormData(form);
+        for (const [key, value] of formData.entries()) {
+            data[key] = value;
+        }
+    }
+    return data;
+}
+
+// Guardar órdenes completadas en localStorage (placeholder para backend)
+function saveCompletedOrder(orderData) {
+    try {
+        const orders = JSON.parse(localStorage.getItem('completedOrders')) || [];
+        orders.push(orderData);
+        localStorage.setItem('completedOrders', JSON.stringify(orders));
+    } catch (err) {
+        console.error('Error saving completed order:', err);
+    }
+}
