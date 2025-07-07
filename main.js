@@ -4,7 +4,18 @@
 // --- ANIMACIÓN DE INTRODUCCIÓN ---
 
 // Asegurar que las funciones estén disponibles globalmente desde el inicio
-let carrito = JSON.parse(localStorage.getItem('cart')) || [];
+// Cargar el carrito de localStorage con control de errores por si el dato está corrupto
+let carrito = [];
+try {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+        carrito = JSON.parse(storedCart);
+    }
+} catch (error) {
+    console.error('Error al leer carrito desde localStorage:', error);
+    localStorage.removeItem('cart');
+    carrito = [];
+}
 
 // Función para migrar datos del carrito anterior
 function migrarCarritoAnterior() {
