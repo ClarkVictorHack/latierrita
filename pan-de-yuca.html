@@ -44,8 +44,30 @@
         <li><a href="index.html#puntos-venta">Puntos de Venta</a></li>
         <li><a href="formulario-distribuidores.html">Distribuidores</a></li>
       </ul>
+      
+      <!-- Botón Hamburguesa -->
+      <button class="hamburger" onclick="toggleMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </nav>
   </header>
+
+  <!-- Menú Móvil -->
+  <div class="menu-overlay" onclick="closeMobileMenu()"></div>
+  <div class="mobile-menu">
+    <div class="mobile-menu-header">
+      <div class="logo">La Tierrita</div>
+    </div>
+    <ul>
+      <li><a href="index.html" onclick="closeMobileMenu()"><i class="fas fa-home"></i>Inicio</a></li>
+      <li><a href="productos.html" onclick="closeMobileMenu()"><i class="fas fa-cookie-bite"></i>Productos</a></li>
+      <li><a href="nuestra-historia.html" onclick="closeMobileMenu()"><i class="fas fa-heart"></i>Nuestra Historia</a></li>
+      <li><a href="index.html#puntos-venta" onclick="closeMobileMenu()"><i class="fas fa-map-marker-alt"></i>Puntos de Venta</a></li>
+      <li><a href="formulario-distribuidores.html" onclick="closeMobileMenu()"><i class="fas fa-handshake"></i>Distribuidores</a></li>
+    </ul>
+  </div>
 
   <!-- Carrito flotante -->
   <div id="carritoFloat" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: var(--naranja-mostaza); color: white; padding: 0.75rem 1rem; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease;" onclick="toggleCarrito()">
@@ -350,6 +372,9 @@
 
   <!-- PayPal SDK -->
   <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
+
+  <!-- Script del Menú Móvil -->
+  <script src="mobile-menu.js"></script>
 
 </body>
 </html>
