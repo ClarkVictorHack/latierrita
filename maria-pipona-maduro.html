@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LXG5F7LK42"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LXG5F7LK42');
+  </script>
+  
+  <!-- Metricool Analytics -->
+  <script>
+    function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"8b8c5c6b2e8f24a5a4d8e68b37f8"})});
+  </script>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>María Pipona de Maduro - La Tierrita | Bocaditos Artesanales</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="img/logofla.ico">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Estilos Principales -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header y Navegación -->
+  <header>
+    <nav>
+      <div class="logo">
+        <img src="img/logotrazo.png" alt="La Tierrita Logo" style="height: 40px; width: auto; margin-right: 10px; border-radius: 4px;">
+        La Tierrita
+      </div>
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="nuestra-historia.html">Nuestra Historia</a></li>
+        <li><a href="index.html#puntos-venta">Puntos de Venta</a></li>
+        <li><a href="formulario-distribuidores.html">Distribuidores</a></li>
+        <li><a href="index.html#contacto">Contacto</a></li>
+        <li><a href="#" onclick="toggleCart()" class="cart-icon" title="Ver carrito">🛒 <span id="cart-count">0</span></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Sección Producto Individual -->
+  <section style="padding: 4rem 2rem; background-color: var(--fondo-claro);">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <!-- Breadcrumb -->
+      <nav style="margin-bottom: 2rem;">
+        <ol style="display: flex; list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: #666;">
+          <li><a href="index.html" style="color: var(--naranja-mostaza); text-decoration: none;">Inicio</a></li>
+          <li style="margin: 0 0.5rem;">/</li>
+          <li><a href="productos.html" style="color: var(--naranja-mostaza); text-decoration: none;">Productos</a></li>
+          <li style="margin: 0 0.5rem;">/</li>
+          <li style="color: #666;">María Pipona de Maduro</li>
+        </ol>
+      </nav>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;">
+        <!-- Imagen del producto -->
+        <div style="text-align: center;">
+          <img src="img/maria pipona de maduro.jpg" alt="María Pipona de Maduro" 
+               style="width: 100%; max-width: 500px; height: auto; border-radius: 1rem; box-shadow: 0 8px 25px rgba(0,0,0,0.15);">
+        </div>
+
+        <!-- Información del producto -->
+        <div>
+          <h1 style="font-size: 2.5rem; color: var(--naranja-mostaza); margin-bottom: 1rem; font-weight: 700;">María Pipona de Maduro</h1>
+          <p style="font-size: 1.2rem; color: var(--texto-principal); line-height: 1.6; margin-bottom: 2rem;">
+            La mezcla ideal de dulzura y firmeza para disfrutar en cualquier momento del día. 
+            Elaborada con plátano maduro ecuatoriano y los mejores ingredientes naturales, 
+            esta delicia artesanal te transportará a la tradición de nuestro campo.
+          </p>
+
+          <!-- Características del producto -->
+          <div style="background: white; padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <h3 style="color: var(--naranja-mostaza); margin-bottom: 1rem; font-size: 1.3rem;">Características</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+                <span style="color: #28a745; margin-right: 0.5rem;">✓</span>
+                <strong>Plátano ecuatoriano:</strong>&nbsp;Maduro de primera calidad
+              </li>
+              <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+                <span style="color: #28a745; margin-right: 0.5rem;">✓</span>
+                <strong>Dulzura natural:</strong>&nbsp;Sin azúcares añadidos
+              </li>
+              <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+                <span style="color: #28a745; margin-right: 0.5rem;">✓</span>
+                <strong>Textura única:</strong>&nbsp;Suave y consistente
+              </li>
+              <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+                <span style="color: #28a745; margin-right: 0.5rem;">✓</span>
+                <strong>Receta tradicional:</strong>&nbsp;Preparación artesanal
+              </li>
+              <li style="padding: 0.5rem 0; display: flex; align-items: center;">
+                <span style="color: #28a745; margin-right: 0.5rem;">✓</span>
+                <strong>Versátil:</strong>&nbsp;Perfecto para desayuno, merienda o postre
+              </li>
+            </ul>
+          </div>
+
+          <!-- Información nutricional -->
+          <div style="background: #fff3cd; padding: 2rem; border-radius: 1rem; margin-bottom: 2rem;">
+            <h3 style="color: #856404; margin-bottom: 1rem; font-size: 1.3rem;">Información Nutricional</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; text-align: center;">
+              <div>
+                <div style="font-weight: 700; font-size: 1.1rem; color: #856404;">Calorías</div>
+                <div style="font-size: 0.9rem;">320 por 100g</div>
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 1.1rem; color: #856404;">Proteínas</div>
+                <div style="font-size: 0.9rem;">6g</div>
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 1.1rem; color: #856404;">Carbohidratos</div>
+                <div style="font-size: 0.9rem;">52g</div>
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 1.1rem; color: #856404;">Fibra</div>
+                <div style="font-size: 0.9rem;">4g</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Precio y cantidad -->
+          <div style="background: white; padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+              <div>
+                <span style="font-size: 2rem; font-weight: 700; color: var(--naranja-mostaza);">$4.25</span>
+                <span style="font-size: 1rem; color: #666; margin-left: 0.5rem;">por paquete (4 unidades)</span>
+              </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem;">
+              <label style="font-weight: 500;">Cantidad:</label>
+              <div style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 0.5rem; overflow: hidden;">
+                <button onclick="decreaseQuantity()" 
+                        style="background: #f8f9fa; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 1.2rem;">-</button>
+                <input type="number" id="quantity" value="1" min="1" max="20" 
+                       style="border: none; padding: 0.5rem; width: 60px; text-align: center; font-size: 1rem;">
+                <button onclick="increaseQuantity()" 
+                        style="background: #f8f9fa; border: none; padding: 0.5rem 1rem; cursor: pointer; font-size: 1.2rem;">+</button>
+              </div>
+            </div>
+
+            <button onclick="addToCart('maria-pipona-maduro', 'María Pipona de Maduro', 4.25, 'img/maria pipona de maduro.jpg')" 
+                    style="width: 100%; background-color: var(--naranja-mostaza); color: white; border: none; padding: 1rem 2rem; 
+                           border-radius: 0.5rem; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+                           box-shadow: 0 4px 12px rgba(0,0,0,0.15);"
+                    onmouseover="this.style.backgroundColor='#e67e22'" 
+                    onmouseout="this.style.backgroundColor='var(--naranja-mostaza)'">
+              🛒 Agregar al carrito
+            </button>
+          </div>
+
+          <!-- Botones de acción adicionales -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+            <a href="https://wa.me/593987843771?text=Hola,%20me%20interesa%20la%20María%20Pipona%20de%20Maduro" 
+               target="_blank" 
+               style="background-color: #25d366; color: white; padding: 1rem; border-radius: 0.5rem; 
+                      text-align: center; text-decoration: none; font-weight: 500; transition: all 0.3s ease;">
+              <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
+            </a>
+            <button onclick="window.history.back()" 
+                    style="background-color: var(--verde-oliva); color: white; border: none; padding: 1rem; 
+                           border-radius: 0.5rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease;">
+              ← Volver a productos
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Productos relacionados -->
+      <section style="margin-top: 4rem;">
+        <h2 style="text-align: center; margin-bottom: 2rem; color: var(--naranja-mostaza); font-size: 2rem;">También te puede interesar</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+          <!-- Pan de Yuca -->
+          <div style="background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+            <img src="img/pan de yuca.png" alt="Pan de Yuca" 
+                 style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 1.5rem;">
+              <h3 style="margin-bottom: 0.5rem; color: var(--texto-principal);">Pan de Yuca</h3>
+              <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">Suave y esponjoso, con la textura perfecta</p>
+              <a href="pan-de-yuca.html" style="color: var(--naranja-mostaza); text-decoration: none; font-weight: 500;">Ver producto →</a>
+            </div>
+          </div>
+          <!-- Mini Bolones de Maduro -->
+          <div style="background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+            <img src="img/mini bolon de maduro.png" alt="Mini Bolones de Maduro" 
+                 style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 1.5rem;">
+              <h3 style="margin-bottom: 0.5rem; color: var(--texto-principal);">Mini Bolones de Maduro</h3>
+              <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">Crocantes por fuera y suaves por dentro</p>
+              <a href="mini-bolones-maduro.html" style="color: var(--naranja-mostaza); text-decoration: none; font-weight: 500;">Ver producto →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Carrito flotante -->
+  <div id="cart-sidebar" style="position: fixed; top: 0; right: -400px; width: 400px; height: 100vh; background: white; 
+                                 box-shadow: -2px 0 10px rgba(0,0,0,0.1); transition: right 0.3s ease; z-index: 1000; 
+                                 display: flex; flex-direction: column;">
+    <div style="padding: 1rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+      <h3 style="margin: 0; color: var(--naranja-mostaza);">Tu Carrito</h3>
+      <button onclick="toggleCart()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+    </div>
+    <div id="cart-items" style="flex: 1; padding: 1rem; overflow-y: auto;"></div>
+    <div style="padding: 1rem; border-top: 1px solid #eee;">
+      <div id="cart-total" style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; text-align: center;"></div>
+      <button onclick="checkout()" 
+              style="width: 100%; background-color: var(--verde-oliva); color: white; border: none; 
+                     padding: 1rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">
+        Finalizar Compra
+      </button>
+    </div>
+  </div>
+
+  <!-- Overlay para el carrito -->
+  <div id="cart-overlay" onclick="toggleCart()" 
+       style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); 
+              z-index: 999; display: none;"></div>
+
+  <!-- Botón flotante de WhatsApp -->
+  <a href="https://wa.me/593987843771" target="_blank" class="whatsapp-float" title="Contáctanos por WhatsApp"></a>
+
+  <!-- Footer -->
+  <footer style="background-color: #2d3748; color: white;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 3rem 2rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem; text-align: left;">
+        <div>
+          <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #f6d55c;">La Tierrita</h3>
+          <p style="font-size: 1rem; color: #e2e8f0; line-height: 1.6; margin-bottom: 1rem;">
+            Sabores auténticos, tradición familiar y calidad natural en cada bocado.
+          </p>
+          <p style="font-size: 1rem; color: #e2e8f0; line-height: 1.6;">
+            Descubre el verdadero gusto del campo ecuatoriano con nuestros bocaditos artesanales, 
+            hechos con amor y dedicación para compartir en cada ocasión especial.
+          </p>
+        </div>
+        <div>
+          <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #f6d55c;">Enlaces</h3>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: 0.75rem;"><a href="index.html" style="color: #e2e8f0; text-decoration: none; font-size: 1rem; transition: color 0.3s ease;" onmouseover="this.style.color='#f6d55c'" onmouseout="this.style.color='#e2e8f0'">Inicio</a></li>
+            <li style="margin-bottom: 0.75rem;"><a href="productos.html" style="color: #e2e8f0; text-decoration: none; font-size: 1rem; transition: color 0.3s ease;" onmouseover="this.style.color='#f6d55c'" onmouseout="this.style.color='#e2e8f0'">Productos</a></li>
+            <li style="margin-bottom: 0.75rem;"><a href="nuestra-historia.html" style="color: #e2e8f0; text-decoration: none; font-size: 1rem; transition: color 0.3s ease;" onmouseover="this.style.color='#f6d55c'" onmouseout="this.style.color='#e2e8f0'">Nosotros</a></li>
+            <li style="margin-bottom: 0.75rem;"><a href="index.html#puntos-venta" style="color: #e2e8f0; text-decoration: none; font-size: 1rem; transition: color 0.3s ease;" onmouseover="this.style.color='#f6d55c'" onmouseout="this.style.color='#e2e8f0'">Puntos de Venta</a></li>
+            <li style="margin-bottom: 0.75rem;"><a href="formulario-distribuidores.html" style="color: #e2e8f0; text-decoration: none; font-size: 1rem; transition: color 0.3s ease;" onmouseover="this.style.color='#f6d55c'" onmouseout="this.style.color='#e2e8f0'">Distribuidores</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #f6d55c;">Síguenos</h3>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="https://www.facebook.com/latierrita.shop" target="_blank" rel="noopener" title="Facebook" 
+               style="color: #e2e8f0; font-size: 1.8rem; transition: color 0.3s ease; display: inline-block;" 
+               onmouseover="this.style.color='#f6d55c'" onmouseout="this.style.color='#e2e8f0'">
+               <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.instagram.com/latierrita.shop/" target="_blank" rel="noopener" title="Instagram" 
+               style="color: #e2e8f0; font-size: 1.8rem; transition: color 0.3s ease; display: inline-block;" 
+               onmouseover="this.style.color='#f6d55c'" onmouseout="this.style.color='#e2e8f0'">
+               <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://wa.me/593987843771" target="_blank" rel="noopener" title="WhatsApp" 
+               style="color: #e2e8f0; font-size: 1.8rem; transition: color 0.3s ease; display: inline-block;" 
+               onmouseover="this.style.color='#f6d55c'" onmouseout="this.style.color='#e2e8f0'">
+               <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="https://www.linkedin.com/company/latierrita/?viewAsMember=true" target="_blank" rel="noopener" title="LinkedIn" 
+               style="color: #e2e8f0; font-size: 1.8rem; transition: color 0.3s ease; display: inline-block;" 
+               onmouseover="this.style.color='#f6d55c'" onmouseout="this.style.color='#e2e8f0'">
+               <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://x.com/Latierritashop" target="_blank" rel="noopener" title="X" 
+               style="color: #e2e8f0; font-size: 1.8rem; transition: color 0.3s ease; display: inline-block;" 
+               onmouseover="this.style.color='#f6d55c'" onmouseout="this.style.color='#e2e8f0'">
+               <i class="fab fa-x-twitter"></i>
+            </a>
+            <a href="https://www.tiktok.com/@la.tierrita.shop" target="_blank" rel="noopener" title="TikTok" 
+               style="color: #e2e8f0; font-size: 1.8rem; transition: color 0.3s ease; display: inline-block;" 
+               onmouseover="this.style.color='#f6d55c'" onmouseout="this.style.color='#e2e8f0'">
+               <i class="fab fa-tiktok"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div style="border-top: 1px solid #4a5568; margin-top: 2rem; padding-top: 1.5rem; text-align: center; font-size: 0.9rem;">
+        <p>&copy; 2025 La Tierrita. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript para funcionalidad del carrito -->
+  <script src="carrito.js"></script>
+  <script>
+    function increaseQuantity() {
+      const quantityInput = document.getElementById('quantity');
+      let currentValue = parseInt(quantityInput.value);
+      if (currentValue < 20) {
+        quantityInput.value = currentValue + 1;
+      }
+    }
+
+    function decreaseQuantity() {
+      const quantityInput = document.getElementById('quantity');
+      let currentValue = parseInt(quantityInput.value);
+      if (currentValue > 1) {
+        quantityInput.value = currentValue - 1;
+      }
+    }
+  </script>
+
+</body>
+</html>

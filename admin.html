@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LXG5F7LK42"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LXG5F7LK42');
+  </script>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Administrativo - La Tierrita</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="img/logofla.ico">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --naranja-mostaza: #f6d55c;
+      --texto-principal: #2d3748;
+      --texto-secundario: #4a5568;
+      --fondo-claro: #f7fafc;
+      --bordes: #e2e8f0;
+      --success: #48bb78;
+      --warning: #ed8936;
+      --danger: #f56565;
+      --info: #4299e1;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--fondo-claro);
+      color: var(--texto-principal);
+      line-height: 1.6;
+    }
+
+    .admin-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .admin-header {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .admin-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .admin-title h1 {
+      color: var(--naranja-mostaza);
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary {
+      background: var(--naranja-mostaza);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #e8be3d;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--texto-principal);
+      border: 2px solid var(--bordes);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--naranja-mostaza);
+      color: var(--naranja-mostaza);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--naranja-mostaza);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--naranja-mostaza);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--texto-principal);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: var(--texto-secundario);
+      font-size: 0.9rem;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 2rem;
+    }
+
+    .orders-section {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .section-header {
+      background: var(--fondo-claro);
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--bordes);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--texto-principal);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filters {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .filter-select {
+      padding: 0.5rem;
+      border: 1px solid var(--bordes);
+      border-radius: 0.5rem;
+      background: white;
+      color: var(--texto-principal);
+    }
+
+    .orders-list {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .order-item {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--bordes);
+      transition: background 0.3s ease;
+    }
+
+    .order-item:hover {
+      background: var(--fondo-claro);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .order-number {
+      font-weight: 600;
+      color: var(--naranja-mostaza);
+      font-size: 1.1rem;
+    }
+
+    .order-status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-confirmed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-preparing {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .status-shipped {
+      background: #e2e3e5;
+      color: #383d41;
+    }
+
+    .status-delivered {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-cancelled {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .order-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: var(--texto-secundario);
+    }
+
+    .order-detail strong {
+      color: var(--texto-principal);
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .btn-sm {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .quick-actions {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .action-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      transition: background 0.3s ease;
+      text-decoration: none;
+      color: var(--texto-principal);
+      margin-bottom: 0.5rem;
+    }
+
+    .action-item:hover {
+      background: var(--fondo-claro);
+    }
+
+    .action-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--naranja-mostaza);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .recent-activity {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .activity-item {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--bordes);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-icon {
+      width: 35px;
+      height: 35px;
+      background: var(--info);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.8rem;
+    }
+
+    .activity-content {
+      flex: 1;
+    }
+
+    .activity-text {
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .activity-time {
+      font-size: 0.8rem;
+      color: var(--texto-secundario);
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.5rem;
+      background: var(--fondo-claro);
+    }
+
+    .page-btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--bordes);
+      background: white;
+      color: var(--texto-principal);
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .page-btn:hover {
+      background: var(--naranja-mostaza);
+      color: white;
+      border-color: var(--naranja-mostaza);
+    }
+
+    .page-btn.active {
+      background: var(--naranja-mostaza);
+      color: white;
+      border-color: var(--naranja-mostaza);
+    }
+
+    @media (max-width: 1200px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .admin-container {
+        padding: 1rem;
+      }
+
+      .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .order-details {
+        grid-template-columns: 1fr;
+      }
+
+      .filters {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-container">
+    <!-- Header -->
+    <div class="admin-header">
+      <div class="admin-title">
+        <img src="img/logotrazo.png" alt="La Tierrita Logo" style="height: 50px; width: auto; border-radius: 8px;">
+        <div>
+          <h1>Panel Administrativo</h1>
+          <p style="color: var(--texto-secundario); margin: 0;">Gestión de Pedidos - La Tierrita</p>
+        </div>
+      </div>
+      <div class="admin-actions">
+        <a href="index.html" class="btn btn-secondary">
+          <i class="fas fa-home"></i>
+          Volver al Sitio
+        </a>
+        <button onclick="refreshData()" class="btn btn-primary">
+          <i class="fas fa-sync-alt"></i>
+          Actualizar
+        </button>
+      </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="stats-grid" id="stats-grid">
+      <!-- Las estadísticas se cargarán dinámicamente -->
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="main-content">
+      <!-- Lista de Pedidos -->
+      <div class="orders-section">
+        <div class="section-header">
+          <div class="section-title">
+            <i class="fas fa-shopping-bag"></i>
+            Pedidos Recientes
+          </div>
+          <div class="filters">
+            <select id="status-filter" class="filter-select" onchange="filterOrders()">
+              <option value="">Todos los Estados</option>
+              <option value="pending">Pendientes</option>
+              <option value="confirmed">Confirmados</option>
+              <option value="preparing">En Preparación</option>
+              <option value="shipped">Enviados</option>
+              <option value="delivered">Entregados</option>
+              <option value="cancelled">Cancelados</option>
+            </select>
+          </div>
+        </div>
+        <div class="orders-list" id="orders-list">
+          <!-- Los pedidos se cargarán dinámicamente -->
+        </div>
+        <div class="pagination" id="pagination">
+          <!-- La paginación se cargará dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Acciones Rápidas -->
+        <div class="quick-actions">
+          <h3 style="margin-bottom: 1rem; color: var(--texto-principal);">
+            <i class="fas fa-bolt mr-2"></i>Acciones Rápidas
+          </h3>
+          <a href="#" onclick="exportOrders()" class="action-item">
+            <div class="action-icon">
+              <i class="fas fa-download"></i>
+            </div>
+            <div>
+              <div style="font-weight: 500;">Exportar Pedidos</div>
+              <div style="font-size: 0.8rem; color: var(--texto-secundario);">Descargar CSV</div>
+            </div>
+          </a>
+          <a href="#" onclick="sendNotifications()" class="action-item">
+            <div class="action-icon">
+              <i class="fas fa-bell"></i>
+            </div>
+            <div>
+              <div style="font-weight: 500;">Enviar Notificaciones</div>
+              <div style="font-size: 0.8rem; color: var(--texto-secundario);">Actualizaciones a clientes</div>
+            </div>
+          </a>
+          <a href="productos.html" class="action-item">
+            <div class="action-icon">
+              <i class="fas fa-box"></i>
+            </div>
+            <div>
+              <div style="font-weight: 500;">Gestionar Productos</div>
+              <div style="font-size: 0.8rem; color: var(--texto-secundario);">Ver catálogo</div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Actividad Reciente -->
+        <div class="recent-activity">
+          <h3 style="margin-bottom: 1rem; color: var(--texto-principal);">
+            <i class="fas fa-clock mr-2"></i>Actividad Reciente
+          </h3>
+          <div id="recent-activity">
+            <!-- La actividad se cargará dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Editar Pedido -->
+  <div id="edit-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 1rem; padding: 2rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="color: var(--texto-principal);">Editar Pedido</h3>
+        <button onclick="closeEditModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--texto-secundario);">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="edit-form">
+        <!-- El formulario se cargará dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentPage = 1;
+    let currentFilter = '';
+    let orders = [];
+    let stats = {};
+
+    // Cargar datos al inicio
+    document.addEventListener('DOMContentLoaded', function() {
+      loadStats();
+      loadOrders();
+      loadRecentActivity();
+    });
+
+    // Cargar estadísticas
+    async function loadStats() {
+      try {
+        const response = await fetch('/api/stats');
+        const data = await response.json();
+        
+        if (data.success) {
+          stats = data.stats;
+          displayStats(stats);
+        }
+      } catch (error) {
+        console.error('Error al cargar estadísticas:', error);
+        // Mostrar datos de ejemplo si no hay conexión
+        displayStats({
+          totalOrders: 0,
+          totalRevenue: 0,
+          ordersToday: 0,
+          ordersThisMonth: 0,
+          ordersByStatus: {
+            pending: 0,
+            confirmed: 0,
+            preparing: 0,
+            shipped: 0,
+            delivered: 0,
+            cancelled: 0
+          }
+        });
+      }
+    }
+
+    // Mostrar estadísticas
+    function displayStats(stats) {
+      const statsGrid = document.getElementById('stats-grid');
+      statsGrid.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <div class="stat-value">${stats.totalOrders}</div>
+          <div class="stat-label">Total Pedidos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-dollar-sign"></i>
+          </div>
+          <div class="stat-value">$${stats.totalRevenue.toFixed(2)}</div>
+          <div class="stat-label">Ingresos Totales</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-day"></i>
+          </div>
+          <div class="stat-value">${stats.ordersToday}</div>
+          <div class="stat-label">Pedidos Hoy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <div class="stat-value">${stats.ordersThisMonth}</div>
+          <div class="stat-label">Pedidos Este Mes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="stat-value">${stats.ordersByStatus?.pending || 0}</div>
+          <div class="stat-label">Pendientes</div>
+        </div>
+      `;
+    }
+
+    // Cargar pedidos
+    async function loadOrders(page = 1, status = '') {
+      try {
+        const params = new URLSearchParams({
+          page: page,
+          limit: 10
+        });
+        
+        if (status) params.append('status', status);
+        
+        const response = await fetch(`/api/orders?${params}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          orders = data.orders;
+          displayOrders(orders);
+          displayPagination(data.pagination);
+        }
+      } catch (error) {
+        console.error('Error al cargar pedidos:', error);
+        displayOrders([]);
+      }
+    }
+
+    // Mostrar pedidos
+    function displayOrders(orders) {
+      const ordersList = document.getElementById('orders-list');
+      
+      if (orders.length === 0) {
+        ordersList.innerHTML = `
+          <div style="text-align: center; padding: 3rem; color: var(--texto-secundario);">
+            <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+            <p>No hay pedidos para mostrar</p>
+          </div>
+        `;
+        return;
+      }
+
+      ordersList.innerHTML = orders.map(order => `
+        <div class="order-item">
+          <div class="order-header">
+            <div class="order-number">#${order.orderNumber}</div>
+            <div class="order-status status-${order.status}">
+              ${getStatusText(order.status)}
+            </div>
+          </div>
+          <div class="order-details">
+            <div class="order-detail">
+              <strong>Cliente:</strong> ${order.customer.firstName} ${order.customer.lastName}
+            </div>
+            <div class="order-detail">
+              <strong>Total:</strong> $${order.totals.total.toFixed(2)}
+            </div>
+            <div class="order-detail">
+              <strong>Fecha:</strong> ${new Date(order.createdAt).toLocaleDateString('es-ES')}
+            </div>
+            <div class="order-detail">
+              <strong>Pago:</strong> ${getPaymentMethodText(order.paymentMethod)}
+            </div>
+          </div>
+          <div class="order-actions">
+            <button onclick="viewOrder('${order.id}')" class="btn btn-secondary btn-sm">
+              <i class="fas fa-eye"></i> Ver
+            </button>
+            <button onclick="editOrder('${order.id}')" class="btn btn-primary btn-sm">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button onclick="updateOrderStatus('${order.id}', 'confirmed')" class="btn btn-secondary btn-sm">
+              <i class="fas fa-check"></i> Confirmar
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Mostrar paginación
+    function displayPagination(pagination) {
+      const paginationEl = document.getElementById('pagination');
+      
+      if (pagination.totalPages <= 1) {
+        paginationEl.innerHTML = '';
+        return;
+      }
+
+      let buttons = '';
+      
+      // Botón anterior
+      if (pagination.hasPrevPage) {
+        buttons += `<button class="page-btn" onclick="changePage(${pagination.currentPage - 1})">
+          <i class="fas fa-chevron-left"></i>
+        </button>`;
+      }
+
+      // Botones de páginas
+      for (let i = 1; i <= pagination.totalPages; i++) {
+        const active = i === pagination.currentPage ? 'active' : '';
+        buttons += `<button class="page-btn ${active}" onclick="changePage(${i})">${i}</button>`;
+      }
+
+      // Botón siguiente
+      if (pagination.hasNextPage) {
+        buttons += `<button class="page-btn" onclick="changePage(${pagination.currentPage + 1})">
+          <i class="fas fa-chevron-right"></i>
+        </button>`;
+      }
+
+      paginationEl.innerHTML = buttons;
+    }
+
+    // Cambiar página
+    function changePage(page) {
+      currentPage = page;
+      loadOrders(page, currentFilter);
+    }
+
+    // Filtrar pedidos
+    function filterOrders() {
+      const select = document.getElementById('status-filter');
+      currentFilter = select.value;
+      currentPage = 1;
+      loadOrders(1, currentFilter);
+    }
+
+    // Funciones de utilidad
+    function getStatusText(status) {
+      const statusMap = {
+        'pending': 'Pendiente',
+        'confirmed': 'Confirmado',
+        'preparing': 'Preparando',
+        'shipped': 'Enviado',
+        'delivered': 'Entregado',
+        'cancelled': 'Cancelado'
+      };
+      return statusMap[status] || status;
+    }
+
+    function getPaymentMethodText(method) {
+      const methodMap = {
+        'paypal': 'PayPal',
+        'transfer': 'Transferencia',
+        'cod': 'Contra Entrega'
+      };
+      return methodMap[method] || method;
+    }
+
+    // Actualizar estado de pedido
+    async function updateOrderStatus(orderId, newStatus) {
+      try {
+        const response = await fetch(`/api/orders/${orderId}/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          alert('Estado actualizado exitosamente');
+          loadOrders(currentPage, currentFilter);
+          loadStats();
+        } else {
+          alert('Error al actualizar estado: ' + data.message);
+        }
+      } catch (error) {
+        console.error('Error al actualizar estado:', error);
+        alert('Error de conexión');
+      }
+    }
+
+    // Ver pedido completo
+    function viewOrder(orderId) {
+      const order = orders.find(o => o.id === orderId);
+      if (order) {
+        alert(`Pedido: ${order.orderNumber}\nCliente: ${order.customer.firstName} ${order.customer.lastName}\nTotal: $${order.totals.total.toFixed(2)}\nEstado: ${getStatusText(order.status)}`);
+      }
+    }
+
+    // Editar pedido
+    function editOrder(orderId) {
+      const order = orders.find(o => o.id === orderId);
+      if (!order) return;
+
+      const modal = document.getElementById('edit-modal');
+      const form = document.getElementById('edit-form');
+      
+      form.innerHTML = `
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Estado</label>
+          <select id="edit-status" class="filter-select" style="width: 100%;">
+            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pendiente</option>
+            <option value="confirmed" ${order.status === 'confirmed' ? 'selected' : ''}>Confirmado</option>
+            <option value="preparing" ${order.status === 'preparing' ? 'selected' : ''}>Preparando</option>
+            <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Enviado</option>
+            <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Entregado</option>
+            <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelado</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Número de Seguimiento</label>
+          <input type="text" id="edit-tracking" placeholder="Opcional" style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordes); border-radius: 0.5rem;" value="${order.trackingNumber || ''}">
+        </div>
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+          <button onclick="closeEditModal()" class="btn btn-secondary">Cancelar</button>
+          <button onclick="saveOrderChanges('${orderId}')" class="btn btn-primary">Guardar</button>
+        </div>
+      `;
+      
+      modal.style.display = 'flex';
+    }
+
+    // Cerrar modal de edición
+    function closeEditModal() {
+      document.getElementById('edit-modal').style.display = 'none';
+    }
+
+    // Guardar cambios del pedido
+    async function saveOrderChanges(orderId) {
+      const status = document.getElementById('edit-status').value;
+      const trackingNumber = document.getElementById('edit-tracking').value;
+
+      try {
+        const response = await fetch(`/api/orders/${orderId}/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            status: status,
+            trackingNumber: trackingNumber || null
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          alert('Pedido actualizado exitosamente');
+          closeEditModal();
+          loadOrders(currentPage, currentFilter);
+          loadStats();
+        } else {
+          alert('Error al actualizar pedido: ' + data.message);
+        }
+      } catch (error) {
+        console.error('Error al actualizar pedido:', error);
+        alert('Error de conexión');
+      }
+    }
+
+    // Actividad reciente
+    function loadRecentActivity() {
+      const activityEl = document.getElementById('recent-activity');
+      activityEl.innerHTML = `
+        <div class="activity-item">
+          <div class="activity-icon">
+            <i class="fas fa-plus"></i>
+          </div>
+          <div class="activity-content">
+            <div class="activity-text">Nuevo pedido recibido #LT001234</div>
+            <div class="activity-time">Hace 5 minutos</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon">
+            <i class="fas fa-check"></i>
+          </div>
+          <div class="activity-content">
+            <div class="activity-text">Pedido #LT001233 confirmado</div>
+            <div class="activity-time">Hace 15 minutos</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon">
+            <i class="fas fa-truck"></i>
+          </div>
+          <div class="activity-content">
+            <div class="activity-text">Pedido #LT001232 enviado</div>
+            <div class="activity-time">Hace 1 hora</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Funciones adicionales
+    function refreshData() {
+      loadStats();
+      loadOrders(currentPage, currentFilter);
+      loadRecentActivity();
+    }
+
+    function exportOrders() {
+      alert('Función de exportación en desarrollo');
+    }
+
+    function sendNotifications() {
+      alert('Función de notificaciones en desarrollo');
+    }
+  </script>
+
+</body>
+</html>

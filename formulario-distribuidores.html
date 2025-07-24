@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario para Distribuidores | La Tierrita</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="img/logofla.ico">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Estilos Principales -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header y Navegación -->
+  <header>
+    <nav>
+      <div class="logo">
+        <img src="img/logotrazo.png" alt="La Tierrita Logo" style="height: 40px; width: auto; margin-right: 10px; border-radius: 4px;">
+        La Tierrita
+      </div>
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="nuestra-historia.html">Nuestra Historia</a></li>
+        <li><a href="index.html#puntos-venta">Puntos de Venta</a></li>
+        <li><a href="formulario-distribuidores.html">Distribuidores</a></li>
+        <li><a href="index.html#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Sección Principal del Formulario -->
+  <section id="distribuidores" style="padding: 4rem 2rem; background-color: var(--fondo-claro);">
+    <div style="max-width: 1000px; margin: 0 auto;">
+      <div id="form-container">
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <h1 style="font-size: 2.5rem; font-weight: 700; color: var(--naranja-mostaza); margin-bottom: 1rem;">
+            Sé parte de La Tierrita: Formulario para Distribuidores
+          </h1>
+          <p style="color: var(--texto-principal); line-height: 1.7; font-size: 1.1rem; max-width: 800px; margin: 0 auto;">
+            ¡Hola! Gracias por tu interés en llevar el sabor de nuestros bocaditos tradicionales a más hogares. 
+            En La Tierrita, valoramos las alianzas basadas en la confianza y el amor por lo nuestro. 
+            Este formulario nos ayudará a conocerte mejor y a entender cómo podemos crecer juntos. 
+            Por favor, completa la siguiente información y nuestro equipo se pondrá en contacto contigo muy pronto.
+          </p>
+        </div>
+
+        <form id="distributor-form" style="display: flex; flex-direction: column; gap: 2rem;">
+          <!-- Sección 1: Información de Contacto -->
+          <div style="padding: 2rem; border: 1px solid #e0e0e0; border-radius: 1rem; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--verde-oliva);">
+              Sección 1: Información de Contacto
+            </h3>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 2rem;">
+              Para saber quién eres y cómo podemos comunicarnos contigo.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+              <div>
+                <label for="nombre" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">Nombre completo *</label>
+                <input type="text" id="nombre" name="nombre" required 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; font-size: 1rem;">
+              </div>
+              <div>
+                <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">Correo electrónico *</label>
+                <input type="email" id="email" name="email" required 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; font-size: 1rem;">
+              </div>
+              <div>
+                <label for="telefono" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">Teléfono/WhatsApp *</label>
+                <input type="tel" id="telefono" name="telefono" required 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; font-size: 1rem;">
+              </div>
+              <div>
+                <label for="ciudad" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">Ciudad *</label>
+                <input type="text" id="ciudad" name="ciudad" required 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; font-size: 1rem;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Sección 2: Tu Perfil Comercial -->
+          <div style="padding: 2rem; border: 1px solid #e0e0e0; border-radius: 1rem; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--verde-oliva);">
+              Sección 2: Tu Perfil Comercial
+            </h3>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 2rem;">
+              Para entender tu actividad y cómo La Tierrita puede integrarse a ella.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+              <div>
+                <label for="tipo-negocio" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">Tipo de negocio *</label>
+                <select id="tipo-negocio" name="tipo-negocio" required 
+                        style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; font-size: 1rem;">
+                  <option value="">Selecciona una opción</option>
+                  <option value="tienda-barrio">Tienda de barrio</option>
+                  <option value="supermercado">Supermercado</option>
+                  <option value="panaderia">Panadería</option>
+                  <option value="restaurante">Restaurante</option>
+                  <option value="cafeteria">Cafetería</option>
+                  <option value="distribuidor">Distribuidor mayorista</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+              <div>
+                <label for="experiencia" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">Experiencia en distribución de alimentos</label>
+                <textarea id="experiencia" name="experiencia" rows="3" 
+                          style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; font-size: 1rem; resize: vertical;"
+                          placeholder="Cuéntanos sobre tu experiencia vendiendo productos alimenticios..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sección 3: Capacidad y Logística -->
+          <div style="padding: 2rem; border: 1px solid #e0e0e0; border-radius: 1rem; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--verde-oliva);">
+              Sección 3: Capacidad y Logística
+            </h3>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 2rem;">
+              Es importante asegurar que el producto mantenga su calidad hasta el cliente final.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+              <div>
+                <label for="volumen-ventas" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">Volumen de ventas estimado (mensual) *</label>
+                <select id="volumen-ventas" name="volumen-ventas" required 
+                        style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; font-size: 1rem;">
+                  <option value="">Selecciona una opción</option>
+                  <option value="1-50">1 - 50 unidades</option>
+                  <option value="51-100">51 - 100 unidades</option>
+                  <option value="101-500">101 - 500 unidades</option>
+                  <option value="501-1000">501 - 1000 unidades</option>
+                  <option value="1000+">Más de 1000 unidades</option>
+                </select>
+              </div>
+              <div>
+                <label for="almacenamiento" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">¿Tienes espacio adecuado para almacenamiento? *</label>
+                <div style="display: flex; gap: 2rem; margin-top: 0.5rem;">
+                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="radio" name="almacenamiento" value="si" required>
+                    <span>Sí</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="radio" name="almacenamiento" value="no" required>
+                    <span>No</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="radio" name="almacenamiento" value="limitado" required>
+                    <span>Limitado</span>
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label for="refrigeracion" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">Capacidad de refrigeración</label>
+                <textarea id="refrigeracion" name="refrigeracion" rows="2" 
+                          style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; font-size: 1rem; resize: vertical;"
+                          placeholder="Describe tu capacidad de refrigeración (opcional)"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sección 4: Conociéndonos Mejor -->
+          <div style="padding: 2rem; border: 1px solid #e0e0e0; border-radius: 1rem; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--verde-oliva);">
+              Sección 4: Conociéndonos Mejor
+            </h3>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 2rem;">
+              Queremos construir relaciones duraderas y afines a nuestros valores.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+              <div>
+                <label for="interes" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">¿Por qué te interesa trabajar con La Tierrita? *</label>
+                <textarea id="interes" name="interes" rows="4" required 
+                          style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; font-size: 1rem; resize: vertical;"
+                          placeholder="Cuéntanos qué te motiva a querer ser parte de nuestra familia..."></textarea>
+              </div>
+              <div>
+                <label for="valores" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">¿Qué valores consideras importantes en un negocio?</label>
+                <textarea id="valores" name="valores" rows="3" 
+                          style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; font-size: 1rem; resize: vertical;"
+                          placeholder="Honestidad, calidad, compromiso con la comunidad..."></textarea>
+              </div>
+              <div>
+                <label for="comentarios" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--texto-principal);">Comentarios adicionales</label>
+                <textarea id="comentarios" name="comentarios" rows="3" 
+                          style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; font-size: 1rem; resize: vertical;"
+                          placeholder="¿Hay algo más que te gustaría compartir con nosotros?"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center; padding-top: 1rem;">
+            <button type="submit" 
+                    style="background-color: var(--naranja-mostaza); color: white; font-weight: 700; border-radius: 0.5rem; border: none; padding: 1rem 3rem; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+              Enviar Formulario
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="form-confirmation" style="display: none; text-align: center; padding: 4rem 2rem;">
+        <div style="max-width: 600px; margin: 0 auto;">
+          <div style="font-size: 4rem; color: #4caf50; margin-bottom: 2rem;">✅</div>
+          <h2 style="font-size: 2rem; font-weight: 700; color: var(--naranja-mostaza); margin-bottom: 1rem;">¡Gracias por tu tiempo!</h2>
+          <p style="color: var(--texto-principal); margin-bottom: 1rem; line-height: 1.7;">
+            Hemos recibido tu información. Tu interés por formar parte de La Tierrita es muy valioso para nosotros.
+          </p>
+          <p style="color: var(--texto-principal); margin-bottom: 2rem; line-height: 1.7;">
+            Revisaremos tus respuestas y te contactaremos en los próximos 2 a 5 días hábiles para conversar sobre los siguientes pasos. 
+            Te invitamos a seguirnos en nuestras redes sociales para estar al tanto de nuestras novedades.
+          </p>
+          <p style="font-weight: 700; font-size: 1.2rem; color: var(--texto-principal);">¡Qué bueno tenerte cerca!</p>
+          <p style="margin-top: 1rem; color: var(--verde-oliva); font-weight: 500;">El equipo de La Tierrita.</p>
+          
+          <div style="margin-top: 2rem;">
+            <a href="index.html" 
+               style="background-color: var(--verde-oliva); color: white; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; display: inline-block; transition: all 0.3s ease;">
+              Volver al Inicio
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Botón flotante de WhatsApp -->
+  <a href="https://wa.me/593987843771" target="_blank" class="whatsapp-float" title="Contáctanos por WhatsApp"></a>
+
+  <!-- Footer -->
+  <footer>
+    <div style="max-width: 1200px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: center;">
+      <div>
+        <h3 style="color: var(--naranja-mostaza); margin-bottom: 1rem;">La Tierrita</h3>
+        <p style="font-weight: 500; line-height: 1.6;">
+          Sabores auténticos, tradición familiar y calidad natural en cada bocado. 
+          Descubre el verdadero gusto del campo ecuatoriano.
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--naranja-mostaza); margin-bottom: 1rem;">Enlaces</h3>
+        <ul style="list-style: none; line-height: 2;">
+          <li><a href="index.html" style="color: inherit; text-decoration: none;">Inicio</a></li>
+          <li><a href="productos.html" style="color: inherit; text-decoration: none;">Productos</a></li>
+          <li><a href="nuestra-historia.html" style="color: inherit; text-decoration: none;">Nuestra Historia</a></li>
+          <li><a href="index.html#puntos-venta" style="color: inherit; text-decoration: none;">Puntos de Venta</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color: var(--naranja-mostaza); margin-bottom: 1rem;">Contacto</h3>
+        <p>WhatsApp: +593 98 784 3771</p>
+        <p>Email: info@latierrita.com</p>
+      </div>
+    </div>
+    <div style="border-top: 1px solid var(--amarillo-suave); margin-top: 2rem; padding-top: 1rem; text-align: center;">
+      <p>&copy; 2025 La Tierrita. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Script básico para el formulario
+    document.getElementById('distributor-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Simular envío del formulario
+      document.getElementById('form-container').style.display = 'none';
+      document.getElementById('form-confirmation').style.display = 'block';
+      
+      // Scroll hacia arriba para mostrar la confirmación
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
+
+</body>
+</html>

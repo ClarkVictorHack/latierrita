@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LXG5F7LK42"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LXG5F7LK42');
+  </script>
+  
+  <!-- Metricool Analytics -->
+  <script>
+    function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"8b8c5c6b2e8f24a5a4d8e68b37f8"})});
+  </script>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos | La Tierrita - Tradición y Sabor Campesino</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="img/logofla.ico">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Estilos Principales -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header y Navegación -->
+  <header>
+    <nav>
+      <div class="logo">
+        <img src="img/logotrazo.png" alt="La Tierrita Logo" style="height: 40px; width: auto; margin-right: 10px; border-radius: 4px;">
+        La Tierrita
+      </div>
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="nuestra-historia.html">Nuestra Historia</a></li>
+        <li><a href="#recetas">Recetas</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Icono del carrito -->
+  <button class="carrito-icon" onclick="toggleCarrito()">
+    🛒
+    <span class="carrito-contador" id="carritoContador">0</span>
+  </button>
+
+  <!-- Contenido Principal -->
+  <main class="productos-container">
+    <h1 style="text-align: center; color: var(--naranja-mostaza); margin-bottom: 1rem;">Nuestros Productos</h1>
+    <p style="text-align: center; color: var(--texto-principal); margin-bottom: 2rem;">Descubre todos nuestros bocaditos tradicionales y gourmet, preparados con amor y los mejores ingredientes de nuestra tierra.</p>
+
+    <!-- Filtros -->
+    <div class="filtros">
+      <button class="filtro-btn active" onclick="filtrarProductos('todos')">Todos</button>
+      <button class="filtro-btn" onclick="filtrarProductos('tradicionales')">Tradicionales</button>
+      <button class="filtro-btn" onclick="filtrarProductos('gourmet')">Gourmet</button>
+    </div>
+
+    <!-- Bocaditos Tradicionales -->
+    <section class="categoria-section" id="tradicionales">
+      <h2 class="categoria-titulo">BOCADITOS TRADICIONALES</h2>
+      <div class="productos-grid">
+        
+        <!-- Pan de Yuca -->
+        <div class="producto-card" data-categoria="tradicionales">
+          <img src="img/pan de yuca.png" alt="Pan de Yuca" class="producto-imagen">
+          <div class="producto-info">
+            <h3 class="producto-nombre">Pan de Yuca</h3>
+            <p class="producto-descripcion">Suave y esponjoso, con la textura perfecta que evoca la tradición de la tierra. Sin gluten, perfecto para cualquier momento del día.</p>
+            <div class="producto-precio">$3,50</div>
+            <div class="producto-acciones">
+              <div class="cantidad-selector">
+                <button class="cantidad-btn" onclick="cambiarCantidad('pan-yuca', -1)">-</button>
+                <input type="number" class="cantidad-input" id="cantidad-pan-yuca" value="1" min="1" readonly>
+                <button class="cantidad-btn" onclick="cambiarCantidad('pan-yuca', 1)">+</button>
+              </div>
+              <button class="btn-agregar-carrito" onclick="agregarAlCarrito('pan-yuca', 'Pan de Yuca', 3.50, 'tradicionales')">
+                Agregar al Carrito
+              </button>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+              <a href="pan-de-yuca.html" class="btn-ver-mas" style="background: var(--naranja-mostaza); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 500; transition: all 0.3s ease;">
+                Ver más
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mini Bolón de Maduro -->
+        <div class="producto-card" data-categoria="tradicionales">
+          <img src="img/mini bolon de maduro.png" alt="Mini Bolón de Maduro" class="producto-imagen">
+          <div class="producto-info">
+            <h3 class="producto-nombre">Mini Bolón de Maduro</h3>
+            <p class="producto-descripcion">Crocantes por fuera y suaves por dentro, hechos con plátano maduro de la mejor calidad. Un clásico de la gastronomía ecuatoriana.</p>
+            <div class="producto-precio">$3,50</div>
+            <div class="producto-acciones">
+              <div class="cantidad-selector">
+                <button class="cantidad-btn" onclick="cambiarCantidad('bolon-maduro', -1)">-</button>
+                <input type="number" class="cantidad-input" id="cantidad-bolon-maduro" value="1" min="1" readonly>
+                <button class="cantidad-btn" onclick="cambiarCantidad('bolon-maduro', 1)">+</button>
+              </div>
+              <button class="btn-agregar-carrito" onclick="agregarAlCarrito('bolon-maduro', 'Mini Bolón de Maduro', 3.50, 'tradicionales')">
+                Agregar al Carrito
+              </button>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+              <a href="mini-bolones-maduro.html" class="btn-ver-mas" style="background: var(--naranja-mostaza); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 500; transition: all 0.3s ease;">
+                Ver más
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mini Bolón de Verde -->
+        <div class="producto-card" data-categoria="tradicionales">
+          <img src="img/mini bolon de verde.png" alt="Mini Bolón de Verde" class="producto-imagen">
+          <div class="producto-info">
+            <h3 class="producto-nombre">Mini Bolón de Verde</h3>
+            <p class="producto-descripcion">Preparados con plátano verde fresco, estos bolones mantienen la textura tradicional con un sabor único y auténtico.</p>
+            <div class="producto-precio">$3,50</div>
+            <div class="producto-acciones">
+              <div class="cantidad-selector">
+                <button class="cantidad-btn" onclick="cambiarCantidad('bolon-verde', -1)">-</button>
+                <input type="number" class="cantidad-input" id="cantidad-bolon-verde" value="1" min="1" readonly>
+                <button class="cantidad-btn" onclick="cambiarCantidad('bolon-verde', 1)">+</button>
+              </div>
+              <button class="btn-agregar-carrito" onclick="agregarAlCarrito('bolon-verde', 'Mini Bolón de Verde', 3.50, 'tradicionales')">
+                Agregar al Carrito
+              </button>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+              <a href="mini-bolones-verde.html" class="btn-ver-mas" style="background: var(--naranja-mostaza); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 500; transition: all 0.3s ease;">
+                Ver más
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mini Muchín de Yuca -->
+        <div class="producto-card" data-categoria="tradicionales">
+          <img src="img/mini muchin.png" alt="Mini Muchín de Yuca" class="producto-imagen">
+          <div class="producto-info">
+            <h3 class="producto-nombre">Mini Muchín</h3>
+            <p class="producto-descripcion">Deliciosos muchines elaborados con ingredientes frescos, crujientes por fuera y suaves por dentro. Una tradición familiar en cada bocado.</p>
+            <div class="producto-precio">$3,50</div>
+            <div class="producto-acciones">
+              <div class="cantidad-selector">
+                <button class="cantidad-btn" onclick="cambiarCantidad('muchin-yuca', -1)">-</button>
+                <input type="number" class="cantidad-input" id="cantidad-muchin-yuca" value="1" min="1" readonly>
+                <button class="cantidad-btn" onclick="cambiarCantidad('muchin-yuca', 1)">+</button>
+              </div>
+              <button class="btn-agregar-carrito" onclick="agregarAlCarrito('muchin-yuca', 'Mini Muchín', 3.50, 'tradicionales')">
+                Agregar al Carrito
+              </button>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+              <a href="mini-muchin.html" class="btn-ver-mas" style="background: var(--naranja-mostaza); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 500; transition: all 0.3s ease;">
+                Ver más
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Bocaditos Gourmet -->
+    <section class="categoria-section" id="gourmet">
+      <h2 class="categoria-titulo">BOCADITOS GOURMET</h2>
+      <div class="productos-grid">
+        
+        <!-- María Pipona de Maduro -->
+        <div class="producto-card" data-categoria="gourmet">
+          <img src="img/maria pipona de maduro.jpg" alt="María Pipona de Maduro" class="producto-imagen">
+          <div class="producto-info">
+            <h3 class="producto-nombre">María Pipona de Maduro</h3>
+            <p class="producto-descripcion">Nuestra versión gourmet con plátano maduro, perfectamente sazonada y con una presentación especial para los paladares más exigentes.</p>
+            <div class="producto-precio">$3,00</div>
+            <div class="producto-acciones">
+              <div class="cantidad-selector">
+                <button class="cantidad-btn" onclick="cambiarCantidad('maria-maduro', -1)">-</button>
+                <input type="number" class="cantidad-input" id="cantidad-maria-maduro" value="1" min="1" readonly>
+                <button class="cantidad-btn" onclick="cambiarCantidad('maria-maduro', 1)">+</button>
+              </div>
+              <button class="btn-agregar-carrito" onclick="agregarAlCarrito('maria-maduro', 'María Pipona de Maduro', 3.00, 'gourmet')">
+                Agregar al Carrito
+              </button>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+              <a href="maria-pipona-maduro.html" class="btn-ver-mas" style="background: var(--naranja-mostaza); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 500; transition: all 0.3s ease;">
+                Ver más
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- María Pipona de Verde -->
+        <div class="producto-card" data-categoria="gourmet">
+          <img src="img/maria pipona de verde.jpg" alt="María Pipona de Verde" class="producto-imagen">
+          <div class="producto-info">
+            <h3 class="producto-nombre">María Pipona de Verde</h3>
+            <p class="producto-descripcion">Elaborada con plátano verde seleccionado, esta versión gourmet ofrece una experiencia culinaria refinada manteniendo el sabor tradicional.</p>
+            <div class="producto-precio">$3,00</div>
+            <div class="producto-acciones">
+              <div class="cantidad-selector">
+                <button class="cantidad-btn" onclick="cambiarCantidad('maria-verde', -1)">-</button>
+                <input type="number" class="cantidad-input" id="cantidad-maria-verde" value="1" min="1" readonly>
+                <button class="cantidad-btn" onclick="cambiarCantidad('maria-verde', 1)">+</button>
+              </div>
+              <button class="btn-agregar-carrito" onclick="agregarAlCarrito('maria-verde', 'María Pipona de Verde', 3.00, 'gourmet')">
+                Agregar al Carrito
+              </button>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+              <a href="maria-pipona-verde.html" class="btn-ver-mas" style="background: var(--naranja-mostaza); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 500; transition: all 0.3s ease;">
+                Ver más
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Muchines de Yuca -->
+        <div class="producto-card" data-categoria="gourmet">
+          <img src="img/muchines de yuca.jpg" alt="Muchines de Yuca" class="producto-imagen">
+          <div class="producto-info">
+            <h3 class="producto-nombre">Muchines de Yuca</h3>
+            <p class="producto-descripcion">Versión gourmet de nuestros tradicionales muchines, elaborados con yuca fresca de la más alta calidad. Una delicia que combina tradición y sabor auténtico.</p>
+            <div class="producto-precio">$3,00</div>
+            <div class="producto-acciones">
+              <div class="cantidad-selector">
+                <button class="cantidad-btn" onclick="cambiarCantidad('muchines-yuca', -1)">-</button>
+                <input type="number" class="cantidad-input" id="cantidad-muchines-yuca" value="1" min="1" readonly>
+                <button class="cantidad-btn" onclick="cambiarCantidad('muchines-yuca', 1)">+</button>
+              </div>
+              <button class="btn-agregar-carrito" onclick="agregarAlCarrito('muchines-yuca', 'Muchines de Yuca', 3.00, 'gourmet')">
+                Agregar al Carrito
+              </button>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+              <a href="muchines-de-yuca.html" class="btn-ver-mas" style="background: var(--naranja-mostaza); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 500; transition: all 0.3s ease;">
+                Ver más
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Torrejas -->
+        <div class="producto-card" data-categoria="gourmet">
+          <img src="img/torrejas.jpg" alt="Torrejas" class="producto-imagen">
+          <div class="producto-info">
+            <h3 class="producto-nombre">Torrejas</h3>
+            <p class="producto-descripcion">Deliciosas torrejas tradicionales con receta familiar de generación en generación. El postre perfecto para endulzar tus momentos especiales.</p>
+            <div class="producto-precio">$3,00</div>
+            <div class="producto-acciones">
+              <div class="cantidad-selector">
+                <button class="cantidad-btn" onclick="cambiarCantidad('torrejas', -1)">-</button>
+                <input type="number" class="cantidad-input" id="cantidad-torrejas" value="1" min="1" readonly>
+                <button class="cantidad-btn" onclick="cambiarCantidad('torrejas', 1)">+</button>
+              </div>
+              <button class="btn-agregar-carrito" onclick="agregarAlCarrito('torrejas', 'Torrejas', 3.00, 'gourmet')">
+                Agregar al Carrito
+              </button>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+              <a href="torrejas.html" class="btn-ver-mas" style="background: var(--naranja-mostaza); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; font-weight: 500; transition: all 0.3s ease;">
+                Ver más
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal del carrito -->
+  <div id="carritoModal" class="carrito-modal">
+    <div class="carrito-contenido">
+      <div class="carrito-header">
+        <h2>Tu Carrito</h2>
+        <button class="cerrar-carrito" onclick="toggleCarrito()">&times;</button>
+      </div>
+      <div id="carritoItems" class="carrito-items"></div>
+      <div class="carrito-total">
+        <strong>Total: $<span id="carritoTotal">0.00</span></strong>
+      </div>
+      <div class="carrito-acciones">
+        <button class="btn-vaciar-carrito" onclick="vaciarCarrito()">Vaciar Carrito</button>
+        <button class="btn-checkout" onclick="procederPago()">Proceder al Pago</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="background-color: #2d3748; color: white; margin-top: 4rem;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 3rem 2rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left;">
+        <div>
+          <h3 style="color: #f6d55c; margin-bottom: 1rem;">La Tierrita</h3>
+          <p style="color: #e2e8f0; line-height: 1.6;">
+            Sabores auténticos, tradición familiar y calidad natural en cada bocado.
+          </p>
+        </div>
+        <div>
+          <h3 style="color: #f6d55c; margin-bottom: 1rem;">Enlaces</h3>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: 0.5rem;"><a href="index.html" style="color: #e2e8f0; text-decoration: none;">Inicio</a></li>
+            <li style="margin-bottom: 0.5rem;"><a href="productos.html" style="color: #e2e8f0; text-decoration: none;">Productos</a></li>
+            <li style="margin-bottom: 0.5rem;"><a href="nuestra-historia.html" style="color: #e2e8f0; text-decoration: none;">Nuestra Historia</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="color: #f6d55c; margin-bottom: 1rem;">Contacto</h3>
+          <p style="color: #e2e8f0;">WhatsApp: +593 98 784 3771</p>
+        </div>
+      </div>
+      <div style="border-top: 1px solid #4a5568; margin-top: 2rem; padding-top: 1rem; text-align: center;">
+        <p>&copy; 2025 La Tierrita. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Funcionalidad del carrito
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+    function cambiarCantidad(productoId, cambio) {
+      const input = document.getElementById(`cantidad-${productoId}`);
+      let cantidad = parseInt(input.value) + cambio;
+      if (cantidad < 1) cantidad = 1;
+      input.value = cantidad;
+    }
+
+    function agregarAlCarrito(id, nombre, precio, categoria) {
+      const cantidad = parseInt(document.getElementById(`cantidad-${id}`).value);
+      const producto = {
+        id: id,
+        nombre: nombre,
+        precio: precio,
+        cantidad: cantidad,
+        categoria: categoria
+      };
+
+      const productoExistente = carrito.find(item => item.id === id);
+      if (productoExistente) {
+        productoExistente.cantidad += cantidad;
+      } else {
+        carrito.push(producto);
+      }
+
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      actualizarCarrito();
+      mostrarMensaje(`${nombre} agregado al carrito`);
+    }
+
+    function actualizarCarrito() {
+      const contador = document.getElementById('carritoContador');
+      const total = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+      contador.textContent = total;
+      contador.style.display = total > 0 ? 'block' : 'none';
+
+      // Actualizar contenido del modal
+      const carritoItems = document.getElementById('carritoItems');
+      carritoItems.innerHTML = '';
+      
+      let totalPrecio = 0;
+      carrito.forEach(item => {
+        totalPrecio += item.precio * item.cantidad;
+        carritoItems.innerHTML += `
+          <div class="carrito-item">
+            <span>${item.nombre}</span>
+            <span>${item.cantidad} x $${item.precio}</span>
+            <span>$${(item.precio * item.cantidad).toFixed(2)}</span>
+            <button onclick="eliminarDelCarrito('${item.id}')">×</button>
+          </div>
+        `;
+      });
+
+      document.getElementById('carritoTotal').textContent = totalPrecio.toFixed(2);
+    }
+
+    function eliminarDelCarrito(id) {
+      carrito = carrito.filter(item => item.id !== id);
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      actualizarCarrito();
+    }
+
+    function vaciarCarrito() {
+      carrito = [];
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      actualizarCarrito();
+    }
+
+    function toggleCarrito() {
+      const modal = document.getElementById('carritoModal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function filtrarProductos(categoria) {
+      const productos = document.querySelectorAll('.producto-card');
+      const botones = document.querySelectorAll('.filtro-btn');
+      
+      botones.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      productos.forEach(producto => {
+        if (categoria === 'todos' || producto.dataset.categoria === categoria) {
+          producto.style.display = 'block';
+        } else {
+          producto.style.display = 'none';
+        }
+      });
+    }
+
+    function mostrarMensaje(mensaje) {
+      // Crear y mostrar mensaje temporal
+      const div = document.createElement('div');
+      div.textContent = mensaje;
+      div.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #28a745;
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        z-index: 9999;
+      `;
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 3000);
+    }
+
+    function procederPago() {
+      if (carrito.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+      }
+      alert('Funcionalidad de pago próximamente');
+    }
+
+    // Inicializar carrito al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+      actualizarCarrito();
+    });
+  </script>
+
+</body>
+</html>
