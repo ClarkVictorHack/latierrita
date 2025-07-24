@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LXG5F7LK42"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LXG5F7LK42');
+  </script>
+  
+  <!-- Metricool Analytics -->
+  <script>
+    function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"8b8c5c6b2e8f24a5a4d8e68b37f8"})});
+  </script>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - La Tierrita | Finalizar Compra</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="img/logofla.ico">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Estilos Principales -->
+  <link rel="stylesheet" href="style.css">
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&intent=capture&components=buttons"></script>
+  
+  <style>
+    .checkout-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 3rem;
+    }
+    
+    .checkout-form {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .order-summary {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      height: fit-content;
+      position: sticky;
+      top: 2rem;
+    }
+    
+    .form-section {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .form-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--texto-principal);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ced4da;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--naranja-mostaza);
+      box-shadow: 0 0 0 0.2rem rgba(215, 159, 73, 0.25);
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .order-item:last-child {
+      border-bottom: none;
+    }
+    
+    .item-image {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+    
+    .item-details {
+      flex: 1;
+    }
+    
+    .item-name {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .item-quantity {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .item-price {
+      font-weight: 600;
+      color: var(--naranja-mostaza);
+    }
+    
+    .order-totals {
+      border-top: 1px solid #e9ecef;
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    
+    .total-row.final {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--naranja-mostaza);
+      border-top: 2px solid var(--naranja-mostaza);
+      padding-top: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .payment-methods {
+      margin-top: 2rem;
+    }
+    
+    .payment-option {
+      border: 2px solid #e9ecef;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .payment-option:hover,
+    .payment-option.selected {
+      border-color: var(--naranja-mostaza);
+      background: rgba(215, 159, 73, 0.05);
+    }
+    
+    .payment-option input[type="radio"] {
+      margin-right: 0.5rem;
+    }
+    
+    .security-badges {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 0.5rem;
+    }
+    
+    .btn-place-order {
+      width: 100%;
+      background: var(--naranja-mostaza);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 2rem;
+    }
+    
+    .btn-place-order:hover {
+      background: #c8871a;
+      transform: translateY(-2px);
+    }
+    
+    .btn-place-order:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .error-message {
+      color: #dc3545;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    
+    .success-message {
+      color: #28a745;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    
+    .progress-steps {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    
+    .step {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      background: #e9ecef;
+      color: #6c757d;
+      margin: 0 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    .step.active {
+      background: var(--naranja-mostaza);
+      color: white;
+    }
+    
+    .step i {
+      margin-right: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .checkout-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 1rem;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .order-summary {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header y Navegación -->
+  <header>
+    <nav>
+      <div class="logo">
+        <img src="img/logotrazo.png" alt="La Tierrita Logo" style="height: 40px; width: auto; margin-right: 10px; border-radius: 4px;">
+        <a href="index.html" style="text-decoration: none; color: inherit;">La Tierrita</a>
+      </div>
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="nuestra-historia.html">Nuestra Historia</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Progress Steps -->
+  <section style="padding: 2rem 0; background: white;">
+    <div class="progress-steps">
+      <div class="step">
+        <i class="fas fa-shopping-cart"></i>
+        Carrito
+      </div>
+      <div class="step active">
+        <i class="fas fa-credit-card"></i>
+        Checkout
+      </div>
+      <div class="step">
+        <i class="fas fa-check-circle"></i>
+        Confirmación
+      </div>
+    </div>
+  </section>
+
+  <!-- Checkout Content -->
+  <section style="padding: 2rem 0; background: #f8f9fa; min-height: 80vh;">
+    <div class="checkout-container">
+      
+      <!-- Checkout Form -->
+      <div class="checkout-form">
+        <h2 style="margin-bottom: 2rem; color: var(--naranja-mostaza);">
+          <i class="fas fa-user-circle mr-2"></i>
+          Información de Entrega
+        </h2>
+        
+        <form id="checkout-form">
+          <!-- Información Personal -->
+          <div class="form-section">
+            <h3 style="margin-bottom: 1rem; color: var(--texto-principal);">Datos Personales</h3>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">Nombre *</label>
+                <input type="text" id="firstName" name="firstName" class="form-control" required>
+                <div class="error-message" id="firstName-error"></div>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Apellidos *</label>
+                <input type="text" id="lastName" name="lastName" class="form-control" required>
+                <div class="error-message" id="lastName-error"></div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Correo Electrónico *</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+                <div class="error-message" id="email-error"></div>
+              </div>
+              <div class="form-group">
+                <label for="phone">Teléfono *</label>
+                <input type="tel" id="phone" name="phone" class="form-control" required>
+                <div class="error-message" id="phone-error"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dirección de Entrega -->
+          <div class="form-section">
+            <h3 style="margin-bottom: 1rem; color: var(--texto-principal);">Dirección de Entrega</h3>
+            
+            <div class="form-group">
+              <label for="address">Dirección Completa *</label>
+              <input type="text" id="address" name="address" class="form-control" placeholder="Calle, número, sector" required>
+              <div class="error-message" id="address-error"></div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="city">Ciudad *</label>
+                <select id="city" name="city" class="form-control" required>
+                  <option value="">Selecciona tu ciudad</option>
+                  <option value="guayaquil">Guayaquil</option>
+                  <option value="quito">Quito</option>
+                  <option value="cuenca">Cuenca</option>
+                  <option value="machala">Machala</option>
+                  <option value="manta">Manta</option>
+                  <option value="ambato">Ambato</option>
+                  <option value="riobamba">Riobamba</option>
+                  <option value="ibarra">Ibarra</option>
+                  <option value="loja">Loja</option>
+                  <option value="esmeraldas">Esmeraldas</option>
+                  <option value="otra">Otra ciudad</option>
+                </select>
+                <div class="error-message" id="city-error"></div>
+              </div>
+              <div class="form-group">
+                <label for="postalCode">Código Postal</label>
+                <input type="text" id="postalCode" name="postalCode" class="form-control">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="deliveryNotes">Notas de Entrega (Opcional)</label>
+              <textarea id="deliveryNotes" name="deliveryNotes" class="form-control" rows="3" placeholder="Instrucciones especiales para la entrega..."></textarea>
+            </div>
+          </div>
+
+          <!-- Método de Pago -->
+          <div class="form-section">
+            <h3 style="margin-bottom: 1rem; color: var(--texto-principal);">Método de Pago</h3>
+            
+            <div class="payment-methods">
+              <div class="payment-option" onclick="selectPaymentMethod('paypal')">
+                <input type="radio" id="paypal" name="paymentMethod" value="paypal" required>
+                <label for="paypal" style="cursor: pointer; display: inline-flex; align-items: center; margin: 0;">
+                  <i class="fab fa-paypal" style="font-size: 1.5rem; color: #0070ba; margin-right: 0.5rem;"></i>
+                  PayPal
+                </label>
+                <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                  Pago seguro con tu cuenta PayPal o tarjeta de crédito
+                </div>
+              </div>
+              
+              <div class="payment-option" onclick="selectPaymentMethod('transfer')">
+                <input type="radio" id="transfer" name="paymentMethod" value="transfer" required>
+                <label for="transfer" style="cursor: pointer; display: inline-flex; align-items: center; margin: 0;">
+                  <i class="fas fa-university" style="font-size: 1.5rem; color: var(--verde-oliva); margin-right: 0.5rem;"></i>
+                  Transferencia Bancaria
+                </label>
+                <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                  Te enviaremos los datos bancarios para realizar la transferencia
+                </div>
+              </div>
+              
+              <div class="payment-option" onclick="selectPaymentMethod('cod')">
+                <input type="radio" id="cod" name="paymentMethod" value="cod" required>
+                <label for="cod" style="cursor: pointer; display: inline-flex; align-items: center; margin: 0;">
+                  <i class="fas fa-money-bill-wave" style="font-size: 1.5rem; color: var(--naranja-mostaza); margin-right: 0.5rem;"></i>
+                  Pago Contra Entrega
+                </label>
+                <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                  Paga en efectivo cuando recibas tu pedido
+                </div>
+              </div>
+            </div>
+            
+            <div class="security-badges">
+              <i class="fas fa-shield-alt" style="color: #28a745; font-size: 1.5rem;"></i>
+              <div>
+                <div style="font-weight: 600; font-size: 0.9rem;">Compra 100% Segura</div>
+                <div style="font-size: 0.8rem; color: #666;">Tus datos están protegidos con encriptación SSL</div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h3 style="margin-bottom: 1.5rem; color: var(--naranja-mostaza);">
+          <i class="fas fa-receipt mr-2"></i>
+          Resumen del Pedido
+        </h3>
+        
+        <div id="order-items">
+          <!-- Los items se cargarán dinámicamente -->
+        </div>
+        
+        <div class="order-totals">
+          <div class="total-row">
+            <span>Subtotal:</span>
+            <span id="subtotal">$0.00</span>
+          </div>
+          <div class="total-row">
+            <span>Envío:</span>
+            <span id="shipping">$3.00</span>
+          </div>
+          <div class="total-row">
+            <span>IVA (12%):</span>
+            <span id="tax">$0.00</span>
+          </div>
+          <div class="total-row final">
+            <span>Total:</span>
+            <span id="total">$0.00</span>
+          </div>
+        </div>
+        
+        <!-- PayPal Buttons Container -->
+        <div id="paypal-button-container" style="display: none; margin-top: 1rem;"></div>
+        
+        <button type="button" id="place-order-btn" class="btn-place-order">
+          <i class="fas fa-lock mr-2"></i>
+          Realizar Pedido
+        </button>
+        
+        <div style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: #666;">
+          <i class="fas fa-truck mr-1"></i>
+          Entrega en 2-3 días hábiles
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background-color: #2d3748; color: white;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+      <div style="text-align: center;">
+        <h3 style="color: #f6d55c; margin-bottom: 1rem;">La Tierrita</h3>
+        <p style="color: #e2e8f0;">Bocaditos tradicionales del campo ecuatoriano</p>
+        <div style="margin-top: 1rem;">
+          <a href="https://wa.me/593987843771" target="_blank" style="color: #e2e8f0; font-size: 1.5rem; margin: 0 0.5rem;">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+          <a href="https://www.facebook.com/latierrita.shop" target="_blank" style="color: #e2e8f0; font-size: 1.5rem; margin: 0 0.5rem;">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://www.instagram.com/latierrita.shop/" target="_blank" style="color: #e2e8f0; font-size: 1.5rem; margin: 0 0.5rem;">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript para el Checkout -->
+  <script>
+    // Variables globales
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let selectedPaymentMethod = '';
+
+    // Inicializar página
+    document.addEventListener('DOMContentLoaded', function() {
+      loadOrderSummary();
+      setupEventListeners();
+      
+      // Redirigir si el carrito está vacío
+      if (cart.length === 0) {
+        alert('Tu carrito está vacío. Serás redirigido a la página de productos.');
+        window.location.href = 'productos.html';
+        return;
+      }
+    });
+
+    // Configurar event listeners
+    function setupEventListeners() {
+      document.getElementById('place-order-btn').addEventListener('click', handlePlaceOrder);
+      document.getElementById('checkout-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        handlePlaceOrder();
+      });
+      
+      // Validación en tiempo real
+      const inputs = document.querySelectorAll('.form-control');
+      inputs.forEach(input => {
+        input.addEventListener('blur', validateField);
+        input.addEventListener('input', clearError);
+      });
+    }
+
+    // Cargar resumen del pedido
+    function loadOrderSummary() {
+      const orderItemsContainer = document.getElementById('order-items');
+      let subtotal = 0;
+
+      orderItemsContainer.innerHTML = '';
+
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+
+        const orderItem = document.createElement('div');
+        orderItem.className = 'order-item';
+        orderItem.innerHTML = `
+          <img src="${getProductImage(item.id)}" alt="${item.name}" class="item-image">
+          <div class="item-details">
+            <div class="item-name">${item.name}</div>
+            <div class="item-quantity">Cantidad: ${item.quantity}</div>
+          </div>
+          <div class="item-price">$${itemTotal.toFixed(2)}</div>
+        `;
+        orderItemsContainer.appendChild(orderItem);
+      });
+
+      // Calcular totales
+      const shipping = subtotal > 20 ? 0 : 3.00; // Envío gratis por compras mayores a $20
+      const tax = subtotal * 0.12; // IVA 12%
+      const total = subtotal + shipping + tax;
+
+      // Actualizar UI
+      document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('shipping').textContent = shipping === 0 ? 'GRATIS' : `$${shipping.toFixed(2)}`;
+      document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+      document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+    }
+
+    // Obtener imagen del producto
+    function getProductImage(productId) {
+      const images = {
+        'pan-yuca': 'img/pan de yuca.png',
+        'maria-pipona-maduro': 'img/maria pipona de maduro.jpg',
+        'mini-bolones-maduro': 'img/mini bolon de maduro.png',
+        'maria-pipona-verde': 'img/maria pipona de verde.jpg',
+        'mini-bolones-verde': 'img/mini bolon de verde.png',
+        'mini-muchin': 'img/mini muchin.png',
+        'muchines-yuca': 'img/muchines de yuca.jpg',
+        'torrejas': 'img/torrejas.jpg'
+      };
+      return images[productId] || 'img/logo.jpg';
+    }
+
+    // Seleccionar método de pago
+    function selectPaymentMethod(method) {
+      selectedPaymentMethod = method;
+      
+      // Remover selección anterior
+      document.querySelectorAll('.payment-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      
+      // Agregar selección actual
+      document.querySelector(`input[value="${method}"]`).closest('.payment-option').classList.add('selected');
+      
+      // Mostrar/ocultar PayPal buttons
+      const paypalContainer = document.getElementById('paypal-button-container');
+      const placeOrderBtn = document.getElementById('place-order-btn');
+      
+      if (method === 'paypal') {
+        paypalContainer.style.display = 'block';
+        placeOrderBtn.style.display = 'none';
+        initPayPalButtons();
+      } else {
+        paypalContainer.style.display = 'none';
+        placeOrderBtn.style.display = 'block';
+      }
+    }
+
+    // Inicializar botones de PayPal
+    function initPayPalButtons() {
+      const total = calculateTotal();
+      
+      paypal.Buttons({
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: total.toFixed(2)
+              },
+              description: 'Productos La Tierrita'
+            }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            // Procesar pago exitoso
+            processOrder({
+              paymentMethod: 'paypal',
+              paymentId: details.id,
+              status: 'paid'
+            });
+          });
+        },
+        onError: function(err) {
+          console.error('Error en PayPal:', err);
+          alert('Hubo un error procesando el pago. Por favor intenta nuevamente.');
+        }
+      }).render('#paypal-button-container');
+    }
+
+    // Calcular total
+    function calculateTotal() {
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const shipping = subtotal > 20 ? 0 : 3.00;
+      const tax = subtotal * 0.12;
+      return subtotal + shipping + tax;
+    }
+
+    // Validar campo individual
+    function validateField(event) {
+      const field = event.target;
+      const value = field.value.trim();
+      const fieldName = field.name;
+      let isValid = true;
+      let errorMessage = '';
+
+      // Limpiar errores anteriores
+      clearError(event);
+
+      // Validaciones específicas
+      switch (fieldName) {
+        case 'firstName':
+        case 'lastName':
+          if (!value) {
+            errorMessage = 'Este campo es obligatorio';
+            isValid = false;
+          } else if (value.length < 2) {
+            errorMessage = 'Debe tener al menos 2 caracteres';
+            isValid = false;
+          }
+          break;
+          
+        case 'email':
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!value) {
+            errorMessage = 'El correo electrónico es obligatorio';
+            isValid = false;
+          } else if (!emailRegex.test(value)) {
+            errorMessage = 'Ingresa un correo electrónico válido';
+            isValid = false;
+          }
+          break;
+          
+        case 'phone':
+          const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
+          if (!value) {
+            errorMessage = 'El teléfono es obligatorio';
+            isValid = false;
+          } else if (!phoneRegex.test(value)) {
+            errorMessage = 'Ingresa un número de teléfono válido';
+            isValid = false;
+          }
+          break;
+          
+        case 'address':
+          if (!value) {
+            errorMessage = 'La dirección es obligatoria';
+            isValid = false;
+          } else if (value.length < 10) {
+            errorMessage = 'Ingresa una dirección más específica';
+            isValid = false;
+          }
+          break;
+          
+        case 'city':
+          if (!value) {
+            errorMessage = 'Selecciona tu ciudad';
+            isValid = false;
+          }
+          break;
+      }
+
+      // Mostrar error si existe
+      if (!isValid) {
+        showFieldError(fieldName, errorMessage);
+      }
+
+      return isValid;
+    }
+
+    // Mostrar error en campo
+    function showFieldError(fieldName, message) {
+      const errorElement = document.getElementById(`${fieldName}-error`);
+      const field = document.querySelector(`[name="${fieldName}"]`);
+      
+      if (errorElement) {
+        errorElement.textContent = message;
+        field.style.borderColor = '#dc3545';
+      }
+    }
+
+    // Limpiar error de campo
+    function clearError(event) {
+      const field = event.target;
+      const fieldName = field.name;
+      const errorElement = document.getElementById(`${fieldName}-error`);
+      
+      if (errorElement) {
+        errorElement.textContent = '';
+        field.style.borderColor = '#ced4da';
+      }
+    }
+
+    // Validar formulario completo
+    function validateForm() {
+      const form = document.getElementById('checkout-form');
+      const requiredFields = form.querySelectorAll('[required]');
+      let isValid = true;
+
+      requiredFields.forEach(field => {
+        const fieldEvent = { target: field };
+        if (!validateField(fieldEvent)) {
+          isValid = false;
+        }
+      });
+
+      // Validar método de pago
+      if (!selectedPaymentMethod) {
+        alert('Por favor selecciona un método de pago');
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    // Manejar envío del pedido
+    function handlePlaceOrder() {
+      if (!validateForm()) {
+        return;
+      }
+
+      const formData = new FormData(document.getElementById('checkout-form'));
+      const orderData = {
+        customer: {
+          firstName: formData.get('firstName'),
+          lastName: formData.get('lastName'),
+          email: formData.get('email'),
+          phone: formData.get('phone')
+        },
+        delivery: {
+          address: formData.get('address'),
+          city: formData.get('city'),
+          postalCode: formData.get('postalCode'),
+          notes: formData.get('deliveryNotes')
+        },
+        paymentMethod: selectedPaymentMethod,
+        items: cart,
+        totals: {
+          subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+          shipping: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) > 20 ? 0 : 3.00,
+          tax: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.12,
+          total: calculateTotal()
+        }
+      };
+
+      processOrder(orderData);
+    }
+
+    // Procesar pedido
+    function processOrder(orderData) {
+      // Mostrar loading
+      const btn = document.getElementById('place-order-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Procesando...';
+      btn.disabled = true;
+
+      // Simular envío a base de datos (aquí integrarías con tu backend)
+      setTimeout(() => {
+        // Generar número de pedido
+        const orderNumber = 'LT' + Date.now().toString().slice(-6);
+        
+        // Guardar pedido en localStorage (en producción sería en base de datos)
+        const order = {
+          ...orderData,
+          orderNumber: orderNumber,
+          status: orderData.status || 'pending',
+          createdAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem(`order_${orderNumber}`, JSON.stringify(order));
+        
+        // Limpiar carrito
+        localStorage.removeItem('cart');
+        
+        // Redirigir a página de confirmación
+        window.location.href = `order-confirmation.html?order=${orderNumber}`;
+      }, 2000);
+    }
+
+    // Track de Google Analytics para eventos de e-commerce
+    function trackPurchase(orderData) {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'purchase', {
+          transaction_id: orderData.orderNumber,
+          value: orderData.totals.total,
+          currency: 'USD',
+          items: orderData.items.map(item => ({
+            item_id: item.id,
+            item_name: item.name,
+            category: item.category || 'Bocaditos',
+            quantity: item.quantity,
+            price: item.price
+          }))
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>
