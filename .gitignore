@@ -1,0 +1,17 @@
+# Archivos y carpetas a ignorar por Git
+.DS_Store
+Thumbs.db
+desktop.ini
+node_modules/
+.env
+*.log
+anima/
+paypal-config.php
+api/paypal/credenciales-privadas.php
+config.php
+*.bak
+*.tmp
+*.sqlite
+*.db
+.idea/
+.vscode/

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LXG5F7LK42"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LXG5F7LK42');
+  </script>
+  
+  <!-- Metricool Analytics -->
+  <script>
+    function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"8b8c5c6b2e8f24a5a4d8e68b37f8"})});
+  </script>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedido Confirmado - La Tierrita | Gracias por tu Compra</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="img/logofla.ico">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Estilos Principales -->
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    .confirmation-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    .success-icon {
+      width: 100px;
+      height: 100px;
+      background: #28a745;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+      animation: checkmarkPop 0.6s ease-in-out;
+    }
+    
+    @keyframes checkmarkPop {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    
+    .success-icon i {
+      color: white;
+      font-size: 3rem;
+    }
+    
+    .order-details {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: left;
+    }
+    
+    .order-header {
+      text-align: center;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--naranja-mostaza);
+      margin-bottom: 1.5rem;
+    }
+    
+    .order-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--naranja-mostaza);
+      margin-bottom: 0.5rem;
+    }
+    
+    .order-date {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .order-sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .order-section h4 {
+      color: var(--naranja-mostaza);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      border-bottom: 1px solid #e9ecef;
+      padding-bottom: 0.5rem;
+    }
+    
+    .order-section p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+    }
+    
+    .order-items {
+      margin-top: 1.5rem;
+    }
+    
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .order-item:last-child {
+      border-bottom: none;
+    }
+    
+    .item-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .item-image {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+    
+    .order-total {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    
+    .total-row.final {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--naranja-mostaza);
+      border-top: 2px solid var(--naranja-mostaza);
+      padding-top: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .next-steps {
+      background: #e3f2fd;
+      border-radius: 1rem;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .next-steps h3 {
+      color: var(--naranja-mostaza);
+      margin-bottom: 1rem;
+    }
+    
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 0.5rem;
+    }
+    
+    .step-number {
+      background: var(--naranja-mostaza);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    
+    .step-content h4 {
+      margin: 0 0 0.5rem 0;
+      color: var(--texto-principal);
+    }
+    
+    .step-content p {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: var(--naranja-mostaza);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #c8871a;
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: white;
+      color: var(--texto-principal);
+      border: 2px solid var(--naranja-mostaza);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--naranja-mostaza);
+      color: white;
+    }
+    
+    .contact-info {
+      background: #f8f9fa;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .contact-info h4 {
+      color: var(--naranja-mostaza);
+      margin-bottom: 1rem;
+    }
+    
+    .contact-methods {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .contact-method {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--texto-principal);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .contact-method:hover {
+      color: var(--naranja-mostaza);
+    }
+    
+    @media (max-width: 768px) {
+      .confirmation-container {
+        padding: 1rem;
+      }
+      
+      .order-sections {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+        max-width: 300px;
+      }
+      
+      .contact-methods {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header y Navegación -->
+  <header>
+    <nav>
+      <div class="logo">
+        <img src="img/logotrazo.png" alt="La Tierrita Logo" style="height: 40px; width: auto; margin-right: 10px; border-radius: 4px;">
+        <a href="index.html" style="text-decoration: none; color: inherit;">La Tierrita</a>
+      </div>
+      <ul class="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="nuestra-historia.html">Nuestra Historia</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Confirmation Content -->
+  <section style="padding: 2rem 0; background: #f8f9fa; min-height: 80vh;">
+    <div class="confirmation-container">
+      
+      <!-- Success Icon -->
+      <div class="success-icon">
+        <i class="fas fa-check"></i>
+      </div>
+      
+      <!-- Success Message -->
+      <h1 style="color: var(--naranja-mostaza); margin-bottom: 1rem; font-size: 2.5rem;">
+        ¡Pedido Confirmado!
+      </h1>
+      <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;">
+        Gracias por elegir La Tierrita. Hemos recibido tu pedido y pronto comenzaremos a prepararlo con el cariño de siempre.
+      </p>
+
+      <!-- Order Details -->
+      <div class="order-details">
+        <div class="order-header">
+          <div class="order-number" id="order-number">
+            Pedido #LT000000
+          </div>
+          <div class="order-date" id="order-date">
+            Fecha del pedido: -
+          </div>
+        </div>
+
+        <div class="order-sections">
+          <!-- Customer Info -->
+          <div class="order-section">
+            <h4><i class="fas fa-user mr-2"></i>Información del Cliente</h4>
+            <p id="customer-name"><strong>Nombre:</strong> -</p>
+            <p id="customer-email"><strong>Email:</strong> -</p>
+            <p id="customer-phone"><strong>Teléfono:</strong> -</p>
+          </div>
+
+          <!-- Delivery Info -->
+          <div class="order-section">
+            <h4><i class="fas fa-truck mr-2"></i>Información de Entrega</h4>
+            <p id="delivery-address"><strong>Dirección:</strong> -</p>
+            <p id="delivery-city"><strong>Ciudad:</strong> -</p>
+            <p id="payment-method"><strong>Método de Pago:</strong> -</p>
+          </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="order-items">
+          <h4 style="color: var(--naranja-mostaza); margin-bottom: 1rem;">
+            <i class="fas fa-shopping-bag mr-2"></i>Productos Pedidos
+          </h4>
+          <div id="items-list">
+            <!-- Los items se cargarán dinámicamente -->
+          </div>
+          
+          <div class="order-total">
+            <div class="total-row">
+              <span>Subtotal:</span>
+              <span id="subtotal-amount">$0.00</span>
+            </div>
+            <div class="total-row">
+              <span>Envío:</span>
+              <span id="shipping-amount">$0.00</span>
+            </div>
+            <div class="total-row">
+              <span>IVA (12%):</span>
+              <span id="tax-amount">$0.00</span>
+            </div>
+            <div class="total-row final">
+              <span>Total Pagado:</span>
+              <span id="total-amount">$0.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next Steps -->
+      <div class="next-steps">
+        <h3><i class="fas fa-clipboard-list mr-2"></i>¿Qué sigue ahora?</h3>
+        
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Confirmación por Email/WhatsApp</h4>
+            <p>En los próximos minutos recibirás una confirmación con todos los detalles de tu pedido.</p>
+          </div>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Preparación del Pedido</h4>
+            <p>Nuestro equipo comenzará a preparar tus bocaditos frescos con los mejores ingredientes.</p>
+          </div>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Envío y Entrega</h4>
+            <p>Te notificaremos cuando tu pedido esté en camino. Tiempo estimado: 2-3 días hábiles.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <a href="productos.html" class="btn btn-primary">
+          <i class="fas fa-shopping-cart"></i>
+          Seguir Comprando
+        </a>
+        <a href="#" onclick="downloadOrderPDF()" class="btn btn-secondary">
+          <i class="fas fa-download"></i>
+          Descargar Comprobante
+        </a>
+        <a href="https://wa.me/593987843771" target="_blank" class="btn btn-secondary">
+          <i class="fab fa-whatsapp"></i>
+          Contactar por WhatsApp
+        </a>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="contact-info">
+        <h4><i class="fas fa-headset mr-2"></i>¿Necesitas Ayuda?</h4>
+        <p style="text-align: center; margin-bottom: 1rem;">
+          Nuestro equipo está disponible para resolver cualquier duda sobre tu pedido
+        </p>
+        <div class="contact-methods">
+          <a href="https://wa.me/593987843771" target="_blank" class="contact-method">
+            <i class="fab fa-whatsapp"></i>
+            +593 98 784 3771
+          </a>
+          <a href="mailto:info@latierrita.com" class="contact-method">
+            <i class="fas fa-envelope"></i>
+            info@latierrita.com
+          </a>
+          <a href="https://www.facebook.com/latierrita.shop" target="_blank" class="contact-method">
+            <i class="fab fa-facebook-f"></i>
+            Facebook
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background-color: #2d3748; color: white;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+      <div style="text-align: center;">
+        <h3 style="color: #f6d55c; margin-bottom: 1rem;">La Tierrita</h3>
+        <p style="color: #e2e8f0;">Bocaditos tradicionales del campo ecuatoriano</p>
+        <div style="margin-top: 1rem;">
+          <a href="https://wa.me/593987843771" target="_blank" style="color: #e2e8f0; font-size: 1.5rem; margin: 0 0.5rem;">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+          <a href="https://www.facebook.com/latierrita.shop" target="_blank" style="color: #e2e8f0; font-size: 1.5rem; margin: 0 0.5rem;">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://www.instagram.com/latierrita.shop/" target="_blank" style="color: #e2e8f0; font-size: 1.5rem; margin: 0 0.5rem;">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </div>
+        <div style="margin-top: 1rem; font-size: 0.9rem; color: #a0aec0;">
+          &copy; 2025 La Tierrita. Todos los derechos reservados.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Cargar información del pedido al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderNumber = urlParams.get('order');
+      
+      if (orderNumber) {
+        loadOrderInfo(orderNumber);
+      } else {
+        // Redirigir si no hay número de pedido
+        window.location.href = 'index.html';
+      }
+    });
+
+    // Cargar información del pedido
+    function loadOrderInfo(orderNumber) {
+      const orderData = localStorage.getItem(`order_${orderNumber}`);
+      
+      if (!orderData) {
+        alert('No se encontró información del pedido');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      const order = JSON.parse(orderData);
+      displayOrderInfo(order);
+      
+      // Track purchase for analytics
+      trackPurchase(order);
+    }
+
+    // Mostrar información del pedido
+    function displayOrderInfo(order) {
+      // Header del pedido
+      document.getElementById('order-number').textContent = `Pedido #${order.orderNumber}`;
+      document.getElementById('order-date').textContent = 
+        `Fecha del pedido: ${new Date(order.createdAt).toLocaleDateString('es-ES')}`;
+
+      // Información del cliente
+      document.getElementById('customer-name').innerHTML = 
+        `<strong>Nombre:</strong> ${order.customer.firstName} ${order.customer.lastName}`;
+      document.getElementById('customer-email').innerHTML = 
+        `<strong>Email:</strong> ${order.customer.email}`;
+      document.getElementById('customer-phone').innerHTML = 
+        `<strong>Teléfono:</strong> ${order.customer.phone}`;
+
+      // Información de entrega
+      document.getElementById('delivery-address').innerHTML = 
+        `<strong>Dirección:</strong> ${order.delivery.address}`;
+      document.getElementById('delivery-city').innerHTML = 
+        `<strong>Ciudad:</strong> ${order.delivery.city}`;
+      
+      const paymentMethods = {
+        'paypal': 'PayPal',
+        'transfer': 'Transferencia Bancaria',
+        'cod': 'Pago Contra Entrega'
+      };
+      document.getElementById('payment-method').innerHTML = 
+        `<strong>Método de Pago:</strong> ${paymentMethods[order.paymentMethod] || order.paymentMethod}`;
+
+      // Items del pedido
+      const itemsList = document.getElementById('items-list');
+      itemsList.innerHTML = '';
+      
+      order.items.forEach(item => {
+        const orderItem = document.createElement('div');
+        orderItem.className = 'order-item';
+        orderItem.innerHTML = `
+          <div class="item-info">
+            <img src="${getProductImage(item.id)}" alt="${item.name}" class="item-image">
+            <div>
+              <div style="font-weight: 600;">${item.name}</div>
+              <div style="color: #666; font-size: 0.9rem;">Cantidad: ${item.quantity}</div>
+            </div>
+          </div>
+          <div style="font-weight: 600; color: var(--naranja-mostaza);">
+            $${(item.price * item.quantity).toFixed(2)}
+          </div>
+        `;
+        itemsList.appendChild(orderItem);
+      });
+
+      // Totales
+      document.getElementById('subtotal-amount').textContent = `$${order.totals.subtotal.toFixed(2)}`;
+      document.getElementById('shipping-amount').textContent = 
+        order.totals.shipping === 0 ? 'GRATIS' : `$${order.totals.shipping.toFixed(2)}`;
+      document.getElementById('tax-amount').textContent = `$${order.totals.tax.toFixed(2)}`;
+      document.getElementById('total-amount').textContent = `$${order.totals.total.toFixed(2)}`;
+    }
+
+    // Obtener imagen del producto
+    function getProductImage(productId) {
+      const images = {
+        'pan-yuca': 'img/pan de yuca.png',
+        'maria-pipona-maduro': 'img/maria pipona de maduro.jpg',
+        'mini-bolones-maduro': 'img/mini bolon de maduro.png',
+        'maria-pipona-verde': 'img/maria pipona de verde.jpg',
+        'mini-bolones-verde': 'img/mini bolon de verde.png',
+        'mini-muchin': 'img/mini muchin.png',
+        'muchines-yuca': 'img/muchines de yuca.jpg',
+        'torrejas': 'img/torrejas.jpg'
+      };
+      return images[productId] || 'img/logo.jpg';
+    }
+
+    // Descargar PDF del pedido
+    function downloadOrderPDF() {
+      // Aquí implementarías la generación del PDF
+      // Por ahora, mostraremos un mensaje
+      alert('Función de descarga de PDF en desarrollo. Te enviaremos el comprobante por email.');
+    }
+
+    // Track purchase para analytics
+    function trackPurchase(order) {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'purchase', {
+          transaction_id: order.orderNumber,
+          value: order.totals.total,
+          currency: 'USD',
+          items: order.items.map(item => ({
+            item_id: item.id,
+            item_name: item.name,
+            category: item.category || 'Bocaditos',
+            quantity: item.quantity,
+            price: item.price
+          }))
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>
